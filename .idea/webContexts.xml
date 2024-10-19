@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebContextManager">
+    <option name="state">
+      <map>
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/fooditem/fooditemDetail.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/fooditem" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/main/member/login.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/main/member" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/management/inventory.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/management" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/management/main.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/management" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/test.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views" />
+        <entry key="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/trade/tradeWrite.jsp" value="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/views/trade" />
+      </map>
+    </option>
+  </component>
+</project>

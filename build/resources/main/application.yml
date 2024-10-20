@@ -2,10 +2,14 @@ spring:
   application:
     name: recipe
 
-  mvc:
-    view:
-      prefix: /WEB-INF/views/
-      suffix: .jsp
+#  mvc:
+#    view:
+#      prefix: /WEB-INF/views/
+#      suffix: .jsp
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
 
   web:
     resources:
@@ -14,7 +18,7 @@ spring:
   datasource:
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
     url: jdbc:log4jdbc:mysql://127.0.0.1:3306/mydb?characterEncoding=UTF-8&serverTimezone=Asia/Seoul
-    username: icia
+    username: root
     password: 1111
 
   security:
@@ -25,8 +29,8 @@ spring:
   mail:
     host: smtp.naver.com
     port: 465
-    username: dlsdnrdl5656@naver.com
-    password: tmakxmdlsdnr1!
+    username: anrqlcdmlrja@naver.com
+    password: vkfksdmlghktkf
     properties:
       mail:
         smtp:

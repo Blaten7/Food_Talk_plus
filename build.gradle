@@ -25,34 +25,67 @@ repositories {
 }
 
 dependencies {
+    // Spring Security 의존성 (보안 관련 기능 제공)
     implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // Spring Web 의존성 (웹 애플리케이션 개발에 필수)
     implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Spring Web Services 의존성 (SOAP 기반 웹 서비스 개발에 사용)
     implementation 'org.springframework.boot:spring-boot-starter-web-services'
+
+    // MyBatis 의존성 (데이터베이스 연동을 위한 MyBatis 사용)
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+
+    // Spring WebSocket 의존성 (실시간 웹 소켓 기능 제공)
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+    // Lombok 의존성 (코드 생성을 위한 어노테이션 제공, 컴파일 시 필요)
     compileOnly 'org.projectlombok:lombok'
+
+    // 개발 시 사용되는 Spring Devtools (핫 리로딩 등 개발 편의 기능 제공)
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // MySQL 데이터베이스 연동을 위한 JDBC 드라이버
     runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // Lombok 어노테이션 프로세서 (컴파일 타임에 어노테이션 처리)
     annotationProcessor 'org.projectlombok:lombok'
-    //타임리프용 톰켓
-    //providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
-    // jsp 용 톰켓
-    // https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-jasper
-    implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:10.1.25'
+
+    // Thymeleaf 의존성 (Spring Boot에서 Thymeleaf 템플릿 엔진 사용)
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+    // Spring Boot Test 의존성 (테스트 관련 기능 제공)
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // MyBatis 테스트 의존성 (MyBatis와 함께 사용하는 테스트 기능)
     testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
+
+    // Spring Security 테스트 의존성 (보안 기능 관련 테스트)
     testImplementation 'org.springframework.security:spring-security-test'
+
+    // JUnit 플랫폼 런처 (테스트 실행기)
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // JavaMail API 사용을 위한 의존성 (이메일 전송 기능 제공)
     implementation 'com.sun.mail:javax.mail:1.6.2'
-    implementation 'org.springframework.security:spring-security-taglibs:6.2.1'
-    //jstl 라이브러리
-	// jakarta.servlet.jsp.jstl
-    implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl'
-    // jakarta.servlet.jsp.jstl-api
-    implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api'
-    //log4jdbc-log4j2-jdbc4.1: logback 활용한 로그 출력
+
+    // Thymeleaf-Spring Security 통합 (Spring Security와 Thymeleaf 연동)
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+
+    // log4jdbc 로그 출력 (SQL 로그 출력을 위한 설정)
     implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
+
+    // BCrypt 해싱 라이브러리 (비밀번호 암호화를 위한 사용)
     implementation group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
+
+    // JSP 용 Tomcat 및 Jasper 의존성 (필요하지 않으므로 제거)
+    // providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    // implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+
+    // JSTL 라이브러리 (JSP 사용 시 필요하나, Thymeleaf로 변경했으므로 제거 가능)
+    // implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl'
+    // implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api'
 }
 
 tasks.named('test') {

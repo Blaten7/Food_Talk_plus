@@ -62,11 +62,7 @@ public class CartController {
         List<HashMap<String, String>> list = new ArrayList<>();
         if(oList.get(0).size() < 2){
             List<String> list1 = new ArrayList<>();
-             oList.forEach( o ->{
-                o.forEach( o2 ->{
-                    list1.add(o2);
-                });
-            });
+             oList.forEach(list1::addAll);
              oList.clear();
              oList.add(list1);
              log.info("olist: {}" ,oList );

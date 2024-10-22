@@ -79,6 +79,18 @@ dependencies {
     // BCrypt 해싱 라이브러리 (비밀번호 암호화를 위한 사용)
     implementation group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
 
+    // Spring Boot JPA (Hibernate 포함)
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // Spring Security (JWT 인증을 위해)
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5:3.1.1.RELEASE'
+
+    // JWT
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
     // JSP 용 Tomcat 및 Jasper 의존성 (필요하지 않으므로 제거)
     // providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
     // implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'

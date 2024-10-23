@@ -1,15 +1,5 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: user
-  Date: 24. 7. 11.
-  Time: 오전 10:39
-  To change this template use File | Settings | File Templates.
---}
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" }
-<%@ page contentType="text/html;charset=UTF-8" language="java" }
-<%@ taglib uri="http://www.springframework.org/security/tags"
-           prefix="sec" }
-<html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ko">
 <head>
     <title>Title</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -193,7 +183,7 @@
 <body>
 
 <header>
-    <jsp:include page="../common/header.html"></jsp:include>
+    <div th:replace="~{main/common/header :: header}"></div>
 </header>
 <h1 style="font-size: large; margin-top: 10px; margin-left: 400px">HOME > 물물교환 > 교환</h1>
 <main style="margin-left: 400px; width: 1100px; border: 3px solid #f9f9f9">

@@ -1,12 +1,5 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: user
-  Date: 24. 8. 1.
-  Time: 오후 6:46
-  To change this template use File | Settings | File Templates.
---}
-<%@ page contentType="text/html;charset=UTF-8" language="java" }
-<html>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ko">
 <head>
     <title>Title</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -118,7 +111,7 @@
 </script>
 <body>
 <header>
-    <jsp:include page="../common/header.html"></jsp:include>
+    <div th:replace="~{main/common/header :: header}"></div>
 </header>
 <main>
     <section style="text-align: center">

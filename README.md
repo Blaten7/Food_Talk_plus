@@ -1,9 +1,11 @@
 <<<<<<< HEAD
-▶ 프로젝트 : 그리팅 카피 및 변경 <br>
-https://www.greating.co.kr/ <br>
+▶ https://github.com/Blaten7/Project <br>
+MVC 디자인 패턴으로 제작된 프로젝트를 Spring Boot의 JPA 와 JWT, 타임리프 탬플릿 엔진을 사용하여 리빌딩 하는 프로젝트 <br>
+
+
 <br>
-▶ 개발기간 2024.07.01 ~ 2024.08.15 <br>
-▶ 참여인원 : 풀스택 및 DB 1명, 풀스택 1명, 백엔드 1명, 총 3명 <br>
+▶ 개발기간 2024.10.15 시작 <br>
+▶ 참여인원 : 1명 <br>
 
 ## 기술 스택
 <table>

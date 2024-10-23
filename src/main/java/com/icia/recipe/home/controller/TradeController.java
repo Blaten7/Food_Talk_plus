@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Arrays;
@@ -19,13 +20,13 @@ import java.util.List;
 
 @Controller
 @Slf4j
-public class
-TradeController {
+@RequestMapping("/trade")
+public class TradeController {
 
     @Autowired
     TradeService tSer;
 
-    @GetMapping("/trade/main")
+    @GetMapping("/main")
     public String tradeMain(Model model) {
         List<TradeDto> tList = tSer.tradeList();
         model.addAttribute("tList", tList);
@@ -34,7 +35,7 @@ TradeController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/trade/detail")
+    @GetMapping("/detail")
     public String tradeDetail(Model model, @RequestParam("t_num") Integer t_num) {
         log.info("...." + t_num);
         List<TradeDto> tDList = tSer.tradeDetail(t_num);
@@ -58,16 +59,16 @@ TradeController {
         model.addAttribute("t_itemcount", t_itemcount);
         model.addAttribute("t_unit", t_unit);
         model.addAttribute("t_change", t_change);
-        return "main/trade/tradeDetail";
+        return "/main/trade/tradeDetail";
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/trade/write")
+    @GetMapping("/write")
     public String tradeWrite() {
         return "main/trade/tradeWrite";
     }
 
-    @PostMapping("/trade/save")
+    @PostMapping("/save")
     public String tradesave(TradeDto tDto, @AuthenticationPrincipal UserDetails userDetails, HttpServletRequest request) {
         String m_id = userDetails.getUsername();
         log.info("컨트롤러 입장");
@@ -110,7 +111,7 @@ TradeController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/trade/update")
+    @PostMapping("/update")
     public String tradeUpdate(TradeDto tDto, HttpServletRequest request) {
         log.info("글 수정 Controller");
         String[] t_item = request.getParameterValues("t_item");
@@ -162,11 +163,11 @@ TradeController {
         } else {
             log.info("tradeUpdate 실패 ㅠㅠ");
         }
-        return "redirect:/trade/detail?t_num=" + tDto.getT_num();
+        return "redirect:/detail?t_num=" + tDto.getT_num();
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/trade/updatefrm")
+    @GetMapping("/updatefrm")
     public String tradeUpdatefrm(@RequestParam("t_num") Integer t_num, Model model) {
         log.info("글 수정창 열기");
         List<TradeDto> tList = tSer.tradeUpdateList(t_num);
@@ -184,7 +185,7 @@ TradeController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/trade/delete")
+    @GetMapping("/delete")
     public String tradeDelete(@RequestParam("t_num") Integer t_num) {
         log.info(">>>>>>>>글 delete controller");
         boolean result = tSer.tradeDelete(t_num);
@@ -198,13 +199,13 @@ TradeController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/trade/login")
+    @GetMapping("/login")
     public String tradeRecommend(TradeDto tDto) {
         return "redirect:/trade/detail?t_num=" + tDto.getT_num();
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/trade/exchangefrm")
+    @GetMapping("/exchangefrm")
     public String tradeExcnahgeFrm(Model model, @RequestParam("t_num") Integer t_num){
         List<TradeDto> tDList = tSer.tradeDetail(t_num);
         log.info("tDList:{} ",tDList);
@@ -226,7 +227,7 @@ TradeController {
         model.addAttribute("t_itemcount", t_itemcount);
         model.addAttribute("t_unit", t_unit);
         model.addAttribute("t_change", t_change);
-        return "main/trade/exchangefrm";
+        return "/main/trade/exchangefrm";
     }
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/refrigerator")

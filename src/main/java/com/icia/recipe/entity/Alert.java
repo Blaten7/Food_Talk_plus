@@ -1,9 +1,6 @@
 package com.icia.recipe.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +38,5 @@ public class Alert {
 
     @Column(name = "alertcol", length = 45)
     private String alertcol;
-
 
 }

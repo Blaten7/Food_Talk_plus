@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -34,4 +35,11 @@ public class Recipe {
 
     @Column(name = "r_delete", columnDefinition = "CHAR(1) DEFAULT 0")
     private String recipe_delete;
+
+    @ManyToMany
+    @JoinTable(name = "membersRecipe",
+    joinColumns = @JoinColumn(name = "m_id"),
+    inverseJoinColumns = @JoinColumn(name = "m_id"))
+    private List<Member> membersRecipe;
+
 }

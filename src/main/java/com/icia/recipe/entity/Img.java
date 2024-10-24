@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -29,17 +31,23 @@ public class Img {
     @Column(name = "f_num", columnDefinition = "VARCHAR(50) DEFAULT NULL")
     private String f_num;
 
-    @Column(name = "r_num", unique = true, columnDefinition = "TINYINT DEFAULT NULL")
-    private String r_num;
-
-    @Column(name = "m_id", columnDefinition = "VARCHAR(20) DEFAULT NULL")
-    private String m_id;
-
     @Column(name = "i_filesize", nullable = false, length = 20)
     private String img_filesize;
 
     @Column(name = "i_register_name", nullable = false, length = 30, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
     private Date img_register_name;
+
+    @ManyToMany
+    @JoinTable(name = "recipe_img",
+    joinColumns = @JoinColumn(name = "r_num"),
+    inverseJoinColumns = @JoinColumn(name = "r_num"))
+    private List<Recipe> recipe_img_list = new ArrayList<Recipe>();
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinTable(name = "whoUploadImg",
+    joinColumns = @JoinColumn(name = "m_id"),
+    inverseJoinColumns = @JoinColumn(name = "m_id"))
+    private Member who_upload_img;
 
 
 

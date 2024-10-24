@@ -1,11 +1,11 @@
 package com.icia.recipe.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -22,5 +22,19 @@ public class Category {
 
     @Column(name = "c_name", nullable = false)
     private String category_name;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "c_num2", referencedColumnName = "c_num")
+    private Category category;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "c_num2", referencedColumnName = "c_num")
+    private Category category2;
+
+    @OneToMany(mappedBy = "bigCgNum")
+    private List<FoodItem> foodItems = new ArrayList<FoodItem>();
+
+    @ManyToMany(mappedBy = "tradeCg")
+    private List<Trade> tradeList = new ArrayList<>();
 
 }

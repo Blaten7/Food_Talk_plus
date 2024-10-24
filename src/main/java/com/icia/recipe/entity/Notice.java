@@ -21,8 +21,8 @@ public class Notice {
     @Column(name = "contents", columnDefinition = "VARCHAR(3000) DEFAULT NULL", length = 3000)
     private String notice_contents;
 
-    @Column(name = "m_id", length = 50, nullable = false)
-    private Integer memberId_FK_notice;
-
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "m_id")
+    private Member member;
 
 }

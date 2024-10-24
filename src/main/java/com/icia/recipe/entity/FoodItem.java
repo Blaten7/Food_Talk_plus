@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -16,9 +18,6 @@ public class FoodItem {
     @Column(name = "f_num", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int fooditem_num;
-
-    @Column(name = "c_num", nullable = false, length = 20)
-    private String bigCgNum;
 
     @Column(name = "c_num2", nullable = true, length = 20)
     private String midCgNum;
@@ -61,5 +60,13 @@ public class FoodItem {
 
     @Column(columnDefinition = "TINYINT DEFAULT '1'")
     private int status;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "c_num", nullable = false)
+    private Category bigCgNum;
+
+    @ManyToMany(mappedBy = "cartList")
+    private List<Cart> cartList = new ArrayList<Cart>();
+
 
 }

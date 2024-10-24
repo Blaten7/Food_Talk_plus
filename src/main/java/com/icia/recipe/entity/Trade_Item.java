@@ -1,9 +1,6 @@
 package com.icia.recipe.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,8 +11,9 @@ import lombok.NoArgsConstructor;
 public class Trade_Item {
 
     @Id
-    @Column(name = "t_num", unique = true, columnDefinition = "SMALLINT DEFAULT NULL")
-    private int tradeItem_num;
+    @OneToOne
+    @JoinColumn (name = "t_num", referencedColumnName = "t_num", unique = true, columnDefinition = "SMALLINT DEFAULT NULL")
+    private Trade trade;
 
     @Column(name = "t_item", length = 50, columnDefinition = "VARCHAR(50) DEFAULT NULL")
     private String tradeItem_item;

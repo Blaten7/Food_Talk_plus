@@ -4,7 +4,10 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.print.attribute.standard.MediaSize;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -16,9 +19,6 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "o_num")
     private Integer order_num;
-
-    @Column(name = "m_id", nullable = false, length = 20)
-    private String memberId_FK_order;
 
     @Column(name = "o_total", nullable = false)
     private int order_total;
@@ -43,4 +43,13 @@ public class Order {
 
     @Column(name = "o_post", nullable = false, length = 20)
     private String order_post;
+
+    @Column(name = "m_id", nullable = false, length = 20)
+    private String memberId_FK_order;
+
+    @ManyToMany
+    @JoinTable(name = "membersOrder",
+    joinColumns = @JoinColumn(name = "m_id"),
+    inverseJoinColumns = @JoinColumn(name = "m_id"))
+    private List<Member> membersOrderList = new ArrayList<Member>();
 }

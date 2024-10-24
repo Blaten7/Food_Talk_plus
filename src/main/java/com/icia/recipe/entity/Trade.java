@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -37,4 +39,16 @@ public class Trade {
 
     @Column(name = "visible", nullable = false, columnDefinition = "CHAR(1) DEFAULT 1")
     private String trade_visible;
+
+    @ManyToMany
+    @JoinTable(name = "tradeCategory",
+    joinColumns = @JoinColumn(name = "c_num"),
+    inverseJoinColumns = @JoinColumn(name = "c_num"))
+    private List<Category> tradeCg = new ArrayList<Category>();
+
+    @OneToMany
+    @JoinTable(name = "tradeMember",
+    joinColumns = @JoinColumn(name = "m_id"),
+    inverseJoinColumns = @JoinColumn(name = "m_id"))
+    private List<Member> memberList = new ArrayList<>();
 }

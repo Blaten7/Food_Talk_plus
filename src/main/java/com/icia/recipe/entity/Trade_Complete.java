@@ -22,4 +22,8 @@ public class Trade_Complete {
 
     @Column(name = "tc_check", columnDefinition = "CHAR(1) DEFAULT 0", length = 1)
     private String check;
+
+    @OneToOne
+    @JoinColumn(name = "m_id")
+    private Member memberId;
 }

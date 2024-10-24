@@ -1,10 +1,12 @@
 package com.icia.recipe.entity;
 
 import jakarta.persistence.*;
+
+import java.io.Serializable;
+import java.util.Date;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,12 +14,12 @@ import java.util.List;
 @Entity
 @Table(name = "fooditem")
 @NoArgsConstructor
-public class FoodItem {
+public class FoodItem implements Serializable {
 
     @Id
     @Column(name = "f_num", nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int fooditem_num;
+    private Long fooditem_num;
 
     @Column(name = "c_num2", nullable = true, length = 20)
     private String midCgNum;
@@ -62,11 +64,9 @@ public class FoodItem {
     private int status;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "c_num", nullable = false)
+    @JoinColumn(name = "c_num", nullable = false, insertable = false, updatable = false)
     private Category bigCgNum;
 
-    @ManyToMany(mappedBy = "cartList")
-    private List<Cart> cartList = new ArrayList<Cart>();
-
-
+    @ManyToMany(mappedBy = "foodList")
+    private List<Cart> cartList = new ArrayList<>();
 }

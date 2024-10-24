@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -12,12 +13,12 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Table(name = "img")
-public class Img {
+public class Img implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "i_num")
-    private int img_num;
+    private Long img_num;
 
     @Column(name = "i_path", nullable = false, length = 500)
     private String img_path;
@@ -39,25 +40,13 @@ public class Img {
 
     @ManyToMany
     @JoinTable(name = "recipe_img",
-    joinColumns = @JoinColumn(name = "r_num"),
-    inverseJoinColumns = @JoinColumn(name = "r_num"))
+    joinColumns = @JoinColumn(name = "img_r_num"),
+    inverseJoinColumns = @JoinColumn(name = "recipe_r_num"))
     private List<Recipe> recipe_img_list = new ArrayList<Recipe>();
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinTable(name = "whoUploadImg",
-    joinColumns = @JoinColumn(name = "m_id"),
-    inverseJoinColumns = @JoinColumn(name = "m_id"))
+    @JoinColumn(name = "m_id", insertable = false, updatable = false)
     private Member who_upload_img;
-
-
-
-
-
-
-
-
-
-
 
 
 }

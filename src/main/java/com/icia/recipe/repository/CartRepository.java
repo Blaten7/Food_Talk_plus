@@ -11,25 +11,5 @@ import java.util.List;
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Long> {
 
-    @Modifying
-    void saveInsertcartlist();
 
-    @Modifying
-    void updateUpdatefooditemcount();
-
-    @Modifying
-    void deleteDeletecart();
-
-    List<Cart> findBySelectcart();
-
-    List<Cart> findBySelectcartcount();
-
-    @Modifying
-    void saveInsertorder();
-
-    @Modifying
-    void saveInsertorderdetail();
-
-    @Modifying
-    void deleteDeletecartname();
 }

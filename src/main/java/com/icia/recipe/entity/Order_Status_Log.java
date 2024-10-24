@@ -4,18 +4,19 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Data
 @NoArgsConstructor
 @Table(name = "order1_status_log")
-public class Order_Status_Log {
+public class Order_Status_Log implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private int OSL_id;
+    private Long OSL_id;
 
     @Column(name = "o_num", columnDefinition = "INT DEFAULT NULL")
     private int OSL_num;

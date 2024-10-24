@@ -5,17 +5,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.Serializable;
+
 @Entity
 @Data
 @NoArgsConstructor
 @Table(name = "alert")
-public class Alert {
+public class Alert implements Serializable {
 
     @Id
     @Column(name = "t_num", unique = true, columnDefinition = "INT UNSIGNED")
-    private int t_num;
+    private Long t_num;
 
-    @Column(name = "m_id", length = 50)
+    @Column(name = "m_id", length = 50, insertable = false, updatable = false)
     private String alert_id;
 
     @Column(name = "tradesend", length = 50)
@@ -34,7 +36,7 @@ public class Alert {
     private String t_change;
 
     @Column(name = "t_alertnum", unique = true, columnDefinition = "TINYINT DEFAULT '1'")
-    private int t_alertnum;
+    private Long t_alertnum;
 
     @Column(name = "alertcol", length = 45)
     private String alertcol;

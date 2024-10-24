@@ -4,18 +4,17 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Entity
 @Data
 @NoArgsConstructor
 @Table(name = "tradecomplete")
-public class Trade_Complete {
+public class Trade_Complete implements Serializable {
 
     @Id
     @Column(name = "tc_num", nullable = false, unique = true)
-    private int trade_complete_num;
-
-    @Column(name = "m_id", nullable = false, length = 20)
-    private String memberId_FK_tradeComplete;
+    private Long trade_complete_num;
 
     @Column(name = "t_num", nullable = false, unique = true)
     private int trade_num;
@@ -24,6 +23,6 @@ public class Trade_Complete {
     private String check;
 
     @OneToOne
-    @JoinColumn(name = "m_id")
+    @JoinColumn(name = "m_id", insertable = false, updatable = false)
     private Member memberId;
 }

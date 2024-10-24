@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,10 +12,10 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Table(name = "category")
-public class Category {
+public class Category implements Serializable {
 
     @Id
-    @Column(name = "c_num", nullable = false)
+    @Column(name = "c_num", nullable = false, insertable = true, updatable = true)
     private String bigCgNum;
 
     @Column(name = "c_num2", nullable = true, columnDefinition = "VARCHAR(10) DEFAULT NULL")
@@ -24,12 +25,8 @@ public class Category {
     private String category_name;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "c_num2", referencedColumnName = "c_num")
-    private Category category;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "c_num2", referencedColumnName = "c_num")
-    private Category category2;
+    @JoinColumn(name = "c_num2", insertable = false, updatable = false)
+    private Category parentCategory; // 명확한 이름 사용
 
     @OneToMany(mappedBy = "bigCgNum")
     private List<FoodItem> foodItems = new ArrayList<FoodItem>();

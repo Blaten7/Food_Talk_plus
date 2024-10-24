@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.print.attribute.standard.MediaSize;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,12 +13,12 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Table(name = "order1")
-public class Order {
+public class Order implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "o_num")
-    private Integer order_num;
+    private Long order_num;
 
     @Column(name = "o_total", nullable = false)
     private int order_total;
@@ -49,7 +49,7 @@ public class Order {
 
     @ManyToMany
     @JoinTable(name = "membersOrder",
-    joinColumns = @JoinColumn(name = "m_id"),
-    inverseJoinColumns = @JoinColumn(name = "m_id"))
+    joinColumns = @JoinColumn(name = "order_m_id", insertable = false, updatable = false),
+    inverseJoinColumns = @JoinColumn(name = "member_m_id"))
     private List<Member> membersOrderList = new ArrayList<Member>();
 }

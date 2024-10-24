@@ -8,11 +8,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.Serializable;
+
 @Entity
 @Data
 @NoArgsConstructor
 @Table(name = "traderecommend")
-public class Trade_Recommend {
+public class Trade_Recommend implements Serializable {
 
     @EmbeddedId
     private TradeRecommend_EmbeddableKey tradeRecommendKey;

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -11,12 +12,12 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Table(name = "recipe")
-public class Recipe {
+public class Recipe implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "r_num", nullable = false, unique = true)
-    private Integer recipe_num;
+    private Long recipe_num;
 
     @Column(name = "m_id", nullable = false, length = 20)
     private String memberId_FK_recipe;
@@ -38,8 +39,8 @@ public class Recipe {
 
     @ManyToMany
     @JoinTable(name = "membersRecipe",
-    joinColumns = @JoinColumn(name = "m_id"),
-    inverseJoinColumns = @JoinColumn(name = "m_id"))
+    joinColumns = @JoinColumn(name = "recipe_m_id", insertable = false, updatable = false),
+    inverseJoinColumns = @JoinColumn(name = "member_m_id"))
     private List<Member> membersRecipe;
 
 }

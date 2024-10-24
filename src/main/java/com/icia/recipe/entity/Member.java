@@ -3,8 +3,8 @@ package com.icia.recipe.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.mybatis.spring.annotation.MapperScan;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Table(name = "member")
-public class Member {
+public class Member implements Serializable {
 
     @Id
     @Column(name = "m_id", nullable = false, length = 50)
@@ -36,9 +36,6 @@ public class Member {
     @Column(name = "role", length = 5, columnDefinition = "VARCHAR(5) DEFAULT 'USER'")
     private String member_role;
 
-    @OneToMany(mappedBy = "member")
-    private List<Notice> alarmList = new ArrayList<>();
-
     @ManyToMany(mappedBy = "membersOrderList")
     private List<Order> orderList = new ArrayList<>();
 
@@ -46,7 +43,7 @@ public class Member {
     private List<Recipe> recipeList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "m_id")
+    @JoinColumn(name = "m_id", insertable = false, updatable = false)
     private Trade tradeList;
 
 }

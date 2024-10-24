@@ -4,21 +4,23 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Entity
 @Data
 @NoArgsConstructor
 @Table(name = "orderdetail")
-public class Order_Detail {
+public class Order_Detail implements Serializable {
 
     @EmbeddedId
     private Order_Detail_EmbeddableKey orderDetailEmbeddableKey;
 
-    @MapsId("o_num")
+    @MapsId("orderDetail_FK_orderNum")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "o_num")
     private Order order;
 
-    @MapsId("f_num")
+    @MapsId("orderDetail_FK_FooditemNum")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "f_num")
     private FoodItem foodItem;

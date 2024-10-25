@@ -6,4 +6,15 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface NoticeRepository extends CrudRepository<Notice, Integer> {
+
+    // SELECT
+
+
+    // INSERT
+
+
+    // UPDATE
+
+
+    // DELETE
 }

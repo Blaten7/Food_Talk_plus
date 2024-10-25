@@ -6,4 +6,15 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TradeRecommendRepository extends JpaRepository<Trade_Recommend, Long> {
+
+    // SELECT
+
+
+    // INSERT
+
+
+    // UPDATE
+
+
+    // DELETE
 }

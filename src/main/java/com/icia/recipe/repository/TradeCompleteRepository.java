@@ -6,4 +6,15 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TradeCompleteRepository extends JpaRepository<Trade_Complete, Long> {
+
+    // SELECT
+
+
+    // INSERT
+
+
+    // UPDATE
+
+
+    // DELETE
 }

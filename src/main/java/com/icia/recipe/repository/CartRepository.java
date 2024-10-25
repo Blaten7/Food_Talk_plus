@@ -11,5 +11,16 @@ import java.util.List;
 @Repository
 public interface CartRepository extends JpaRepository<Cart, Long> {
 
+    // SELECT
+
+
+    // INSERT
+
+
+    // UPDATE
+
+
+    // DELETE
+
 
 }

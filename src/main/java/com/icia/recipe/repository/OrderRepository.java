@@ -7,9 +7,16 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
-    void executeGettodayprofitcount();
+    // SELECT
 
-    void executeGetweekprofitcount();
 
-    void executeGetmonthlyprofit();
+    // INSERT
+
+
+    // UPDATE
+
+
+    // DELETE
+
+
 }

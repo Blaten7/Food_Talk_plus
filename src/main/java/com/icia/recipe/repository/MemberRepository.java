@@ -10,20 +10,15 @@ import java.util.List;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-    @Modifying
-    void saveInsertnotice();
+    // SELECT
 
-    List<Member> findBySelectorder();
 
-    List<Member> findBySelectorderdetail();
+    // INSERT
 
-    void executeGetordercount();
 
-    void executeGetranking();
+    // UPDATE
 
-    void executeGetranking50();
 
-    void executeGetnoticelist();
+    // DELETE
 
-    void executeCheckid();
 }

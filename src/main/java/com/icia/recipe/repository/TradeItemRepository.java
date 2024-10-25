@@ -6,4 +6,15 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TradeItemRepository extends JpaRepository<Trade_Item, Long> {
+
+    // SELECT
+
+
+    // INSERT
+
+
+    // UPDATE
+
+
+    // DELETE
 }

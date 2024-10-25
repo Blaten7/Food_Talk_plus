@@ -2,6 +2,7 @@ package com.icia.recipe.repository;
 
 import com.icia.recipe.entity.Img;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -27,13 +28,29 @@ public interface ImgRepository extends JpaRepository<Img, Long> {
             @Param("code") String code
     );
 
-    @Query(value = "select * from FoodItem f " +
-            "join Category c " +
-            "on f._c_num = c.c_num " +
-            "where f_num =  :fNum", nativeQuery = true)
-    List<Img> getFiImg();
+    @Query(value = "SELECT * FROM img i JOIN fooditem f ON i.f_num = f.f_num " +
+            "JOIN category c ON c.c_num = f.c_num WHERE c.c_num = :bigCgNum " +
+            "AND f.f_title = :title AND f.f_code = :code AND c.c_name = :cgName",
+            nativeQuery = true)
+    List<Img> getImg(@Param("bigCgNum") String bigCgNum,
+                     @Param("title") String title,
+                     @Param("code") String code,
+                     @Param("cgName") String cgName);
 
     // INSERT
+    @Query(value = "SELECT CAST(MAX(CAST(f_num AS UNSIGNED)) AS CHAR) FROM fooditem", nativeQuery = true)
+    String getMaxFoodItemNum();
+
+    @Modifying
+    @Query(value = "INSERT INTO img (i_path, i_sys_name, i_original_name, f_num, m_id, i_filesize) " +
+            "VALUES (:iPath, :iSysName, :iOriginalName, :maxNum, :mId, :iFileSize)",
+            nativeQuery = true)
+    void insertFoodItemImg(@Param("iPath") String iPath,
+                           @Param("iSysName") String iSysName,
+                           @Param("iOriginalName") String iOriginalName,
+                           @Param("maxNum") String maxNum,
+                           @Param("mId") String mId,
+                           @Param("iFileSize") long iFileSize);
 
 
     // UPDATE

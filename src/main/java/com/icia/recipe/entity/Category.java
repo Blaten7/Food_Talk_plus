@@ -15,7 +15,7 @@ import java.util.List;
 public class Category implements Serializable {
 
     @Id
-    @Column(name = "c_num", nullable = false, insertable = true, updatable = true)
+    @Column(name = "c_num", nullable = false)
     private String bigCgNum;
 
     @Column(name = "c_num2", nullable = true, columnDefinition = "VARCHAR(10) DEFAULT NULL")

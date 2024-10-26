@@ -13,6 +13,9 @@ import java.io.Serializable;
 public class Trade_Item implements Serializable {
 
     @Id
+    @Column
+    private Long t_num;
+
     @OneToOne
     @JoinColumn (name = "t_num", referencedColumnName = "t_num", unique = true, columnDefinition = "SMALLINT DEFAULT NULL")
     private Trade trade;

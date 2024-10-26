@@ -1,9 +1,6 @@
 package com.icia.recipe.repository;
 
 import com.icia.recipe.entity.FoodItem;
-import com.icia.recipe.home.dto.FooditemDto;
-import com.icia.recipe.management.dto.FoodItemDto;
-import io.micrometer.common.lang.NonNullApi;
 import jakarta.annotation.Nullable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -29,7 +26,7 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
             "WHERE status = 1 " +
             "ORDER BY :param",
             nativeQuery = true)
-    List<FoodItemDto> getSortedFoodItemList(
+    List<FoodItem> getSortedFoodItemList(
             @Param("param") String param
     );
 
@@ -43,7 +40,7 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
             "on f.f_num = i.f_num " +
             "where f.f_num = :trCode " +
             "and f.status = 1", nativeQuery = true)
-    List<FoodItemDto> getFoodItemListByTrCode(
+    List<FoodItem> getFoodItemListByTrCode(
             @Param("trCode") String trCode
     );
 
@@ -69,10 +66,9 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
             "WHERE f.status = 1 " +
             "AND (:numName IS NULL OR :numName != 'zzzz' OR :numName = :sDtoDataNum) " +
             "GROUP BY f.f_num " +
-            "ORDER BY :sDtoDataName :sDtoDataSort " +
-            "LIMIT :sDtoStartIdx, :sDtoListCnt",
-            nativeQuery = true)
-    List<FooditemDto> searchFoodItem(@Param("numName") String numName,
+            "ORDER BY :sDtoDataName =:sDtoDataSort " +
+            "LIMIT :sDtoStartIdx, :sDtoListCnt", nativeQuery = true)
+    List<FoodItem> searchFoodItem(@Param("numName") String numName,
                                      @Param("sDtoDataNum") String sDtoDataNum,
                                      @Param("sDtoDataName") String sDtoDataName,
                                      @Param("sDtoDataSort") String sDtoDataSort,
@@ -87,7 +83,7 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
             "JOIN category c1 ON f.c_num = c1.c_num " +
             "WHERE f.f_num = :num",
             nativeQuery = true)
-    FooditemDto searchFoodDetail(@Param("num") String num);
+    FoodItem searchFoodDetail(@Param("num") String num);
 
     @Query(value = "SELECT f_contents FROM fooditem WHERE f_num = :num", nativeQuery = true)
     String searchFoodDetailInfo(@Param("num") String num);
@@ -119,7 +115,7 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
             "FORMAT(SUM(f.f_count) * TRUNCATE(SUM(f.f_price) / COUNT(*), 0), 0) AS total " +
             "FROM fooditem f JOIN category c ON f.c_num = c.c_num " +
             "WHERE f.status = 1 GROUP BY c.c_num, c.c_num2, c.c_name, f.f_title " +
-            "ORDER BY :param :sort",
+            "ORDER BY :param =:sort",
             nativeQuery = true)
     List<FoodItem> getSortedInvenList(@Param("param") String param,
                                       @Param("sort") String sort);

@@ -1,14 +1,11 @@
 package com.icia.recipe.config;
 
-import com.icia.recipe.home.dao.CartDao;
-import com.icia.recipe.home.dto.CartDto;
-import com.icia.recipe.home.service.MemberService;
+import com.icia.recipe.service.mainService.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -19,8 +16,8 @@ import java.security.Principal;
 public class DataChangeInterceptor implements HandlerInterceptor {
     @Autowired
     MemberService mSer;
+
     @Autowired
-    CartDao cDao;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 사용자 정보 가져오기

@@ -1,7 +1,8 @@
 package com.icia.recipe.home.dao;
 
-import com.icia.recipe.home.dto.*;
-import com.icia.recipe.management.dto.MemberDto;
+import com.icia.recipe.entity.FoodItem;
+import com.icia.recipe.entity.Member;
+import com.icia.recipe.entity.Order;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -15,7 +16,7 @@ public interface MemberDao {
     boolean join(Member member);
 
     @Select("select * from member where m_id=#{m_id}")
-    MemberDto check(String m_id);
+    Member check(String m_id);
 
     @Select("select * from member where m_id=#{m_id}")
     Member getMemberInfo(String username);
@@ -56,13 +57,13 @@ public interface MemberDao {
     @Update("update member set m_pw=#{newPw} where m_pw=#{pw}")
     boolean updateNewPw(String pw, String newPw);
 
-    List<OrderDto> selectOrder(SearchDto sDto);
+    List<Order> selectOrder(Search sDto);
 
     List<OrderDto> selectOrderDetail(String num);
 
     int getorderCount(String id);
 
-    List<FooditemDto> getRanking();
+    List<FoodItem> getRanking();
 
     List<FooditemDto> getRanking50();
 

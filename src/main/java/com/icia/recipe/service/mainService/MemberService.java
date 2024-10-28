@@ -1,15 +1,23 @@
 package com.icia.recipe.service.mainService;
 
+import com.icia.recipe.dto.mainDto.NoticeDto;
+import com.icia.recipe.dto.mainDto.OrderDto;
+import com.icia.recipe.dto.mainDto.SearchDto;
 import com.icia.recipe.entity.FoodItem;
 import com.icia.recipe.entity.Member;
 import com.icia.recipe.entity.Notice;
 import com.icia.recipe.entity.Order;
+import com.icia.recipe.repository.FoodItemRepository;
 import com.icia.recipe.repository.MemberRepository;
+import com.icia.recipe.repository.NoticeRepository;
+import com.icia.recipe.repository.OrderRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -17,6 +25,12 @@ import java.util.List;
 public class MemberService {
     @Autowired
     MemberRepository mr;
+    @Autowired
+    OrderRepository or;
+    @Autowired
+    FoodItemRepository fr;
+    @Autowired
+    NoticeRepository nr;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -115,44 +129,44 @@ public class MemberService {
         }
     }
 
-//    public String getPaging(String id, SearchDto sDto){
-//        int totalNum = mr.getorderCount(id);
-//        log.info("totalNum : {}", totalNum);
-//        String listUrl = "javascript:paging(";
-//        Paging paging = new Paging(totalNum, sDto.getPageNum(),sDto.getListCnt(),pageCount,listUrl);
-//        return paging.makeHtmlPaging();
-//    }
+    public String getPaging(String id, SearchDto sDto){
+        int totalNum = or.getOrderCount(id);
+        log.info("totalNum : {}", totalNum);
+        String listUrl = "javascript:paging(";
+        Paging paging = new Paging(totalNum, sDto.getPageNum(),sDto.getListCnt(),pageCount,listUrl);
+        return paging.makeHtmlPaging();
+    }
 
 
-//    public void selectOrder(String id, Model model, SearchDto sDto) {
-//        pageCount = 4;
-//        if (sDto.getPageNum() == null)
-//            sDto.setPageNum(1);
-//        if (sDto.getListCnt() == null)
-//            sDto.setListCnt(pageCount);
-//        if (sDto.getStartIdx() == null)
-//            sDto.setStartIdx(0);
-//       sDto.setStartIdx((sDto.getPageNum()-1)*sDto.getListCnt());
-//        HashMap<String,String> hMap = new HashMap<>();
-//        hMap.put("id",id);
-//        sDto.setData(hMap);
-//        List<OrderDto> list = mr.selectOrder(sDto);
-//        log.info("selectOrder:{}",list);
-//        model.addAttribute("orderTable", makeOrder(list));
-//        model.addAttribute("empty", "ok");
-//    }
+    public void selectOrder(String id, Model model, SearchDto sDto) {
+        pageCount = 4;
+        if (sDto.getPageNum() == null)
+            sDto.setPageNum(1);
+        if (sDto.getListCnt() == null)
+            sDto.setListCnt(pageCount);
+        if (sDto.getStartIdx() == null)
+            sDto.setStartIdx(0);
+       sDto.setStartIdx((sDto.getPageNum()-1)*sDto.getListCnt());
+        HashMap<String,String> hMap = new HashMap<>();
+        hMap.put("id",id);
+        sDto.setData(hMap);
+        List<OrderDto> list = or.selectOrder(id, sDto);
+        log.info("selectOrder:{}",list);
+        model.addAttribute("orderTable", makeOrder(list));
+        model.addAttribute("empty", "ok");
+    }
 
-    private String makeOrder(List<Order> list) {
+    private String makeOrder(List<OrderDto> list) {
         StringBuilder sb = new StringBuilder();
         sb.append("<section class=\"orderPayment__sect accordion itemConfirm\">")
                 .append("<div class=\"orderPayment__cont\" id=\"dvCartListArea\" style=\"padding-bottom: 0;\">")
                 .append("<strong id=\"normalTitle\" class=\"itemConfirm__title normal-title\">-진행중인 주문</strong>");
         list.forEach(l -> {
             int index = 0;
-            int price = l.getOrder_total();
-//            price = price.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
+            String price = l.getO_total();
+            price = price.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
             String delivery = null;
-            switch (l.getOrder_delivery()) {
+            switch (l.getO_delivery()){
                 case "0":
                     delivery = "배송 준비중";
                     break;
@@ -163,11 +177,11 @@ public class MemberService {
                     delivery = "배송 완료";
                     break;
             }
-            int count = l.getOrder_count() - 1;
+            int count = Integer.parseInt(l.getO_count())-1;
             sb.append("<div class=\"planMeals box\" id=\"normal-item\">")
                     .append("<div class=\"box__list single\">")
                     .append("<strong class=\"title\">")
-                    .append("<a href=\"javascript:void(0)\" onclick=\"modalOpen(" + l.getOrder_num() + ")\">" + l.getMembersOrderList().get(index).getF_title() + "...외" + count + "개</a>")
+                    .append("<a href=\"javascript:void(0)\" onclick=\"modalOpen("+l.getO_num()+")\">" + l.getFList().get(index).getF_title() +"...외"+  count + "개</a>")
                     .append("</strong>")
                     .append("<div class=\"boxInner\">")
                     .append("<figure class=\"boxInner__thumb\">")
@@ -191,12 +205,12 @@ public class MemberService {
     }
 
     public String selectOrderDetail(String num) {
-        List<Order> list = mr.selectOrderDetail(num);
+        List<OrderDto> list = or.selectOrderDetail(num);
         log.info("selectOrderDetail:,{}", list);
         return makeOrderDatail(list);
     }
 
-    private String makeOrderDatail(List<Order> list) {
+    private String makeOrderDatail(List<OrderDto> list) {
         StringBuilder sb = new StringBuilder();
         sb.append("<section class=\"orderPayment__sect accordion itemConfirm\">")
                 .append("<div class=\"orderPayment__cont\" id=\"dvCartListArea\" style=\"padding-bottom: 0;\">")
@@ -237,17 +251,17 @@ public class MemberService {
     }
 
     public List<FoodItem> getRanking() {
-        return mr.getRanking();
+        return fr.getRanking();
     }
 
     public boolean insertNotice(String title, String contents, String id) {
-        return mr.insertNotice(title, contents, id);
+        return nr.insertNotice(title, contents, id);
     }
 
-    public List<Notice> getNoticeList() {
-        List<Notice> nList = mr.getNoticeList();
-        for (Notice n : nList) {
-            n.setMember("관리자");
+    public List<NoticeDto> getNoticeList() {
+        List<NoticeDto> nList = nr.getNoticeList();
+        for (NoticeDto n : nList) {
+            n.setM_id("관리자");
         }
         return nList;
     }

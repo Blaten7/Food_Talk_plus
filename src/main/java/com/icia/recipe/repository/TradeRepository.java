@@ -1,6 +1,9 @@
 package com.icia.recipe.repository;
 
+import com.icia.recipe.dto.mainDto.TradeDto;
+import com.icia.recipe.dto.mainDto.TradeItemDto;
 import com.icia.recipe.entity.Trade;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -20,7 +23,7 @@ public interface TradeRepository extends JpaRepository<Trade, Long> {
     @Query(value = "SELECT t_num, t_title, m_id, t_date, t_views, t_count " +
             "FROM trade WHERE visible = 1 ORDER BY t_date",
             nativeQuery = true)
-    List<Trade> tradeDateSort();
+    List<TradeDto> tradeDateSort();
 
     @Query(value = "SELECT t_num, t_title, m_id, t_date, t_views, t_count " +
             "FROM trade WHERE visible = 1 ORDER BY t_views DESC",
@@ -30,41 +33,89 @@ public interface TradeRepository extends JpaRepository<Trade, Long> {
     @Query(value = "SELECT t_num, t_title, m_id, t_date, t_views, t_count " +
             "FROM trade WHERE visible = 1 ORDER BY t_count DESC",
             nativeQuery = true)
-    List<Trade> tradeCountSort();
+    List<TradeDto> tradeCountSort();
 
-    @Query(value = "SELECT * FROM trade WHERE t_num = :tNum", nativeQuery = true)
-    Optional<Trade> tradeExchangefrm(@Param("tNum") Long tNum);
+    @Query(value = "SELECT * FROM trade WHERE t_num = :#{#tDto.t_num}", nativeQuery = true)
+    boolean tradeExchange(@Param("tDto")TradeDto tDto);
 
     @Query(value = "SELECT t_num, t_title FROM trade WHERE t_num = :tNum", nativeQuery = true)
-    Optional<Trade> tradeUpdateList(@Param("tNum") Long tNum);
+    List<TradeDto> tradeUpdateList(@Param("tNum")Integer tNum);
+
+    @Query(value = "SELECT m_id FROM traderecommend WHERE m_id = :#{#tDto.m_id} AND t_num = :#{#tDto.t_num}", nativeQuery = true)
+    List<TradeDto> selectRecommend(@Param("tDto")TradeDto tDto);
+
+    @Query(value = "SELECT ti.t_num, t.m_id, t.t_title, ti.t_item, ti.t_itemcount, ti.t_unit, ti.t_change, t.visible " +
+            "FROM trade t JOIN tradeitem ti ON t.t_num = ti.t_num WHERE ti.t_num = :#{#tDto.t_num}",
+            nativeQuery = true)
+    List<TradeDto> tradeDetail(@Param("tDto")TradeDto tDto);
+
+    @Query(value = "SELECT * FROM tradeitem WHERE t_num = :tNum", nativeQuery = true)
+    List<TradeDto> tradeUpList(@Param("tNum")Integer tNum);
+
+    @Select("select * from trade t join member m on t.m_id = m.m_id")
+    List<TradeDto> getTradeList();
+
+    @Select("select * from tradeitem")
+    List<TradeItemDto> getTradeItemList();
 
 
     // INSERT
     @Modifying
-    @Query(value = "INSERT INTO trade VALUES (NULL, NULL, :mId, DEFAULT, DEFAULT, DEFAULT, :tTitle, DEFAULT)", nativeQuery = true)
-    void saveTrade(@Param("mId") String mId, @Param("tTitle") String tTitle);
+    @Query(value = "INSERT INTO trade VALUES (NULL, NULL, :#{#tDto.m_id}, DEFAULT, DEFAULT, DEFAULT, :#{tDto.t_title}, DEFAULT)", nativeQuery = true)
+    boolean saveTrade(@Param("tradeDto")TradeDto tDto);
 
+    @Modifying
+    @Query(value = "INSERT INTO traderecommend VALUES (:#{#tDto.m_id}, :#{#tDto.t_num})", nativeQuery = true)
+    boolean insertRecommend(@Param("tradeDto")TradeDto tDto);
 
     // UPDATE
     @Modifying
-    @Query(value = "UPDATE trade SET t_title = :tTitle WHERE t_num = :tNum", nativeQuery = true)
-    void tradeUpdate(@Param("tTitle") String tTitle, @Param("tNum") Long tNum);
+    @Query(value = "UPDATE trade SET t_title = :#{tDto.t_title} WHERE t_num = :#{#tDto.t_num}", nativeQuery = true)
+    boolean tradeUpdate(@Param("tradeDto")TradeDto tDto);
 
     @Modifying
     @Query(value = "UPDATE trade SET t_views = t_views + 1 WHERE t_num = :tNum", nativeQuery = true)
-    void viewsCount(@Param("tNum") Long tNum);
+    void viewsCount(@Param("tNum") Integer tNum);
 
     @Modifying
-    @Query(value = "UPDATE trade SET t_count = t_count + 1 WHERE t_num = :tNum", nativeQuery = true)
-    void tradeRecommend(@Param("tNum") Long tNum);
+    @Query(value = "UPDATE trade SET t_count = t_count + 1 WHERE t_num = :#{#tDto.t_num}", nativeQuery = true)
+    boolean tradeRecommend(@Param("tradeDto")TradeDto tDto);
 
     @Modifying
     @Query(value = "UPDATE trade SET visible = 2 WHERE t_num = :tNum", nativeQuery = true)
-    void tradeDelete(@Param("tNum") Long tNum);
+    boolean tradeDelete(@Param("tNum") Integer tNum);
+
+    @Modifying
+    @Query(value = "INSERT INTO tradeitem (t_num, t_item, t_itemcount, t_unit, t_change, t_order) " +
+            "SELECT MAX(t_num), :#{#tDto.t_item}, :#{#tDto.t_itemcount}, :#{#tDto.t_unit}, :#{#tDto.t_change}, :#{#tDto.t_order} FROM trade",
+            nativeQuery = true)
+    boolean tradeSaveItem(@Param("tradeDto")TradeDto tDto);
+
+    @Modifying
+    @Query(value = "INSERT INTO tradeitem (t_num, t_item, t_itemcount, t_unit, t_change, t_order) " +
+            "SELECT :#{#tDto.t_num}, :#{#tDto.t_item}, :#{#tDto.t_itemcount}, :#{#tDto.t_unit}, :#{#tDto.t_change}, " +
+            "MAX(t_order) + 1 FROM tradeitem WHERE t_num = :#{#tDto.t_num}",
+            nativeQuery = true)
+    boolean tradeUpInsert(@Param("tradeDto") TradeDto tDto);
+
+
+    @Modifying
+    @Query(value = "UPDATE tradeitem SET t_item = :#{#tDto.t_item}, t_itemcount = :#{#tDto.t_itemcount}, t_unit = :#{#tDto.t_unit}, " +
+            "t_change = :#{tDto.t_change} WHERE t_num = :#{#tDto.t_num} AND t_order = :#{tDto.t_order}",
+            nativeQuery = true)
+    boolean tradeUpdateItem(@Param("tradeDto")TradeDto tDto);
+
+    @Modifying
+    @Query(value = "UPDATE tradeitem SET t_itemcount = t_itemcount - :#{#tDto.t_itemcount} " +
+            "WHERE t_num = :#{#tDto.t_num} AND t_item = :#{#tDto.t_item}",
+            nativeQuery = true)
+    boolean tradeItemDelete(@Param("tradeDto")TradeDto tDto);
 
 
     // DELETE
-
+    @Modifying
+    @Query(value = "DELETE FROM tradeitem WHERE t_num = :#{#tDto.t_num} AND t_order = :#{tDto.t_order}", nativeQuery = true)
+    boolean tradeUpDelete(@Param("tradeDto")TradeDto tDto);
 
 
 }

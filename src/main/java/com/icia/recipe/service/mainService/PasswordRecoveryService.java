@@ -1,7 +1,8 @@
 package com.icia.recipe.service.mainService;
 
+import com.icia.recipe.entity.Member;
 import com.icia.recipe.home.dao.MemberDao;
-import com.icia.recipe.home.dto.Member;
+import com.icia.recipe.repository.MemberRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,21 +17,21 @@ import java.util.Properties;
 @Slf4j
 public class PasswordRecoveryService {
     @Autowired
-    MemberDao mDao;
+    MemberRepository mr;
 
     @Autowired
     HttpSession session;
 
     public String PasswordRecovery(Member member) {
         //검증하고 처리하는 로직
-        String user=mDao.passwordRecovery(member);
+        String user=mr.passwordRecovery(member);
 
         //인증 코드 생성
         if(user!=null) {
             String authenticationCode = generateCode();
             session.setAttribute("authCode", authenticationCode);
             //사용자 이메일로 인증 코드를 전송
-            String recipientEamil = member.getM_id();
+            String recipientEamil = member.getMember_id();
             try {
                 sendEmail(recipientEamil, authenticationCode);
                 log.info("이메일 전송 성공");

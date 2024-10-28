@@ -1,5 +1,6 @@
 package com.icia.recipe.controller.mainController;
 
+import com.icia.recipe.dto.mainDto.TradeDto;
 import com.icia.recipe.home.dto.TradeDto;
 import com.icia.recipe.service.mainService.TradeService;
 import jakarta.servlet.http.HttpServletRequest;

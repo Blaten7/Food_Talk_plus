@@ -1,9 +1,10 @@
 package com.icia.recipe.service.manageService;
 
-import com.icia.recipe.management.dao.BoardDao;
-import com.icia.recipe.management.dao.InvenDao;
-import com.icia.recipe.management.dto.BoardDto;
-import com.icia.recipe.management.dto.FoodItemDto;
+import com.icia.recipe.entity.Category;
+import com.icia.recipe.entity.FoodItem;
+import com.icia.recipe.repository.CategoryRepository;
+import com.icia.recipe.repository.FoodItemRepository;
+import com.icia.recipe.repository.RecipeRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,24 +22,27 @@ import java.util.stream.Collectors;
 public class BoardService {
 
     @Autowired
-    private BoardDao bDao;
-
-    @Autowired
-    private InvenDao iDao;
-
-    @Autowired
     private InvenService iSer;
+
+    @Autowired
+    CategoryRepository cr;
+
+    @Autowired
+    FoodItemRepository fr;
+
+    @Autowired
+    RecipeRepository rr;
 
     public static final int PAGECOUNT = 2;
 
     // 식자재 대분류 값 가져오기
-    public List<BoardDto> getFoodItemBigCg() {
-        return bDao.getFoodItemBigCg();
+    public List<Category> getFoodItemBigCg() {
+        return cr.getFoodItemBigCg();
     }
 
     // 레시피 대분류 값 가져오기
     public List<BoardDto> getRecipeBigCg() {
-        return bDao.getRecipeBigCg();
+        return rr.getRecipeBigCg();
     }
 
     // 식자재 중분류 값 가져오기

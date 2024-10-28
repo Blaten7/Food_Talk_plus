@@ -1,6 +1,5 @@
 package com.icia.recipe.service.manageService;
 
-import com.icia.recipe.management.dao.MoneyDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

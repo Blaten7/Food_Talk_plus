@@ -1,7 +1,7 @@
 package com.icia.recipe.controller.manageRestController;
 
-import com.icia.recipe.management.dao.DeliveryDao;
-import com.icia.recipe.management.dto.DeliveryDto;
+import com.icia.recipe.dto.manageDto.DeliveryDto;
+import com.icia.recipe.repository.OrderRepository;
 import com.icia.recipe.service.manageService.DeliveryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +22,14 @@ public class DeliveryRestController {
     private DeliveryService dSer;
 
     @Autowired
-    private DeliveryDao dDao;
+    OrderRepository or;
 
     @PostMapping("/order/delivery/start")
     @Secured("ROLE_ADMIN")
     public List<DeliveryDto> deliveryStart(@RequestParam("keySet") ArrayList keySet, Model model) {
         boolean result = dSer.deliveryStart(keySet);
         if (result) {
-            return dDao.getOrderList();
+            return or.getOrderList();
         } else {
             log.info("[배송완료] 컨트롤러 에러");
             return null;
@@ -45,7 +45,7 @@ public class DeliveryRestController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return dDao.getOrderList();
+        return or.getOrderList();
 
     }
 
@@ -54,7 +54,7 @@ public class DeliveryRestController {
     public List<DeliveryDto> deliveryEnd(@RequestParam("keySet") ArrayList keySet, Model model) {
         boolean result = dSer.deliveryEnd(keySet);
         if (result) {
-            return dDao.getOrderList();
+            return or.getOrderList();
         } else {
             return null;
         }

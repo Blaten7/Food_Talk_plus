@@ -1,7 +1,11 @@
 package com.icia.recipe.repository;
 
+import com.icia.recipe.dto.mainDto.FooditemDto;
+import com.icia.recipe.dto.mainDto.ItemListDto;
+import com.icia.recipe.dto.mainDto.SearchDto;
 import com.icia.recipe.entity.FoodItem;
 import jakarta.annotation.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -66,14 +70,14 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
             "WHERE f.status = 1 " +
             "AND (:numName IS NULL OR :numName != 'zzzz' OR :numName = :sDtoDataNum) " +
             "GROUP BY f.f_num " +
-            "ORDER BY :sDtoDataName =:sDtoDataSort " +
+            "ORDER BY :#{#sDto.data.num} =:sDtoDataSort " +
             "LIMIT :sDtoStartIdx, :sDtoListCnt", nativeQuery = true)
-    List<FoodItem> searchFoodItem(@Param("numName") String numName,
-                                     @Param("sDtoDataNum") String sDtoDataNum,
-                                     @Param("sDtoDataName") String sDtoDataName,
-                                     @Param("sDtoDataSort") String sDtoDataSort,
-                                     @Param("sDtoStartIdx") int sDtoStartIdx,
-                                     @Param("sDtoListCnt") int sDtoListCnt);
+    List<FooditemDto> searchFoodItem(@Param("sDto")SearchDto sDto,
+                                  @Param("numName") String numName);
+
+    @Query(value = "SELECT COUNT(*) FROM fooditem WHERE status = 1 AND (:num IS NULL OR c_num = :num)", nativeQuery = true)
+    int getFooditemCount(@Param("num") String num);
+
 
     @Query(value = "SELECT c1.c_name AS c1_name, f.f_volume, FORMAT(f.f_price, 0) AS f_price, f.f_cal, f.f_save, " +
             "i.i_path, i.i_sys_name, f.f_contents, f.f_title, f.f_date, " +
@@ -83,10 +87,10 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
             "JOIN category c1 ON f.c_num = c1.c_num " +
             "WHERE f.f_num = :num",
             nativeQuery = true)
-    FoodItem searchFoodDetail(@Param("num") String num);
+    List<FooditemDto> searchFoodDetail(@Param("num") String num);
 
     @Query(value = "SELECT f_contents FROM fooditem WHERE f_num = :num", nativeQuery = true)
-    String searchFoodDetailInfo(@Param("num") String num);
+    List<FooditemDto> searchFoodDetailInfo(@Param("num")String num);
 
     @Query(value = "SELECT COUNT(*) FROM fooditem WHERE status = 1 " +
             "AND (:num IS NULL OR :num != 'no' OR c_num = :num)",
@@ -132,6 +136,10 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
                                    @Param("cgName") String cgName,
                                    @Param("bigCgNum") String bigCgNum);
 
+    @Query(value = "select * from fooditem", nativeQuery = true)
+    List<FooditemDto> getFooditemList();
+
+
     @Query(value = "SELECT f.f_num, f.c_num, f.c_num2, f.f_title, f.f_price, f.f_count, " +
             "f.f_date, f.f_edate, f.f_views, f.f_code, f.f_volume, f.f_origin, f.f_cal, f.f_save " +
             "FROM fooditem f JOIN category c ON c.c_num = f.c_num WHERE f.status = 1 " +
@@ -174,6 +182,7 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
 
 
 
+
     // INSERT
     @Modifying
     @Query(value = "INSERT INTO fooditem (c_num, c_num2, f_title, f_contents, f_price, f_count, f_edate, f_code, f_volume, f_origin, f_cal, f_save) " +
@@ -195,9 +204,8 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
 
     // UPDATE
     @Modifying
-    @Query(value = "UPDATE fooditem SET f_count = (f_count - :dvCartCount) WHERE f_num = :dvCartDetlId", nativeQuery = true)
-    void updateFooditemCount(@Param("dvCartCount") int dvCartCount,
-                             @Param("dvCartDetlId") Long dvCartDetlId);
+    @Query(value = "UPDATE fooditem SET f_count = (f_count - :#{#i.dvCartCount}) WHERE f_num = :#{#i.dvCartDetlId}", nativeQuery = true)
+    boolean updateFooditemCount(@Param("i")ItemListDto i);
 
     @Modifying
     @Query(value = "UPDATE fooditem SET f_views = f_views + 1 WHERE f_num = :num", nativeQuery = true)
@@ -245,6 +253,10 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
     @Modifying
     @Query(value = "UPDATE fooditem SET status = 0 WHERE f_code IN :deleteKeys", nativeQuery = true)
     void updateFoodItem(@Param("deleteKeys") List<String> deleteKeys);
+
+    @Modifying
+    @Query(value = "update FoodItem set f_views = fooditem.f_views +1 where f_num = :num", nativeQuery = true)
+    Throwable viewsPlus(String num);
 
     // DELETE
 

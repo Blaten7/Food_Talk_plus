@@ -1,14 +1,12 @@
 package com.icia.recipe.service.mainService;
 
-import com.icia.recipe.entity.Cart;
-import com.icia.recipe.entity.Member;
-import com.icia.recipe.home.dao.CartDao;
-import com.icia.recipe.home.dao.MemberDao;
-import com.icia.recipe.home.dto.CartDto;
-import com.icia.recipe.home.dto.InputOrderDto;
-import com.icia.recipe.management.dto.MemberDto;
+import com.icia.recipe.dto.mainDto.CartDto;
+import com.icia.recipe.dto.mainDto.InputOrderDto;
+import com.icia.recipe.dto.manageDto.MemberDto;
 import com.icia.recipe.repository.CartRepository;
+import com.icia.recipe.repository.FoodItemRepository;
 import com.icia.recipe.repository.MemberRepository;
+import com.icia.recipe.repository.OrderRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,9 +22,12 @@ public class CartService {
 
     @Autowired
     CartRepository cr;
-
     @Autowired
     MemberRepository mr;
+    @Autowired
+    OrderRepository or;
+    @Autowired
+    FoodItemRepository fr;
 
     public String intoCartList(HashMap<String, String> hMap, Model model) {
         int result = cr.insertCartList(hMap.get("num"), hMap.get("count"), hMap.get("user"));
@@ -38,13 +39,13 @@ public class CartService {
     }
 
     public String selectCart(String name, Model model) {
-        List<Cart> cDto = cr.selectCart(name);
+        List<CartDto> cDto = cr.selectCart(name);
         log.info("장바구니에 있는 수: {}", cDto.size());
         model.addAttribute("count", cDto.size());
         return makeCartList(cDto);
     }
 
-    private String makeCartList(List<Cart> cDto) {
+    private String makeCartList(List<CartDto> cDto) {
         StringBuilder sb = new StringBuilder();
         cDto.forEach(cart -> {
             int fPrice = Integer.parseInt(cart.getFList().get(0).getF_price());
@@ -81,19 +82,16 @@ public class CartService {
         return sb.toString();
     }
 
-    public String deleteCart(List num, Model model, String name) {
-        num.forEach(e -> {
+    public String deleteCart(List<Long> num, Model model, String name) {
+        for (Long e : num) {
             int result = cr.deleteCart(e);
-            if (result < 0) {
-                //추후 모달을 이용하든 해서 조건 추가
-            }
-        });
-        List<Cart> cDto = cr.selectCart(name);
+        }
+        List<CartDto> cDto = cr.selectCart(name);
         return makeCartList(cDto);
     }
 
     public void selectMember(String name, Model model) {
-        Member mDto = mr.check(name);
+        MemberDto mDto = mr.check(name);
         String[] phoneNumber = mDto.getM_phone().split("-");
         String[] memberId = mDto.getM_id().split("@");
         Arrays.stream(phoneNumber).forEach(c -> log.info("번호:{}", c));
@@ -144,27 +142,27 @@ public class CartService {
         hMap.put("id", id);
         hMap.put("count",iOrder.getItemList().size());
         iOrder.getInputList().get(0).setData(hMap);
-        boolean order = cDao.insertOrder(iOrder.getInputList().get(0));
+        boolean order = or.insertOrder(iOrder.getInputList().get(0));
         if (!order) {
             throw new RuntimeException("Failed to insert order");
         }
         // 주문 상세 삽입
         iOrder.getItemList().forEach(i->{
             i.setData(hMap);
-            boolean itemResult = cDao.insertOrderDetail(i);
+            boolean itemResult = or.insertOrderDetail(i);
             if (!itemResult) {
                 throw new RuntimeException("Failed to insert order detail");
             }
         });
         // 게시글 수량 빼기
         iOrder.getItemList().forEach(i->{
-            boolean itemMinus = cDao.updateFooditemCount(i);
+            boolean itemMinus = fr.updateFooditemCount(i);
             if (!itemMinus) {
                 throw new RuntimeException("Failed to update fooditem count");
             }
         });
         // 장바구니 삭제
-        int cartDelete = cDao.deleteCartName(id);
+        int cartDelete = cr.deleteCartName(id);
         if (cartDelete<0) {
             throw new RuntimeException("Failed to delete cart name");
         }

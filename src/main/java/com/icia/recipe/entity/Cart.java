@@ -3,13 +3,10 @@ package com.icia.recipe.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import com.icia.recipe.entity.FoodItem;
 
 @Entity
 @Data

@@ -1,5 +1,6 @@
 package com.icia.recipe.repository;
 
+import com.icia.recipe.dto.mainDto.CartDto;
 import com.icia.recipe.entity.Cart;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -22,7 +23,7 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
             "JOIN category c ON c.c_num = f.c_num " +
             "WHERE ca.m_id = :name",
             nativeQuery = true)
-    List<Cart> selectCart(@Param("name") String name);
+    List<CartDto> selectCart(@Param("name") String name);
 
     @Query(value = "SELECT COUNT(*) FROM cart WHERE m_id = :mId", nativeQuery = true)
     String selectCartCount(@Param("mId") String mId);
@@ -31,9 +32,9 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
     // INSERT
     @Modifying
     @Query(value = "INSERT INTO cart VALUES (DEFAULT, :user, :num, :count, DEFAULT)", nativeQuery = true)
-    void insertCartList(@Param("user") String user,
-                        @Param("num") Long num,
-                        @Param("count") int count);
+    int insertCartList(@Param("user") String user,
+                        @Param("num") String num,
+                        @Param("count") String count);
 
 
     // UPDATE
@@ -42,11 +43,13 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
     // DELETE
     @Modifying
     @Query(value = "DELETE FROM cart WHERE ca_num = :e", nativeQuery = true)
-    void deleteCart(@Param("e") Long e);
+    int deleteCart(@Param("e") Long e);
 
     @Modifying
     @Query(value = "DELETE FROM cart WHERE m_id = :id", nativeQuery = true)
     void deleteCartByName(@Param("id") String id);
 
-
+    @Modifying
+    @Query(value = "DELETE FROM CART WHERE M_ID = :id", nativeQuery = true)
+    int deleteCartName(@Param("id") String id);
 }

@@ -1,10 +1,12 @@
 package com.icia.recipe.service.mainService;
 
-import com.icia.recipe.home.dao.CommonDao;
-import com.icia.recipe.home.dto.CtgDto;
-import com.icia.recipe.home.dto.FooditemDto;
-import com.icia.recipe.home.dto.TradeDto;
-import com.icia.recipe.home.dto.TradeItemDto;
+import com.icia.recipe.dto.mainDto.CtgDto;
+import com.icia.recipe.dto.mainDto.FooditemDto;
+import com.icia.recipe.dto.mainDto.TradeDto;
+import com.icia.recipe.dto.mainDto.TradeItemDto;
+import com.icia.recipe.repository.CategoryRepository;
+import com.icia.recipe.repository.FoodItemRepository;
+import com.icia.recipe.repository.TradeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,14 +19,22 @@ import java.util.List;
 @Slf4j
 public class MainSearchService {
 
+//    @Autowired
+//    CommonDao cDao;
     @Autowired
-    CommonDao cDao;
+    CategoryRepository cr;
+    @Autowired
+    FoodItemRepository fr;
+    @Autowired
+    TradeRepository tr;
+
+
 
     public List<?> getAllTableList(String value) {
-        List<CtgDto> categoryList = cDao.getCategoryList();
-        List<FooditemDto> fooditemList = cDao.getFooditemList();
-        List<TradeDto> tradeList = cDao.getTradeList();
-        List<TradeItemDto> tradeItemList = cDao.getTradeItemList();
+        List<CtgDto> categoryList = cr.getCategoryList();
+        List<FooditemDto> fooditemList = fr.getFooditemList();
+        List<TradeDto> tradeList = tr.getTradeList();
+        List<TradeItemDto> tradeItemList = tr.getTradeItemList();
         String[] values;
         if (value.contains(" ")) {
             values = value.split(" ");

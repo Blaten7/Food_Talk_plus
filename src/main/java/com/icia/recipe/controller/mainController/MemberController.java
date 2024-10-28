@@ -1,5 +1,7 @@
 package com.icia.recipe.controller.mainController;
 
+import com.icia.recipe.dto.mainDto.NoticeDto;
+import com.icia.recipe.dto.mainDto.SearchDto;
 import com.icia.recipe.entity.Member;
 import com.icia.recipe.entity.Notice;
 import com.icia.recipe.home.dto.Member;
@@ -92,7 +94,7 @@ public class MemberController {
     }
     @GetMapping("/customer/center")
     public String customerCenter(Model model) {
-        List<Notice> nList = mSer.getNoticeList();
+        List<NoticeDto> nList = mSer.getNoticeList();
         model.addAttribute("nList", nList);
         return "main/customerservice/notice";
     }
@@ -121,7 +123,7 @@ public class MemberController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/member/mypage")
-    public String mypage(Principal principal,Model model,SearchDto sDto) {
+    public String mypage(Principal principal, Model model, SearchDto sDto) {
         String id = principal.getName();
         log.info("pageNum:{}", sDto.getPageNum());
         log.info("sDto:{}",sDto);

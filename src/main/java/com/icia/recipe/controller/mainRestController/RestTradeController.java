@@ -1,5 +1,6 @@
 package com.icia.recipe.controller.mainRestController;
 
+import com.icia.recipe.dto.mainDto.TradeDto;
 import com.icia.recipe.home.dto.TradeDto;
 import com.icia.recipe.service.mainService.TradeService;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +47,7 @@ public class RestTradeController {
     }
 
     @PostMapping("/trade/recommend")
-    public boolean tradeRecommend(TradeDto tDto,@RequestParam("t_num") Integer t_num,@AuthenticationPrincipal UserDetails userDetails){
+    public boolean tradeRecommend(TradeDto tDto, @RequestParam("t_num") Integer t_num, @AuthenticationPrincipal UserDetails userDetails){
         String m_id=userDetails.getUsername();
         tDto.setM_id(m_id);
         tDto.setT_num(t_num);

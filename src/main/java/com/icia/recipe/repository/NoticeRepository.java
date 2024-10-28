@@ -1,5 +1,6 @@
 package com.icia.recipe.repository;
 
+import com.icia.recipe.dto.mainDto.NoticeDto;
 import com.icia.recipe.entity.Notice;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,13 +15,13 @@ public interface NoticeRepository extends CrudRepository<Notice, Integer> {
 
     // SELECT
     @Query(value = "SELECT * FROM notice", nativeQuery = true)
-    List<Notice> getNoticeList();
+    List<NoticeDto> getNoticeList();
 
 
     // INSERT
     @Modifying
     @Query(value = "INSERT INTO notice (title, contents, m_id) VALUES (:title, :contents, :id)", nativeQuery = true)
-    void insertNotice(@Param("title") String title,
+    boolean insertNotice(@Param("title") String title,
                       @Param("contents") String contents,
                       @Param("id") String id);
 

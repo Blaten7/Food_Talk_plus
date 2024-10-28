@@ -55,7 +55,7 @@ public class FooditemController {
             model.addAttribute("cal",l.getFoodItem_Cal());
             model.addAttribute("save",l.getFoodItem_Save());
             model.addAttribute("date",l.getFoodItem_Date());
-            model.addAttribute("c_name", l.getCList().get(0).getC_name());
+            model.addAttribute("c_name", l.getCartList().get(0).getC_name());
             model.addAttribute("count",l.getFoodItem_Count());
         });
             String info=fSer.fooditemDetailinfo(num,"foodInfo");

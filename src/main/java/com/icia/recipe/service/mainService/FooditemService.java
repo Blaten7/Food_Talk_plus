@@ -1,13 +1,12 @@
 package com.icia.recipe.service.mainService;
 
+import com.icia.recipe.dto.mainDto.*;
+import com.icia.recipe.entity.Category;
 import com.icia.recipe.entity.FoodItem;
-import com.icia.recipe.home.dao.FooditemDao;
-import com.icia.recipe.home.dao.MemberDao;
-import com.icia.recipe.home.dto.FooditemDto;
-import com.icia.recipe.home.dto.CtgDto;
-import com.icia.recipe.home.dto.ImgDto;
-import com.icia.recipe.home.dto.SearchDto;
+import com.icia.recipe.entity.Img;
+import com.icia.recipe.repository.CategoryRepository;
 import com.icia.recipe.repository.FoodItemRepository;
+import com.icia.recipe.repository.ImgRepository;
 import com.icia.recipe.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +19,21 @@ import java.util.*;
 @Slf4j
 public class FooditemService {
 
+    FoodItem fi;
+
+    FoodItemRepository fir;
 
     @Autowired
     FoodItemRepository fr;
 
     @Autowired
+    CategoryRepository cr;
+
+    @Autowired
     MemberRepository mr;
+
+    @Autowired
+    ImgRepository ir;
 
     public String fooditemOrder(String order, String num, SearchDto sDto) {
         log.info("fooditemOrder 입장");
@@ -51,7 +59,7 @@ public class FooditemService {
                 log.info("이상한거 들어옴");
                 return null;
         }
-        String cNum = num.substring(0,1);
+        String cNum = num.substring(0, 1);
         log.info("num:{}", num);
         String numName = "";
         switch (cNum) {
@@ -61,7 +69,7 @@ public class FooditemService {
             case "2":
                 numName = "f.c_num2";
                 break;
-            case "3","4":
+            case "3", "4":
                 numName = "f.c_num2";
                 break;
             default:
@@ -71,44 +79,44 @@ public class FooditemService {
         log.info("order: {},{}", name, sort);
         log.info("ctg: {},{}", numName, num);
         List<FooditemDto> list = null; //new ArrayList<>();
-        HashMap<String,String> hMap = new HashMap<>();
-        hMap.put("name",name);
-        hMap.put("sort",sort);
-        hMap.put("num",num);
+        HashMap<String, String> hMap = new HashMap<>();
+        hMap.put("name", name);
+        hMap.put("sort", sort);
+        hMap.put("num", num);
         sDto.setData(hMap);
-        list = fDao.searchFooditem(sDto,numName);
+        list = fr.searchFoodItem(sDto, numName);
         //list = list.stream().sorted(Comparator.comparing(FooditemDto::getF_price)).collect(Collectors.toList());
         log.info("fDto: {}", list);
         return makeFooditemListHtml(list);
     }
 
-   /* public String searchctg(String c_num) {
-        String num = c_num.substring(0,1);
-        log.info("num:{}", num);
-        String numName = "";
-        switch (num) {
-            case "1":
-                numName = "c1.c_num";
-                break;
-            case "2":
-                numName = "c2.c_num";
-                break;
-            case "3","4":
-                numName = "c3.c_num";
-                break;
-            default:
-                return null;
-        }
-        log.info("보내는 것: {},{} ",numName,c_num);
-      *//*  List<FooditemDto> list = fDao.searchctgFoodtitem(numName,c_num);*//*
-        return makeFooditemListHtml(list);
-    }*/
+//    public String searchctg(String c_num) {
+//        String num = c_num.substring(0, 1);
+//        log.info("num:{}", num);
+//        String numName = "";
+//        switch (num) {
+//            case "1":
+//                numName = "c1.c_num";
+//                break;
+//            case "2":
+//                numName = "c2.c_num";
+//                break;
+//            case "3", "4":
+//                numName = "c3.c_num";
+//                break;
+//            default:
+//                return null;
+//        }
+//        log.info("보내는 것: {},{} ", numName, c_num);
+//        List<FoodItem> list = .searchCtg(numName, c_num);
+//        return makeFooditemListHtml(list);
+//    }
 
     private String makeFooditemListHtml(List<FooditemDto> list) {
         StringBuilder sb = new StringBuilder();
         list.forEach(fDto -> {
             sb.append("<li class=\"baby-product renew-badge\">")
-                    .append("<a class=\"baby-product-link\" href=\"/fooditem/detail?f_num=" + fDto.getF_num() + "\" style=\"height: 466px\">")
+                    .append("<a class=\"baby-product-link\" href=\"/fooditem/detail?f_num=" + fi.getFooditem_num() + "\" style=\"height: 466px\">")
                     .append("<dl class=\"baby-product-wrap adjust-spacing\" style=\"height: 444px\">")
                     .append("<dt class=\"image\">");
             if (fDto.getIList().isEmpty()) {
@@ -131,11 +139,10 @@ public class FooditemService {
     }
 
 
-
     public String fooditemctg() {
         HashMap<String, String> hMap = new HashMap<>();
         List<CtgDto> cList = new ArrayList<>();
-        cList = fDao.searchCtg();
+        cList = cr.searchCtg();
         /* log.info("cList: {}",cList);*/
         return ctgMakeHtml(cList);
     }
@@ -188,10 +195,10 @@ public class FooditemService {
 
     }
 
-    public List<FoodItem> searchFoodDetail(String num, Model model) {
-        log.info("views: {}",fDao.viewsPlus(num));
-        List<FoodItem> list = fDao.searchFoodDetail(num);
-        if (!list.get(0).getIList().isEmpty()) {
+    public List<FooditemDto> searchFoodDetail(String num, Model model) {
+        log.info("views : ", fr.viewsPlus(num));
+        List<FooditemDto> list = fr.searchFoodDetail(num);
+        if (!list.get(0).getCList().isEmpty()) {
             String img = makeFoodDetailImg(list.get(0).getIList());
             model.addAttribute("img", img);
         }
@@ -213,8 +220,8 @@ public class FooditemService {
         String makeHtml = "";
         switch (type) {
             case "foodInfo":
-                fDto = fDao.searchFoodDetailInfo(num);
-                makeHtml = "<div>"+fDto.get(0).getF_contents()+"</div>";
+                fDto = fr.searchFoodDetailInfo(num);
+                makeHtml = "<div>" + fDto.get(0).getF_contents() + "</div>";
                 break;
 //            case "foodReview":
 //                fDao.searchFoodDetailReview();
@@ -230,18 +237,18 @@ public class FooditemService {
     }
 
     public String getPaging(String num, SearchDto sDto, String listUrl) {
-        log.info("여기가 아니야?{}",num);
-        if(num == null){
-            num ="no";
+        log.info("여기가 아니야?{}", num);
+        if (num == null) {
+            num = "no";
         }
-        int totalNum = fDao.getFooditemCount(num);
+        int totalNum = fr.getFooditemCount(num);
         log.info("totalNum : {}", totalNum);
-        Paging paging = new Paging(totalNum, sDto.getPageNum(),sDto.getListCnt(),sDto.getListCnt(),listUrl);
+        Paging paging = new Paging(totalNum, sDto.getPageNum(), sDto.getListCnt(), sDto.getListCnt(), listUrl);
         return paging.makeHtmlPaging();
     }
 
     public List<FoodItem> getRanking50() {
-        return mr.getRanking50();
+        return fr.getRanking50();
     }
 }
 

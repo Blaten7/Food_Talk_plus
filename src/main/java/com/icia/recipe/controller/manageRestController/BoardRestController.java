@@ -1,7 +1,10 @@
 package com.icia.recipe.controller.manageRestController;
 
+import com.icia.recipe.entity.Category;
 import com.icia.recipe.management.dto.BoardDto;
 import com.icia.recipe.management.dto.FoodItemDto;
+import com.icia.recipe.repository.CategoryRepository;
+import com.icia.recipe.repository.RecipeRepository;
 import com.icia.recipe.service.manageService.BoardService;
 import com.icia.recipe.service.manageService.InvenService;
 import jakarta.servlet.http.HttpSession;
@@ -27,16 +30,21 @@ public class BoardRestController {
     @Autowired
     private InvenService iSer;
 
+    @Autowired
+    CategoryRepository cr;
+    @Autowired
+    RecipeRepository rr;
+
     // 카테고리 관리. select option에 따라 대분류 div에 해당 값 가져오기
     @Secured("ROLE_ADMIN")
     @GetMapping("/bigcategory")
-    public List<BoardDto> getCategory(@RequestParam("cg") String cg) {
+    public List<Category> getCategory(@RequestParam("cg") String cg) {
         if (cg.equals("fooditem")) {
             // 식자재 대분류 카테고리 가져오기
-            return bSer.getFoodItemBigCg();
+            return cr.getFoodItemBigCg();
         } else if (cg.equals("recipe")) {
             // 레시피 대분류 카테고리 가져오기
-            return bSer.getRecipeBigCg();
+            return cr.getRecipeBigCg();
         }
 
         return null;
@@ -46,10 +54,10 @@ public class BoardRestController {
     // 중분류 카테고리 매핑
     @Secured("ROLE_ADMIN")
     @GetMapping("/midcategory")
-    public List<BoardDto> getMiddleCategory(@RequestParam("cg") String cg) {
+    public List<Category> getMiddleCategory(@RequestParam("cg") String cg) {
         if (String.valueOf(cg.charAt(0)).equals("1")) {
             // 선택한 대분류코드에 속하는 중분류 가져오기 식자재만.
-            return bSer.getFoodItemMidCg(cg);
+            return cr.getFoodItemMidCg(cg);
         } else if (String.valueOf(cg.charAt(1)).equals("4")) {
             return null;
         }
@@ -60,9 +68,9 @@ public class BoardRestController {
     // 소분류 카테고리 매핑
     @Secured("ROLE_ADMIN")
     @GetMapping("/smallcategory")
-    public List<BoardDto> getSmallCategory(@RequestParam("cg") String cg) {
+    public List<Category> getSmallCategory(@RequestParam("cg") String cg) {
         if (String.valueOf(cg.charAt(0)).equals("2")) {
-            List<BoardDto> getSmallCg = bSer.getFoodItemSmCg(cg);
+            List<Category> getSmallCg = cr.getFoodItemSmCg(cg);
             log.info("소분류카테고리 리스트 :{}가지고 복귀", getSmallCg);
             return getSmallCg;
         }

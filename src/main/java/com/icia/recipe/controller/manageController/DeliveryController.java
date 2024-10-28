@@ -1,6 +1,5 @@
 package com.icia.recipe.controller.manageController;
 
-import com.icia.recipe.management.dao.DeliveryDao;
 import com.icia.recipe.management.dto.DeliveryDto;
 import com.icia.recipe.service.manageService.DeliveryService;
 import lombok.extern.slf4j.Slf4j;

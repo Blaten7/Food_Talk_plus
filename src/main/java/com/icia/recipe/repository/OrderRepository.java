@@ -1,14 +1,17 @@
 package com.icia.recipe.repository;
 
+import com.icia.recipe.dto.mainDto.*;
+import com.icia.recipe.dto.manageDto.DeliveryDto;
 import com.icia.recipe.entity.Order;
-import com.icia.recipe.management.dto.DeliveryDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
@@ -62,12 +65,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "JOIN img i ON i.f_num = f.f_num " +
             "JOIN (SELECT MIN(i_num) AS min_inum, f_num FROM img GROUP BY f_num) min_img " +
             "ON min_img.min_inum = i.i_num " +
-            "WHERE o.m_id = :dataId GROUP BY o.o_num " +
-            "ORDER BY o.o_num DESC LIMIT :startIdx, :listCnt",
+            "WHERE o.m_id = :id GROUP BY o.o_num " +
+            "ORDER BY o.o_num DESC LIMIT :#{#sDto.startIdx}, :#{#sDto.listCnt}",
           nativeQuery = true)
-    List<Order> selectOrder(@Param("dataId") String dataId,
-                            @Param("startIdx") int startIdx,
-                            @Param("listCnt") int listCnt);
+    List<OrderDto> selectOrder(@Param("id")String id, @Param("searchDto")SearchDto sDto);
 
     @Query(value = "SELECT COUNT(*) FROM order1 WHERE m_id = :id", nativeQuery = true)
     Integer getOrderCount(@Param("id") String id);
@@ -99,6 +100,33 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
                      @Param("count") int count,
                      @Param("post") String post);
 
+    @Modifying
+    @Query(value = "INSERT INTO orderDetail (o_num, f_num, o_unit) VALUES (:#{#i.o_num}, :#{#i.dvCartDetlId}, :#{#i.dvCartCount})",
+            nativeQuery = true)
+    boolean insertOrderDetail(@Param("i")ItemListDto i);
+
+    @Query(value = "SELECT o.o_total AS o_total, o.o_count, f.f_title, i.i_sys_name, i.i_path, " +
+            "o.o_num, od.o_unit, f.f_num, f.f_price, o.o_num " +
+            "FROM order1 o JOIN orderdetail od ON od.o_num = o.o_num " +
+            "JOIN fooditem f ON f.f_num = od.f_num " +
+            "JOIN img i ON i.f_num = f.f_num " +
+            "JOIN (SELECT MIN(i_num) min_inum, f_num FROM img GROUP BY f_num) min " +
+            "ON min.min_inum = i.i_num " +
+            "WHERE o.o_num = :num ORDER BY o.o_num",
+            nativeQuery = true)
+    List<OrderDto> selectOrderDetail(@Param("num") String num);
+
+    @Modifying
+    @Query(value = "INSERT INTO order1 (o_num, m_id, o_total, o_date, o_name, o_address, o_phone, o_count, o_delivery, o_post) " +
+            "VALUES (NULL, :#{#dto.id}, :#{#dto.price}, DEFAULT, :#{#dto.name}, " +
+            "CONCAT(:#{#dto.addr1}, '_', :#{#dto.addr2}), CONCAT('010-', :#{#dto.phone1}, '-', :#{#dto.phone2}), " +
+            ":#{#dto.count}, DEFAULT, :#{#dto.post})",
+            nativeQuery = true)
+    boolean insertOrder(@Param("dto") InputListDto dto);
+
+
+
+
 
     // UPDATE
     @Modifying
@@ -110,9 +138,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query(value = "UPDATE order1 SET o_delivery = 2 WHERE o_delivery = 1 AND o_num IN :orderNumbers",
             nativeQuery = true)
     void endDelivery(@Param("orderNumbers") List<Long> orderNumbers);
-
-
-
 
     // DELETE
 

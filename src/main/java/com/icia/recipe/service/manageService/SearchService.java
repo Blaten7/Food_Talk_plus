@@ -1,11 +1,11 @@
 package com.icia.recipe.service.manageService;
 
-import com.icia.recipe.management.dao.BoardDao;
+import com.icia.recipe.entity.FoodItem;
 import com.icia.recipe.management.dao.InvenDao;
-import com.icia.recipe.management.dao.SearchDao;
 import com.icia.recipe.management.dto.FoodItemDto;
 import com.icia.recipe.management.dto.InvenDto;
 import com.icia.recipe.management.dto.MemberDto;
+import com.icia.recipe.repository.InvenAddRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class SearchService {
     private InvenDao iDao;
 
     @Autowired
-    private SearchDao sDao;
+    InvenAddRepository ir;
 
     public List<?> getSearchModalDetails(String className, ArrayList param) {
         List<?> thisList = null;
@@ -33,12 +33,12 @@ public class SearchService {
                 String cname = param.get(0).toString();
                 String code = param.get(1).toString();
                 String name = param.get(2).toString();
-                thisList = sDao.getSearchModalDetails(cname, code, name);
+                thisList = ir.getSearchModalDetails(cname, code, name);
                 break;
             case "invenAdd":
                 String company = param.get(0).toString();
                 String iname = param.get(1).toString();
-                thisList = sDao.getSearchModalDetailsInven(company, iname);
+                thisList = ir.getSearchModalDetailsInven(company, iname);
                 break;
             default:
         }
@@ -55,8 +55,8 @@ public class SearchService {
             keywords = null;
         }
         // 재고
-        List<FoodItemDto> inven = sDao.getInvenList();
-        List<FoodItemDto> searchInven = inven.stream()
+        List<FoodItem> inven = ir.getInvenList();
+        List<FoodItem> searchInven = inven.stream()
                 .filter(fis -> keywords == null ? (
                         fis.getC_name().contains(Keyword) ||
                                 fis.getF_date().contains(Keyword) ||

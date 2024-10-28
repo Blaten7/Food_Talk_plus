@@ -1,8 +1,10 @@
 package com.icia.recipe.repository;
 
+import com.icia.recipe.dto.mainDto.CtgDto;
 import com.icia.recipe.entity.Category;
 import com.icia.recipe.entity.FoodItem;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -60,7 +62,10 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
             "LEFT JOIN category c3 ON c2.c_num = c3.c_num2 " +
             "WHERE LEFT(c1.c_num, 1) = 1",
             nativeQuery = true)
-    List<Category> searchCtg();
+    List<CtgDto> searchCtg();
+
+    @Query(value = "select * from category", nativeQuery = true)
+    List<CtgDto> getCategoryList();
 
 
 

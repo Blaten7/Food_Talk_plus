@@ -1,12 +1,9 @@
 package com.icia.recipe.entity;
 
 import jakarta.persistence.*;
-
-import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +11,7 @@ import java.util.List;
 @Entity
 @Table(name = "fooditem")
 @NoArgsConstructor
-public class FoodItem implements Serializable {
+public class FoodItem {
 
     @Id
     @Column(name = "f_num", nullable = false, unique = true)
@@ -69,4 +66,5 @@ public class FoodItem implements Serializable {
 
     @ManyToMany(mappedBy = "foodList")
     private List<Cart> cartList = new ArrayList<>();
+
 }

@@ -1,10 +1,8 @@
 package com.icia.recipe.service.manageService;
 
+import com.icia.recipe.dto.manageDto.FoodItemDto;
 import com.icia.recipe.entity.Category;
-import com.icia.recipe.entity.FoodItem;
-import com.icia.recipe.repository.CategoryRepository;
-import com.icia.recipe.repository.FoodItemRepository;
-import com.icia.recipe.repository.RecipeRepository;
+import com.icia.recipe.repository.*;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +24,14 @@ public class BoardService {
 
     @Autowired
     CategoryRepository cr;
-
     @Autowired
     FoodItemRepository fr;
-
     @Autowired
     RecipeRepository rr;
+    @Autowired
+    ImgRepository imgr;
+    @Autowired
+    InvenAddRepository ir;
 
     public static final int PAGECOUNT = 2;
 
@@ -41,33 +41,33 @@ public class BoardService {
     }
 
     // 레시피 대분류 값 가져오기
-    public List<BoardDto> getRecipeBigCg() {
-        return rr.getRecipeBigCg();
+    public List<Category> getRecipeBigCg() {
+        return cr.getRecipeBigCg();
     }
 
     // 식자재 중분류 값 가져오기
-    public List<BoardDto> getFoodItemMidCg(String cg) {
+    public List<Category> getFoodItemMidCg(String cg) {
 
-        return bDao.getFoodItemMidCg(cg);
+        return cr.getFoodItemMidCg(cg);
     }
 
     // 레시피 중분류 값 가져오기
-    public List<BoardDto> getRecipeMidCg(String cgNum) {
-        return bDao.getRecipeMidCg(cgNum);
+    public List<Category> getRecipeMidCg(String cgNum) {
+        return cr.getRecipeMidCg(cgNum);
     }
 
     // 식자재 소분류 값 가져오기
-    public List<BoardDto> getFoodItemSmCg(String cg) {
-        return bDao.getFoodItemSmCg(cg);
+    public List<Category> getFoodItemSmCg(String cg) {
+        return cr.getFoodItemSmallCg(cg);
     }
 
     // 레시피 소분류 값 가져오기
-    public List<BoardDto> getRecipeSmCg(String cgNum) {
-        return bDao.getRecipeSmCg(cgNum);
+    public List<Category> getRecipeSmCg(String cgNum) {
+        return cr.getRecipeSmallCg(cgNum);
     }
 
     public List<?> deleteCategory(String name, String cg) {
-        boolean result = bDao.deleteCategory(name, cg);
+        boolean result = cr.deleteCategory(name);
         log.info(name);
         if (result) {
             return getAllCategory(name, cg);
@@ -84,8 +84,8 @@ public class BoardService {
         // 파라미터 추출
         String fiCode = request.getParameter("fiCode");
         String fiPrice = request.getParameter("fiPrice");
-        String fiBigCg = bDao.getBigCgNum(request.getParameter("fiBigCg"));
-        String fiMidCg = bDao.getMidCgNum(request.getParameter("fiMidCg"));
+        String fiBigCg = cr.getBigCg(request.getParameter("fiBigCg"));
+        String fiMidCg = cr.getMidCg(request.getParameter("fiMidCg"));
         String fiCounts = request.getParameter("fiCounts");
         String fiExDate = request.getParameter("fiExDate");
         String fiContents = request.getParameter("fiContents");
@@ -97,7 +97,8 @@ public class BoardService {
         String role = "ADMIN";
 
         // 식자재 정보 DB 저장
-        boolean update = bDao.insertFoodItem(fiCode, fiExDate, fiCounts, fiBigCg, fiMidCg, fiPrice, fiContents, fiTitle, fiVolume, fiOrigin, fiCal, fiSave);
+        FoodItemDto fDto = new FoodItemDto();
+        boolean update = fr.insertFoodItem(fDto);
 
         // 파일 업로드 및 DB 저장
         List<MultipartFile> files = request.getFiles("fiFiles");
@@ -141,7 +142,7 @@ public class BoardService {
             // 파일 저장 및 DB 삽입
             try {
                 mf.transferTo(new File(uploadPath + sysFileName));
-                boolean isInserted = bDao.insertFoodItemImg(fiMap);
+                boolean isInserted = imgr.insertFoodItemImg(oriFileName, sysFileName, realPath, role, filesize);
                 if (!isInserted) return false;  // 하나라도 실패하면 false 반환
             } catch (IOException e) {
                 log.error("[파일] 업로드 실패: {}", e.getMessage());
@@ -172,10 +173,10 @@ public class BoardService {
 
     // 식자재 리스트 가져오기. 대분류 중분류에 해당하는 이름으로 바꾸고 ㅇㅇ
     public List<FoodItemDto> getFoodItemList(Integer pageNum, Integer pageSize) {
-        List<FoodItemDto> fiList = bDao.getFoodItemList2();
+        List<FoodItemDto> fiList = fr.getFoodItemList2();
         for (FoodItemDto fi : fiList) {
-            fi.setC_num(bDao.getFoodItemListNaming(fi.getC_num()));
-            fi.setC_num2(bDao.getFoodItemListNaming2(fi.getC_num2()));
+            fi.setC_num(cr.getFoodItemListNaming(fi.getC_num()));
+            fi.setC_num2(cr.getFoodItemListNaming2(fi.getC_num2()));
             if (fi.getC_num().length() > 6) {
                 fi.setC_num(fi.getC_num().substring(0, 6) + "...");
             }
@@ -193,7 +194,7 @@ public class BoardService {
     }
 
     public Object getRecipeList() {
-        return bDao.getRecipeList();
+        return rr.getRecipeList();
     }
 
     // 식자재 리스트 각각 정렬 ASC, DESC 토글
@@ -238,10 +239,10 @@ public class BoardService {
                 break;
 
         }
-        List<FoodItemDto> fiList = bDao.getSortedFoodItemList(param, sort);
+        List<FoodItemDto> fiList = fr.getSortedFoodItemList(param);
         for (FoodItemDto fi : fiList) {
-            fi.setC_num(bDao.getFoodItemListNaming(fi.getC_num()));
-            fi.setC_num2(bDao.getFoodItemListNaming2(fi.getC_num2()));
+            fi.setC_num(cr.getFoodItemListNaming(fi.getC_num()));
+            fi.setC_num2(cr.getFoodItemListNaming2(fi.getC_num2()));
             if (fi.getF_title().length() >=5) {
                 fi.setF_title(fi.getF_title().substring(0, 5) + "...");
             }
@@ -263,22 +264,22 @@ public class BoardService {
     public List<?> getAllCategory(String name, String cg) {
         switch (String.valueOf(cg.charAt(0))) {
             case "1" -> {
-                return bDao.getFoodItemBigCg();
+                return cr.getFoodItemBigCg();
             }
             case "2" -> {
-                return bDao.getFoodItemMidCg(cg);
+                return cr.getFoodItemMidCg(cg);
             }
             case "3" -> {
-                return bDao.getFoodItemSmCg(cg);
+                return cr.getFoodItemSmallCg(cg);
             }
             case "4" -> {
-                return bDao.getRecipeBigCg();
+                return cr.getRecipeBigCg();
             }
             case "5" -> {
-                return bDao.getRecipeMidCg(cg);
+                return cr.getRecipeMidCg(cg);
             }
             case "6" -> {
-                return bDao.getRecipeSmCg(cg);
+                return cr.getRecipeSmallCg(cg);
             }
             default -> {
                 log.info("[삭제] 서비스 에러");
@@ -293,14 +294,14 @@ public class BoardService {
         log.info("[참조할 코드] : {}", cgNum);
         boolean result;
         if (cgNum.equals("fooditem")) {
-            result = bDao.addBigCg(cgName, cgNum);
+            result = cr.addBigCg(cgName, cgNum);
         } else {
-            result = bDao.getMidSmCg(cgName, cgNum);
+            result = cr.getMidSmCg(cgName, cgNum);
         }
         if (result) {
             switch (String.valueOf(cgNum.charAt(0))) {
                 case "1":
-                    return bDao.getFoodItemMidCg(cgNum);
+                    return cr.getFoodItemMidCg(cgNum);
                 case "2":
                     cgNum = "3";
                     break;
@@ -326,9 +327,9 @@ public class BoardService {
 
     public List<?> deleteFoodItemList(ArrayList deleteKey, Integer pageNum, Integer pageSize) {
         log.info("[게시글 삭제] 서비스 진입");
-        boolean result = bDao.deleteFoodItemList(deleteKey);
+        boolean result = ir.deleteFoodItemList(deleteKey);
         if (result) {
-            return iDao.getInvenAddList();
+            return ir.getInvenAddList();
         } else {
             log.info("[게시글 삭제] 에러 발생");
             return null;
@@ -336,11 +337,11 @@ public class BoardService {
     }
 
     public List<FoodItemDto> getModalFIDetails(String trCode) {
-        List<FoodItemDto> details = bDao.getModalFIDetails(trCode);
+        List<FoodItemDto> details = fr.getModalFIDetails(trCode);
         for (FoodItemDto fi : details) {
-            fi.setF_img(bDao.getFiImg(trCode));
-            fi.setC_numName(bDao.getFoodItemListNaming(fi.getC_num()));
-            fi.setC_num2Name(bDao.getFoodItemListNaming2(fi.getC_num2()));
+            fi.setF_img(imgr.getFiImg(trCode));
+            fi.setC_numName(cr.getFoodItemListNaming(fi.getC_num()));
+            fi.setC_num2Name(cr.getFoodItemListNaming2(fi.getC_num2()));
         }
         return details;
     }
@@ -349,10 +350,10 @@ public class BoardService {
         log.info("[식자재 검색] 진입");
         log.info("검색어 : {}", searchKeyword);
 
-        List<FoodItemDto> fsearchList = bDao.getFoodItemList();
+        List<FoodItemDto> fsearchList = fr.getFoodItemList();
         for (FoodItemDto fis : fsearchList) {
-            fis.setC_num(bDao.getFoodItemListNaming(fis.getC_num()));
-            fis.setC_num2(bDao.getFoodItemListNaming2(fis.getC_num2()));
+            fis.setC_num(cr.getFoodItemListNaming(fis.getC_num()));
+            fis.setC_num2(cr.getFoodItemListNaming2(fis.getC_num2()));
         }
 
         List<FoodItemDto> filteredList = fsearchList.stream()
@@ -411,10 +412,10 @@ public class BoardService {
 
         log.info("[식자재 수정] 파라미터 맵 : {}", params);
 
-        boolean result = bDao.updateAndGetModalDetailsInfo(params);
+        boolean result = fr.updateAndGetModalDetailsInfo(u_code, u_cnum, u_cnum2, u_price, u_count, u_origin, u_save, u_cal, c_cnum, c_cnum2, c_ftitle);
 
         if (result) {
-            return bDao.getModalDetailsInfoUpdateBeforeList(fnum);
+            return fr.getModalDetailsInfoUpdateBeforeList(fnum);
         } else {
             log.info("[상세모달] 업데이트 실패!");
             return null;
@@ -423,17 +424,15 @@ public class BoardService {
 
 
     public List<FoodItemDto> getCategory() {
-        List <FoodItemDto> cList = bDao.getCategory();
-        return cList;
+        return cr.getCategory();
     }
 
     public List<FoodItemDto> getCategory2() {
-        List <FoodItemDto> cList = bDao.getCategory2();
-        return cList;
+        return cr.getCategory2();
     }
 
     public List<FoodItemDto> permanentDelte(ArrayList deleteKey) {
-        boolean result = bDao.permanentDeleteFoodItem(deleteKey);
+        boolean result = fr.permanentDeleteFoodItem(deleteKey);
         if (result) {
             return iSer.getFoodItemList(1, 10);
         } else {

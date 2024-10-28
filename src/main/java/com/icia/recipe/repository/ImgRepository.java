@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public interface ImgRepository extends JpaRepository<Img, Long> {
@@ -37,20 +38,25 @@ public interface ImgRepository extends JpaRepository<Img, Long> {
                      @Param("code") String code,
                      @Param("cgName") String cgName);
 
+    @Query(value = "SELECT i_sys_name FROM img WHERE f_num = :code", nativeQuery = true)
+    String getFiImg(@Param("code") String code);
+
     // INSERT
     @Query(value = "SELECT CAST(MAX(CAST(f_num AS UNSIGNED)) AS CHAR) FROM fooditem", nativeQuery = true)
     String getMaxFoodItemNum();
 
     @Modifying
     @Query(value = "INSERT INTO img (i_path, i_sys_name, i_original_name, f_num, m_id, i_filesize) " +
-            "VALUES (:iPath, :iSysName, :iOriginalName, :maxNum, :mId, :iFileSize)",
+            "VALUES (:realPath, :iSysName, :iOriginalName, :maxNum, :mId, :iFileSize)",
             nativeQuery = true)
-    void insertFoodItemImg(@Param("iPath") String iPath,
-                           @Param("iSysName") String iSysName,
-                           @Param("iOriginalName") String iOriginalName,
-                           @Param("maxNum") String maxNum,
-                           @Param("mId") String mId,
-                           @Param("iFileSize") long iFileSize);
+    boolean insertFoodItemImg(@Param("oriFileName") String oriFileName,
+                              @Param("sysFileName") String sysFileName,
+                              @Param("realPath") String realPath,
+                              @Param("role") String role,
+                              @Param("filesize") String filesize);
+
+
+
 
 
     // UPDATE

@@ -1,5 +1,6 @@
 package com.icia.recipe.service.manageService;
 
+import com.icia.recipe.repository.OrderRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,16 +12,17 @@ import java.util.HashMap;
 public class MoneyService {
 
     @Autowired
-    MoneyDao mDao;
+    OrderRepository or;
+
 
     public String getTodayProfitCount() {
-        Integer dayProfit = mDao.getTodayProfitCount();
+        Integer dayProfit = or.getTodayProfitCount();
         return (dayProfit== null)?makeMoneyFormat(0):makeMoneyFormat(dayProfit);
     }
 
     public String getWeekProfitCount() {
         /*String weekProfit = mDao.getWeekProfitCount();*/
-        return makeMoneyFormat(mDao.getWeekProfitCount());
+        return makeMoneyFormat(or.getWeekProfitCount());
     }
 
     public String makeMoneyFormat(Integer money) {
@@ -44,7 +46,7 @@ public class MoneyService {
     public HashMap<String,String> getMonthProfitCount() {
         HashMap<String,String> monthMap = new HashMap<>();
         for (int i = 1; i <= 12; i++) {
-            int monthlyProfit = mDao.getMonthlyProfit(i);
+            int monthlyProfit = or.getMonthlyProfit(i);
             monthMap.put((i+"월"), monthlyProfit+"");
             log.info("{}",monthlyProfit+"응애..");
         }

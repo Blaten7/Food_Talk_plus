@@ -3,6 +3,8 @@ package com.icia.recipe.service.mainService;
 import com.icia.recipe.dto.mainDto.AlertMessage;
 import com.icia.recipe.dto.mainDto.TradeDto;
 import com.icia.recipe.entity.Trade;
+import com.icia.recipe.repository.AlertRepository;
+import com.icia.recipe.repository.MemberRepository;
 import com.icia.recipe.repository.TradeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +18,13 @@ import java.util.List;
 public class TradeService {
     @Autowired
     TradeRepository tr;
+    @Autowired
+    AlertRepository ar;
+    @Autowired
+    MemberRepository mr;
 
-    public List<Trade> tradeList() {
-        List<Trade> tList = new ArrayList<>();
+    public List<TradeDto> tradeList() {
+        List<TradeDto> tList = new ArrayList<>();
         tList = tr.tradeList();
         return tList;
     }
@@ -47,8 +53,8 @@ public class TradeService {
         return tDateList;
     }
 
-    public List<Trade> tradeViewSort() {
-        List<Trade> tViewList = new ArrayList<>();
+    public List<TradeDto> tradeViewSort() {
+        List<TradeDto> tViewList = new ArrayList<>();
         tViewList = tr.tradeViewSort();
         return tViewList;
     }
@@ -101,15 +107,15 @@ public class TradeService {
     }
 
     public boolean alertSave(AlertMessage alertMessage) {
-        return tr.alertSave(alertMessage);
+        return ar.alertSave(alertMessage);
     }
 
     public List<TradeDto> alertList(TradeDto tDto) {
-        return tr.alertList(tDto);
+        return ar.alertList(tDto);
     }
 
     public boolean alertDelete(TradeDto tDto) {
-        return tr.alertDelete(tDto);
+        return ar.alertDelete(tDto);
     }
 
     public boolean tradeItemDelete(TradeDto tDto) {
@@ -117,11 +123,11 @@ public class TradeService {
     }
 
     public String getMemberName(String mId) {
-        return tr.getMemberName(mId);
+        return mr.getMemberName(mId);
     }
 
     public List<TradeDto> getTradeListPaging(Integer pageNum, Integer pageSize) {
-        List<Trade> tList = tr.tradeList();
+        List<TradeDto> tList = tr.tradeList();
         int totalListCnt = tList.size();
         int fromIdx = (pageNum - 1) * pageSize;
         int toIdx = Math.min(fromIdx + pageSize, totalListCnt);

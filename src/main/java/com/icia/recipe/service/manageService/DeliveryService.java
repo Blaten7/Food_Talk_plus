@@ -1,7 +1,6 @@
 package com.icia.recipe.service.manageService;
 
 import com.icia.recipe.dto.manageDto.DeliveryDto;
-import com.icia.recipe.management.dto.DeliveryDto;
 import com.icia.recipe.repository.OrderRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,7 @@ public class DeliveryService {
     }
 
     public boolean deliveryStart(ArrayList keySet) {
-        return or.deliveryStart(keySet);
+        return or.startDelivery(keySet);
     }
 
     public List<DeliveryDto> getOrderList2() {
@@ -39,7 +38,7 @@ public class DeliveryService {
     }
 
     public boolean deliveryEnd(ArrayList keySet) {
-        return or.deliveryEnd(keySet);
+        return or.endDelivery(keySet);
     }
 
     public boolean deliveryEndUpdate(ArrayList keySet) {

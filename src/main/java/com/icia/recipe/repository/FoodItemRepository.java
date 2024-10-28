@@ -3,6 +3,7 @@ package com.icia.recipe.repository;
 import com.icia.recipe.dto.mainDto.FooditemDto;
 import com.icia.recipe.dto.mainDto.ItemListDto;
 import com.icia.recipe.dto.mainDto.SearchDto;
+import com.icia.recipe.dto.manageDto.FoodItemDto;
 import com.icia.recipe.entity.FoodItem;
 import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
             "WHERE status = 1 " +
             "ORDER BY :param",
             nativeQuery = true)
-    List<FoodItem> getSortedFoodItemList(
+    List<FoodItemDto> getSortedFoodItemList(
             @Param("param") String param
     );
 
@@ -48,15 +49,17 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
             @Param("trCode") String trCode
     );
 
-    @Query(value = "select * from fooditem f " +
-            "join category c " +
-            "on f.c_num = c.c_num " +
-            "where f_num = : fNum", nativeQuery = true)
-    List<FoodItem> getModalDetailsInfoUpdateBeforeList();
+    @Query(value = "SELECT f.f_num, f.c_num, f.c_num2, f.f_title, f.f_price, f.f_count, f.f_date, " +
+            "f.f_edate, f.f_views, f.f_code, f.f_volume, f.f_origin, f.f_cal, f.f_save " +
+            "FROM fooditem f " +
+            "JOIN category c ON f.c_num = c.c_num " +
+            "WHERE f.f_num = :fnum AND f.status = 1", nativeQuery = true)
+    List<FoodItemDto> getModalDetailsInfoUpdateBeforeList(@Param("fnum") String fnum);
+
 
     @Query(value = "select * from fooditem " +
             "where status = 1", nativeQuery = true)
-    List<FoodItem> getFoodItemList();
+    List<FoodItemDto> getFoodItemList();
 
     @Query(value = "SELECT f.f_num, i.i_path, i.i_sys_name, f.f_title, FORMAT(f.f_price, 0) AS f_price, " +
             "f.f_views, c1.c_num AS c1_num, c2.c_num AS c2_num, c3.c_num AS c3_num, i.i_num " +
@@ -110,7 +113,7 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
             "FROM fooditem f JOIN category c ON f.c_num = c.c_num " +
             "WHERE f.status = 1 GROUP BY c.c_num, c.c_num2, c.c_name, f.f_title",
             nativeQuery = true)
-    List<FoodItem> getInvenList();
+    List<FoodItemDto> getInvenList();
 
     @Query(value = "SELECT MIN(f.f_date) AS oldest_date, MAX(f.f_date) AS recent_date, " +
             "MIN(f.f_edate) AS oldest_edate, MAX(f.f_edate) AS recent_edate, " +
@@ -121,7 +124,7 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
             "WHERE f.status = 1 GROUP BY c.c_num, c.c_num2, c.c_name, f.f_title " +
             "ORDER BY :param =:sort",
             nativeQuery = true)
-    List<FoodItem> getSortedInvenList(@Param("param") String param,
+    List<FoodItemDto> getSortedInvenList(@Param("param") String param,
                                       @Param("sort") String sort);
 
 
@@ -131,7 +134,7 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
             "WHERE f.f_title = :title AND f.f_code = :code AND c.c_name = :cgName AND c.c_num = :bigCgNum " +
             "AND f.status = 1",
             nativeQuery = true)
-    List<FoodItem> getFoodItemList(@Param("title") String title,
+    List<FooditemDto> getFoodItemList(@Param("title") String title,
                                    @Param("code") String code,
                                    @Param("cgName") String cgName,
                                    @Param("bigCgNum") String bigCgNum);
@@ -145,12 +148,12 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
             "FROM fooditem f JOIN category c ON c.c_num = f.c_num WHERE f.status = 1 " +
             "GROUP BY f.c_num, f.c_num2, f.f_title HAVING SUM(f_count) = 0",
             nativeQuery = true)
-    List<FoodItem> emptyFoodItem();
+    List<FoodItemDto> emptyFoodItem();
 
     @Query(value = "SELECT f_num, c_num, c_num2, f_title, f_price, f_count, f_date, f_edate, " +
             "f_views, f_code, f_volume, f_origin, f_cal, f_save FROM fooditem WHERE status = 0",
             nativeQuery = true)
-    List<FoodItem> getDeleteFooditemList();
+    List<FoodItemDto> getDeleteFooditemList();
 
     @Query(value = "SELECT f.f_title, f.f_price, f.f_views, f.f_code, f.f_volume, f.f_origin, " +
             "f.f_cal, f.f_save, i.i_path, i.i_sys_name, i.i_original_name " +
@@ -179,6 +182,21 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
                                          @Param("code") String code,
                                          @Param("name") String name);
 
+    @Query(value = "SELECT f_num, c_num, c_num2, f_title, f_price, f_count, f_date, f_edate, " +
+            "f_views, f_code, f_volume, f_origin, f_cal, f_save " +
+            "FROM fooditem " +
+            "WHERE status = 1", nativeQuery = true)
+    List<FoodItemDto> getFoodItemList2();
+
+    @Query(value = "SELECT f.f_num, f.c_num, f.c_num2, f.f_title, f.f_price, f.f_count, f.f_date, " +
+            "f.f_edate, f.f_views, f.f_code, f.f_volume, f.f_origin, f.f_cal, f.f_save, " +
+            "i.i_path, i.i_sys_name " +
+            "FROM fooditem f " +
+            "JOIN category c ON f.c_num = c.c_num " +
+            "JOIN img i ON f.f_num = i.f_num " +
+            "WHERE f.f_num = :trCode AND f.status = 1", nativeQuery = true)
+    List<FoodItemDto> getModalFIDetails(@Param("trCode") String trCode);
+
 
 
 
@@ -186,20 +204,10 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
     // INSERT
     @Modifying
     @Query(value = "INSERT INTO fooditem (c_num, c_num2, f_title, f_contents, f_price, f_count, f_edate, f_code, f_volume, f_origin, f_cal, f_save) " +
-            "VALUES (:fiBigCg, :fiMidCg, :fiTitle, :fiContents, :fiPrice, :fiCounts, :fiExDate, :fiCode, :fiVolume, :fiOrigin, :fiCal, :fiSave)",
+            "VALUES (:#{#fDto.c_num}, :#{#fDto.c_num2}, :#{#fDto.f_title}, :#{#fDto.f_contents}, :#{#fDto.f_price}," +
+            " :#{#fDto.f_count}, :#{#fDto.f_edate}, :#{#fDto.f_code}, :#{#fDto.f_volume}, :#{#fDto.f_origin}, :#{#fDto.f_cal}, :#{#fDto.f_save})",
             nativeQuery = true)
-    void insertFoodItem(@Param("fiBigCg") String fiBigCg,
-                        @Param("fiMidCg") String fiMidCg,
-                        @Param("fiTitle") String fiTitle,
-                        @Param("fiContents") String fiContents,
-                        @Param("fiPrice") int fiPrice,
-                        @Param("fiCounts") int fiCounts,
-                        @Param("fiExDate") String fiExDate,
-                        @Param("fiCode") String fiCode,
-                        @Param("fiVolume") String fiVolume,
-                        @Param("fiOrigin") String fiOrigin,
-                        @Param("fiCal") int fiCal,
-                        @Param("fiSave") int fiSave);
+    boolean insertFoodItem(@Param("fDto")FoodItemDto fDto);
 
 
     // UPDATE
@@ -218,7 +226,7 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
             "SET f.status = 4 " +
             "WHERE f.status = 0 " +
             "AND f.foodItem_Code IN :deleteKeys")
-    void permanentDeleteFoodItem(
+    boolean permanentDeleteFoodItem(
             @Param("deleteKeys") List<String> deleteKeys
     );
 
@@ -237,11 +245,11 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
             "AND f.c_num2 = :c_cnum2 " +
             "AND f.f_title = :c_ftitle",
             nativeQuery = true)
-    void updateAndGetModalDetailsInfo(
+    boolean updateAndGetModalDetailsInfo(
             @Param("u_code") String uCode,
             @Param("u_cnum") String uCnum,
             @Param("u_cnum2") String uCnum2,
-            @Param("u_price") Integer uPrice,
+            @Param("u_price") String uPrice,
             @Param("u_count") String uCount,
             @Param("u_origin") String uOrigin,
             @Param("u_save") String uSave,
@@ -252,7 +260,7 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
 
     @Modifying
     @Query(value = "UPDATE fooditem SET status = 0 WHERE f_code IN :deleteKeys", nativeQuery = true)
-    void updateFoodItem(@Param("deleteKeys") List<String> deleteKeys);
+    boolean updateFoodItem(@Param("deleteKeys") List<String> deleteKeys);
 
     @Modifying
     @Query(value = "update FoodItem set f_views = fooditem.f_views +1 where f_num = :num", nativeQuery = true)
@@ -266,6 +274,8 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
     void deleteFromFoodItem(@Param("code") String code,
                             @Param("title") String title,
                             @Param("bigCgNum") String bigCgNum);
+
+
 
 
 }

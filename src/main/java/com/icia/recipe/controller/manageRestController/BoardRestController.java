@@ -70,7 +70,7 @@ public class BoardRestController {
     @GetMapping("/smallcategory")
     public List<Category> getSmallCategory(@RequestParam("cg") String cg) {
         if (String.valueOf(cg.charAt(0)).equals("2")) {
-            List<Category> getSmallCg = cr.getFoodItemSmCg(cg);
+            List<Category> getSmallCg = cr.getFoodItemSmallCg(cg);
             log.info("소분류카테고리 리스트 :{}가지고 복귀", getSmallCg);
             return getSmallCg;
         }

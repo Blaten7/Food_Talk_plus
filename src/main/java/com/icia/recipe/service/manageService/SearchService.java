@@ -1,11 +1,11 @@
 package com.icia.recipe.service.manageService;
 
-import com.icia.recipe.entity.FoodItem;
-import com.icia.recipe.management.dao.InvenDao;
-import com.icia.recipe.management.dto.FoodItemDto;
-import com.icia.recipe.management.dto.InvenDto;
-import com.icia.recipe.management.dto.MemberDto;
+import com.icia.recipe.dto.manageDto.FoodItemDto;
+import com.icia.recipe.dto.manageDto.InvenDto;
+import com.icia.recipe.dto.manageDto.MemberDto;
+import com.icia.recipe.repository.FoodItemRepository;
 import com.icia.recipe.repository.InvenAddRepository;
+import com.icia.recipe.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,14 +17,13 @@ import java.util.List;
 @Slf4j
 @Service
 public class SearchService {
-    @Autowired
-    private BoardDao bDao;
-
-    @Autowired
-    private InvenDao iDao;
 
     @Autowired
     InvenAddRepository ir;
+    @Autowired
+    FoodItemRepository fr;
+    @Autowired
+    MemberRepository mr;
 
     public List<?> getSearchModalDetails(String className, ArrayList param) {
         List<?> thisList = null;
@@ -55,8 +54,8 @@ public class SearchService {
             keywords = null;
         }
         // 재고
-        List<FoodItem> inven = ir.getInvenList();
-        List<FoodItem> searchInven = inven.stream()
+        List<FoodItemDto> inven = fr.getInvenList();
+        List<FoodItemDto> searchInven = inven.stream()
                 .filter(fis -> keywords == null ? (
                         fis.getC_name().contains(Keyword) ||
                                 fis.getF_date().contains(Keyword) ||
@@ -81,7 +80,7 @@ public class SearchService {
                 .toList();
 
 // 발주내역
-        List<InvenDto> invenAdd = sDao.getInvenAddList();
+        List<InvenDto> invenAdd = ir.getInvenAddList();
         List<InvenDto> searchInvenAdd = invenAdd.stream()
                 .filter(ia -> keywords == null ? (
                         ia.getIv_vat().contains(Keyword) ||
@@ -104,7 +103,7 @@ public class SearchService {
                 ))
                 .toList();
         // 식자재
-        List<FoodItemDto> fiList = sDao.getFoodItemList();
+        List<FoodItemDto> fiList = fr.getFoodItemList();
         List<FoodItemDto> searchFoodItem = fiList.stream()
                 .filter(fi -> keywords == null ? (
                         fi.getF_title().contains(Keyword) ||
@@ -119,7 +118,7 @@ public class SearchService {
                                 fi.getF_date().contains(k) ||
                                 fi.getF_edate().contains(k)
                 )).toList();
-        List<MemberDto> memList = sDao.getMemberList();
+        List<MemberDto> memList = mr.getMemberList();
         List<MemberDto> searchMember = memList.stream()
                 .filter(m -> keywords == null ? (
                         m.getM_id().contains(Keyword) ||

@@ -1,8 +1,9 @@
 package com.icia.recipe.service.manageService;
 
-import com.icia.recipe.management.dao.InvenDao;
-import com.icia.recipe.management.dto.FoodItemDto;
-import com.icia.recipe.management.dto.InvenDto;
+import com.icia.recipe.dto.manageDto.FoodItemDto;
+import com.icia.recipe.dto.manageDto.InvenDto;
+import com.icia.recipe.repository.FoodItemRepository;
+import com.icia.recipe.repository.InvenAddRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,11 +17,13 @@ import java.util.List;
 public class InvenService {
 
     @Autowired
-    private InvenDao iDao;
+    InvenAddRepository ir;
+    @Autowired
+    FoodItemRepository fr;
 
     public List<FoodItemDto> getInvenList(Integer pageNum, Integer pageSize) {
         log.info("[재고] 서비스 진입");
-        List<FoodItemDto> fList = iDao.getInvenList();
+        List<FoodItemDto> fList = fr.getInvenList();
         int totalListCnt = fList.size();
         int fromIdx = (pageNum - 1) * pageSize;
         int toIdx = Math.min(fromIdx + pageSize, totalListCnt);
@@ -104,7 +107,7 @@ public class InvenService {
                     return null;
             }
         }
-        List<FoodItemDto> iList = iDao.getSortedInvenList(param, sort);
+        List<FoodItemDto> iList = fr.getSortedInvenList(param, sort);
         for (FoodItemDto fi : iList) {
             if (fi.getF_title().length() >= 6) {
                 fi.setF_title(fi.getF_title().substring(0, 5) + "...");
@@ -122,7 +125,7 @@ public class InvenService {
 
     @Transactional
     public List<?> deleteFromFooditem(ArrayList deleteKeySet, Integer pageNum, Integer pageSize) {
-        boolean update = iDao.updateFoodItem(deleteKeySet);
+        boolean update = fr.updateFoodItem(deleteKeySet);
         if (update) {
             return getInvenList(pageNum, pageSize);
         } else {
@@ -133,9 +136,9 @@ public class InvenService {
 
     public List<?> insertInvenAdd(Integer pageNum, Integer pageSize, String company,
                                   String name, String count, String price) {
-        boolean result = iDao.insertInvenAdd(count, company, name, price);
+        boolean result = ir.insertInvenAdd(count, company, name, price);
         if (result) {
-            return iDao.getInvenAddList();
+            return ir.getInvenAddList();
         } else {
             log.info("[추가] 서비스 에러");
             return null;
@@ -143,12 +146,12 @@ public class InvenService {
     }
 
     public List<InvenDto> finalOrder() {
-        boolean update = iDao.finalOrder();
+        boolean update = ir.finalOrder();
         if (update) {
-            return iDao.getInvenAddList();
+            return ir.getInvenAddList();
         } else {
             log.info("[발주] 서비스 에러");
-            return iDao.getInvenAddList();
+            return ir.getInvenAddList();
         }
     }
 
@@ -160,10 +163,10 @@ public class InvenService {
         switch (tab) {
             case "invenM":
             case "invenE": // 재고량 확인, 유통기한
-                fList = iDao.getInvenList();
+                fList = fr.getInvenList();
                 break;
             case "invenO": // 발주
-                iList = iDao.getInvenAddList();
+                iList = ir.getInvenAddList();
                 break;
             case "invenD": // 폐기함
                 return null;
@@ -204,7 +207,7 @@ public class InvenService {
     }
 
     public List<InvenDto> getInvenAddList(Integer pageNum, Integer pageSize) {
-        List<InvenDto> iList = iDao.getInvenAddList();
+        List<InvenDto> iList = ir.getInvenAddList();
         int totalListCnt = iList.size();
         int fromIdx = (pageNum - 1) * pageSize;
         int toIdx = Math.min(fromIdx + pageSize, totalListCnt);
@@ -254,7 +257,7 @@ public class InvenService {
             default:
                 log.info("[발주 정렬] 서비스 에러");
         }
-        List<InvenDto> iList = iDao.getInvenAddListSort(param, sort);
+        List<InvenDto> iList = ir.getInvenAddListSort(param, sort);
         int totalListCnt = iList.size();
         int fromIdx = (pageNum - 1) * pageSize;
         int toIdx = Math.min(fromIdx + pageSize, totalListCnt);
@@ -267,11 +270,11 @@ public class InvenService {
     }
 
     public List<FoodItemDto> emptyFoodItem() {
-        return iDao.emptyFoodItem();
+        return fr.emptyFoodItem();
     }
 
     public List<FoodItemDto> getFoodItemList(Integer pageNum, Integer pageSize) {
-        List<FoodItemDto> fList = iDao.getDeleteFooditemList();
+        List<FoodItemDto> fList = fr.getDeleteFooditemList();
         int totalListCnt = fList.size();
         int fromIdx = (pageNum - 1) * pageSize;
         int toIdx = Math.min(fromIdx + pageSize, totalListCnt);

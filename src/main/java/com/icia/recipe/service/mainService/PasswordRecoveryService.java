@@ -1,7 +1,6 @@
 package com.icia.recipe.service.mainService;
 
-import com.icia.recipe.entity.Member;
-import com.icia.recipe.home.dao.MemberDao;
+import com.icia.recipe.dto.mainDto.Member;
 import com.icia.recipe.repository.MemberRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +30,7 @@ public class PasswordRecoveryService {
             String authenticationCode = generateCode();
             session.setAttribute("authCode", authenticationCode);
             //사용자 이메일로 인증 코드를 전송
-            String recipientEamil = member.getMember_id();
+            String recipientEamil = member.getM_id();
             try {
                 sendEmail(recipientEamil, authenticationCode);
                 log.info("이메일 전송 성공");

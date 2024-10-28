@@ -42,7 +42,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query(value = "SELECT COUNT(*) FROM order1 WHERE DATE_FORMAT(o_date, '%Y-%m') = :month " +
             "AND o_delivery = 2",
             nativeQuery = true)
-    Integer getMonthlyDelivery(@Param("month") String month);
+    Integer getMonthlyDelivery(@Param("month") int month);
 
     @Query(value = "SELECT COUNT(*) FROM order1 WHERE o_delivery = 1 " +
             "AND o_date BETWEEN DATE_SUB(CURDATE(), INTERVAL 7 DAY) AND CURDATE()",
@@ -80,7 +80,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Integer getWeekProfitCount();
 
     @Query(value = "SELECT COALESCE(SUM(o_total), 0) FROM order1 WHERE DATE_FORMAT(o_date, '%Y-%m') = :month", nativeQuery = true)
-    Integer getMonthlyProfit(@Param("month") String month);
+    Integer getMonthlyProfit(@Param("month") int month);
 
 
 
@@ -132,12 +132,17 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     @Modifying
     @Query(value = "UPDATE order1 SET o_delivery = 1 WHERE o_delivery = 0 AND o_num IN :orderNumbers",
             nativeQuery = true)
-    void startDelivery(@Param("orderNumbers") List<Long> orderNumbers);
+    boolean startDelivery(@Param("orderNumbers") List<Long> orderNumbers);
 
     @Modifying
     @Query(value = "UPDATE order1 SET o_delivery = 2 WHERE o_delivery = 1 AND o_num IN :orderNumbers",
             nativeQuery = true)
-    void endDelivery(@Param("orderNumbers") List<Long> orderNumbers);
+    boolean endDelivery(@Param("orderNumbers") List<Long> orderNumbers);
+
+    @Modifying
+    @Query(value = "UPDATE order1 SET o_delivery = 2 WHERE o_delivery = 1 AND o_num IN :orderNums", nativeQuery = true)
+    boolean updateDeliveryStatus(@Param("orderNums") List<Long> orderNums);
+
 
     // DELETE
 

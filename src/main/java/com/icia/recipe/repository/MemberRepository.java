@@ -1,12 +1,11 @@
 package com.icia.recipe.repository;
 
+import com.icia.recipe.dto.mainDto.Member;
 import com.icia.recipe.dto.manageDto.MemberDto;
-import com.icia.recipe.entity.Member;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -15,17 +14,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRepository extends JpaRepository<MemberDto, Long> {
 
     // SELECT
     @Query(value = "SELECT m_id FROM member WHERE m_id = :m_id", nativeQuery = true)
     List<Member> checkId(@Param("m_id") String mId);
 
     @Query(value = "SELECT * FROM member", nativeQuery = true)
-    List<Member> getMemberList();
+    List<MemberDto> getMemberList();
 
     @Query(value = "SELECT m_name FROM member WHERE m_id = :mId", nativeQuery = true)
-    Optional<String> getMemberName(@Param("mId") String mId);
+    String getMemberName(@Param("mId") String mId);
 
     @Select("select * from member where m_id=#{m_id}")
     MemberDto check(String m_id);

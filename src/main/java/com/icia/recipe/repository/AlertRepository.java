@@ -1,5 +1,7 @@
 package com.icia.recipe.repository;
 
+import com.icia.recipe.dto.mainDto.AlertMessage;
+import com.icia.recipe.dto.mainDto.TradeDto;
 import com.icia.recipe.entity.Alert;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -15,21 +17,15 @@ import java.util.List;
 public interface AlertRepository extends JpaRepository<Alert, Long> {
 
     // SELECT
-    @Query(value = "SELECT * FROM alert WHERE m_id = :mId AND t_alertnum = 1", nativeQuery = true)
-    List<Alert> alertList(@Param("mId") String mId);
+    @Query(value = "SELECT * FROM alert WHERE m_id = :#{#tDto.m_id} AND t_alertnum = 1", nativeQuery = true)
+    List<TradeDto> alertList(@Param("tDto")TradeDto tDto);
 
 
     // INSERT
     @Modifying
-    @Query(value = "INSERT INTO alert VALUES (:mId, :tradeSend, :tNum, :tItem, :tItemCount, :tUnit, :tChange, DEFAULT)",
+    @Query(value = "INSERT INTO alert VALUES (:#{#alert.m_id}, :#{#alert.tradesend}, :#{#alert.t_num}, :#{#alert.t_item}, :#{#alert.t_itemcount}, :#{#alert.t_unit}, :#{#alert.t_change}, DEFAULT)",
             nativeQuery = true)
-    void alertSave(@Param("mId") String mId,
-                   @Param("tradeSend") String tradeSend,
-                   @Param("tNum") Long tNum,
-                   @Param("tItem") String tItem,
-                   @Param("tItemCount") int tItemCount,
-                   @Param("tUnit") String tUnit,
-                   @Param("tChange") String tChange);
+    boolean alertSave(@Param("alert")AlertMessage alert);
 
 
     // UPDATE
@@ -38,13 +34,10 @@ public interface AlertRepository extends JpaRepository<Alert, Long> {
     void tradeExchange(@Param("tNum") Long tNum, @Param("tItem") String tItem);
 
     @Modifying
-    @Query(value = "UPDATE alert SET t_alertnum = 3 WHERE t_num = :tNum AND t_item = :tItem " +
-            "AND tradesend = :tradeSend AND m_id = :mId",
+    @Query(value = "UPDATE alert SET t_alertnum = 3 WHERE t_num = :#{#tDto.t_num} AND t_item = :#{#tDto.t_item} " +
+            "AND tradesend = :#{#tDto.tradesend} AND m_id = :#{tDto.m_id}",
             nativeQuery = true)
-    void alertDelete(@Param("tNum") Long tNum,
-                     @Param("tItem") String tItem,
-                     @Param("tradeSend") String tradeSend,
-                     @Param("mId") String mId);
+    boolean alertDelete(@Param("tDto")TradeDto tDto);
 
 
     // DELETE

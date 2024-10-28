@@ -18,7 +18,7 @@ public interface TradeRepository extends JpaRepository<Trade, Long> {
 
     // SELECT
     @Query(value = "SELECT t_num, t_title, m_id, t_date, t_views, t_count, visible FROM trade", nativeQuery = true)
-    List<Trade> tradeList();
+    List<TradeDto> tradeList();
 
     @Query(value = "SELECT t_num, t_title, m_id, t_date, t_views, t_count " +
             "FROM trade WHERE visible = 1 ORDER BY t_date",
@@ -28,7 +28,7 @@ public interface TradeRepository extends JpaRepository<Trade, Long> {
     @Query(value = "SELECT t_num, t_title, m_id, t_date, t_views, t_count " +
             "FROM trade WHERE visible = 1 ORDER BY t_views DESC",
             nativeQuery = true)
-    List<Trade> tradeViewSort();
+    List<TradeDto> tradeViewSort();
 
     @Query(value = "SELECT t_num, t_title, m_id, t_date, t_views, t_count " +
             "FROM trade WHERE visible = 1 ORDER BY t_count DESC",
@@ -47,7 +47,7 @@ public interface TradeRepository extends JpaRepository<Trade, Long> {
     @Query(value = "SELECT ti.t_num, t.m_id, t.t_title, ti.t_item, ti.t_itemcount, ti.t_unit, ti.t_change, t.visible " +
             "FROM trade t JOIN tradeitem ti ON t.t_num = ti.t_num WHERE ti.t_num = :#{#tDto.t_num}",
             nativeQuery = true)
-    List<TradeDto> tradeDetail(@Param("tDto")TradeDto tDto);
+    List<TradeDto> tradeDetail(@Param("tDto")Integer tDto);
 
     @Query(value = "SELECT * FROM tradeitem WHERE t_num = :tNum", nativeQuery = true)
     List<TradeDto> tradeUpList(@Param("tNum")Integer tNum);

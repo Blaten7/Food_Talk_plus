@@ -1,14 +1,6 @@
 ▶ https://github.com/Blaten7/Project <br>
 MVC 디자인 패턴으로 제작된 프로젝트를 Spring Boot의 JPA 와 JWT, 타임리프 탬플릿 엔진을 사용하여 리빌딩 하는 프로젝트 <br>
 
-  1. Entity 테이블간 관계설정<br>
-	2. Repository 생성 및 작성<br>
-	3. Controller 수정<br>
-	4. Serivce 수정<br>
-	5. 뷰페이지 수정<br>
-	6. CSS JavaScript 수정<br>
-	7. 배포<br>
-
 <br>
 ▶ 개발기간 2024.10.15 시작 <br>
 ▶ 참여인원 : 1명 <br>

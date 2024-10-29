@@ -1,6 +1,7 @@
 package com.icia.recipe.controller.mainRestController;
 
 import com.icia.recipe.dto.mainDto.Member;
+import com.icia.recipe.dto.manageDto.MemberDto;
 import com.icia.recipe.service.mainService.MemberService;
 import com.icia.recipe.service.mainService.PasswordRecoveryService;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,7 @@ public class PasswordRecoveryController {
     }
 
     @PostMapping("/recover")
-    public String recoverPassword(Member mem) {
+    public String recoverPassword(MemberDto mem) {
         String suc = passwordRecoveryService.PasswordRecovery(mem);
         log.info(">>>>>>>>>>>>" + suc);
         if (suc.equals("이메일 전송 완료")) {

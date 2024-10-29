@@ -1,6 +1,6 @@
 package com.icia.recipe.pay;
 
-import com.icia.recipe.home.dto.InputOrderDto;
+import com.icia.recipe.dto.mainDto.InputOrderDto;
 import com.icia.recipe.service.mainService.CartService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;

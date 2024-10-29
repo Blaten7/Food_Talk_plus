@@ -1,12 +1,9 @@
 package com.icia.recipe.controller.mainController;
 
+import com.icia.recipe.dto.mainDto.Member;
 import com.icia.recipe.dto.mainDto.NoticeDto;
 import com.icia.recipe.dto.mainDto.SearchDto;
-import com.icia.recipe.entity.Member;
-import com.icia.recipe.entity.Notice;
-import com.icia.recipe.home.dto.Member;
-import com.icia.recipe.home.dto.NoticeDto;
-import com.icia.recipe.home.dto.SearchDto;
+import com.icia.recipe.dto.manageDto.MemberDto;
 import com.icia.recipe.service.mainService.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -81,7 +78,7 @@ public class MemberController {
     }
 
     @PostMapping("/changepw")
-    public String changepw(@ModelAttribute Member member, HttpSession session) {
+    public String changepw(@ModelAttribute MemberDto member, HttpSession session) {
         session.removeAttribute("authCode");
         boolean result = mSer.changepw(member);
         if (result) {

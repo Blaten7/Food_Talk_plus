@@ -1,8 +1,7 @@
 package com.icia.recipe.controller.manageRestController;
 
+import com.icia.recipe.dto.manageDto.FoodItemDto;
 import com.icia.recipe.entity.Category;
-import com.icia.recipe.management.dto.BoardDto;
-import com.icia.recipe.management.dto.FoodItemDto;
 import com.icia.recipe.repository.CategoryRepository;
 import com.icia.recipe.repository.RecipeRepository;
 import com.icia.recipe.service.manageService.BoardService;
@@ -24,9 +23,9 @@ import java.util.List;
 @Slf4j
 @RestController //@ResponseBody생략 가능
 public class BoardRestController {
+
     @Autowired
     private BoardService bSer;
-
     @Autowired
     private InvenService iSer;
 

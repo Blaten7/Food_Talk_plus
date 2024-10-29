@@ -1,5 +1,6 @@
 package com.icia.recipe.entity;
 
+import com.icia.recipe.dto.manageDto.FoodItemDto;
 import jakarta.persistence.*;
 import java.util.Date;
 import lombok.Data;
@@ -8,9 +9,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Entity
 @Table(name = "fooditem")
 @NoArgsConstructor
+@Entity
+@SqlResultSetMapping(
+        name = "FoodItemDtoMapping",
+        classes = @ConstructorResult(
+                targetClass = FoodItemDto.class,
+                columns = {
+                        @ColumnResult(name = "f_num", type = Integer.class),
+                        @ColumnResult(name = "f_title", type = String.class),
+                        @ColumnResult(name = "f_price", type = String.class),
+                        @ColumnResult(name = "f_views", type = Integer.class),
+                        @ColumnResult(name = "f_code", type = String.class),
+                        @ColumnResult(name = "f_volume", type = String.class),
+                        @ColumnResult(name = "f_origin", type = String.class),
+                        @ColumnResult(name = "f_cal", type = String.class),
+                        @ColumnResult(name = "f_save", type = String.class),
+                        @ColumnResult(name = "i_path", type = String.class),
+                        @ColumnResult(name = "i_sys_name", type = String.class),
+                        @ColumnResult(name = "i_original_name", type = String.class)
+                }
+        )
+)
 public class FoodItem {
 
     @Id

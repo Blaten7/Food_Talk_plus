@@ -1,6 +1,5 @@
 package com.icia.recipe.controller.mainRestController;
 
-import com.icia.recipe.home.dto.SearchDto;
 import com.icia.recipe.service.mainService.FooditemService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

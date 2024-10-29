@@ -1,5 +1,6 @@
 package com.icia.recipe.service.manageService;
 
+import com.icia.recipe.dto.mainDto.FooditemDto;
 import com.icia.recipe.dto.manageDto.FoodItemDto;
 import com.icia.recipe.dto.manageDto.InvenDto;
 import com.icia.recipe.dto.manageDto.MemberDto;
@@ -37,7 +38,8 @@ public class SearchService {
             case "invenAdd":
                 String company = param.get(0).toString();
                 String iname = param.get(1).toString();
-                thisList = ir.getSearchModalDetailsInven(company, iname);
+//                thisList = ir.getSearchModalDetailsInven(company, iname);
+                thisList = null;
                 break;
             default:
         }
@@ -103,7 +105,7 @@ public class SearchService {
                 ))
                 .toList();
         // 식자재
-        List<FoodItemDto> fiList = fr.getFoodItemList();
+        List<FoodItemDto> fiList = fr.getFooditemList();
         List<FoodItemDto> searchFoodItem = fiList.stream()
                 .filter(fi -> keywords == null ? (
                         fi.getF_title().contains(Keyword) ||

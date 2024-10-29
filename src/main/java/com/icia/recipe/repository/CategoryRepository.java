@@ -1,15 +1,12 @@
 package com.icia.recipe.repository;
 
 import com.icia.recipe.dto.mainDto.CtgDto;
-import com.icia.recipe.dto.mainDto.FooditemDto;
 import com.icia.recipe.dto.manageDto.FoodItemDto;
 import com.icia.recipe.entity.Category;
-import com.icia.recipe.entity.FoodItem;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

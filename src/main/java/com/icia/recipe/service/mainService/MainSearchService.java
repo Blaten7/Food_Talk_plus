@@ -4,6 +4,7 @@ import com.icia.recipe.dto.mainDto.CtgDto;
 import com.icia.recipe.dto.mainDto.FooditemDto;
 import com.icia.recipe.dto.mainDto.TradeDto;
 import com.icia.recipe.dto.mainDto.TradeItemDto;
+import com.icia.recipe.dto.manageDto.FoodItemDto;
 import com.icia.recipe.repository.CategoryRepository;
 import com.icia.recipe.repository.FoodItemRepository;
 import com.icia.recipe.repository.TradeRepository;
@@ -32,7 +33,7 @@ public class MainSearchService {
 
     public List<?> getAllTableList(String value) {
         List<CtgDto> categoryList = cr.getCategoryList();
-        List<FooditemDto> fooditemList = fr.getFooditemList();
+        List<FoodItemDto> fooditemList = fr.getFooditemList();
         List<TradeDto> tradeList = tr.getTradeList();
         List<TradeItemDto> tradeItemList = tr.getTradeItemList();
         String[] values;
@@ -49,7 +50,7 @@ public class MainSearchService {
                             Arrays.stream(values).anyMatch(val -> cg.getC_num().contains(val)) ||
                                     cg.getC_name().contains(value))
                     .toList();
-            List<FooditemDto> fiFilterList = fooditemList.stream()
+            List<FoodItemDto> fiFilterList = fooditemList.stream()
                     .filter(fi ->
                             Arrays.stream(values).anyMatch(val ->
                                     fi.getF_title().contains(val) ||
@@ -89,7 +90,7 @@ public class MainSearchService {
                             cg.getC_num().contains(value) ||
                                     cg.getC_name().contains(value))
                     .toList();
-            List<FooditemDto> fiFilterList = fooditemList.stream()
+            List<FoodItemDto> fiFilterList = fooditemList.stream()
                     .filter(fi ->
                             fi.getF_title().contains(value) ||
                                     fi.getF_price().contains(value) ||

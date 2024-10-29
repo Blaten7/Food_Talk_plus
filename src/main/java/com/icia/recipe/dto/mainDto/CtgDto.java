@@ -12,11 +12,10 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @AllArgsConstructor
-@Builder
 @Accessors(chain=true)
 public class CtgDto {
     private String c_num;
     private String c_name;
-    List<CtgDto> list = new ArrayList<>();
     private String c_ai;
+    List<CtgDto> list = new ArrayList<>();
 }

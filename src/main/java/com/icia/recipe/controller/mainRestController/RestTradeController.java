@@ -1,7 +1,6 @@
 package com.icia.recipe.controller.mainRestController;
 
 import com.icia.recipe.dto.mainDto.TradeDto;
-import com.icia.recipe.home.dto.TradeDto;
 import com.icia.recipe.service.mainService.TradeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

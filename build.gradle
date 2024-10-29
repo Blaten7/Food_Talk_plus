@@ -32,10 +32,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
     // Spring Web Services 의존성 (SOAP 기반 웹 서비스 개발에 사용)
-    implementation 'org.springframework.boot:spring-boot-starter-web-services'
+//    implementation 'org.springframework.boot:spring-boot-starter-web-services'
 
     // MyBatis 의존성 (데이터베이스 연동을 위한 MyBatis 사용)
-    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+//    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
 
     // Spring WebSocket 의존성 (실시간 웹 소켓 기능 제공)
     implementation 'org.springframework.boot:spring-boot-starter-websocket'

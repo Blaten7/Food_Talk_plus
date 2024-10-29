@@ -1,5 +1,6 @@
 package com.icia.recipe.config;
 
+import com.icia.recipe.repository.CartRepository;
 import com.icia.recipe.service.mainService.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,6 +19,8 @@ public class DataChangeInterceptor implements HandlerInterceptor {
     MemberService mSer;
 
     @Autowired
+    CartRepository cr;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 사용자 정보 가져오기
@@ -26,7 +29,7 @@ public class DataChangeInterceptor implements HandlerInterceptor {
         if (principal != null) {
             String m_id = principal.getName();
             String m_name = mSer.findId(m_id);
-            String cartCount = cDao.selectCartCount(m_id);
+            String cartCount = cr.selectCartCount(m_id);
             // 세션 가져오기
             HttpSession session = request.getSession();
             session.setAttribute("m_name", m_name);

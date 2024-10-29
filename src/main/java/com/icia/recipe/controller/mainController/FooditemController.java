@@ -1,5 +1,6 @@
 package com.icia.recipe.controller.mainController;
 
+import com.icia.recipe.dto.mainDto.FooditemDto;
 import com.icia.recipe.entity.FoodItem;
 import com.icia.recipe.service.mainService.FooditemService;
 import lombok.extern.slf4j.Slf4j;
@@ -47,16 +48,16 @@ public class FooditemController {
             model.addAttribute("msg","잘못된 요청입니다. 관리자에게 문의해 주세요");
             return "index";
         }*/
-        List<FoodItem> list = fSer.searchFoodDetail(num , model);
+        List<FooditemDto> list = fSer.searchFoodDetail(num , model);
         list.forEach(l ->{
-            model.addAttribute("title",l.getFoodItem_Title());
-            model.addAttribute("price",l.getFoodItem_price());
-            model.addAttribute("volume",l.getFoodItem_Volume());
-            model.addAttribute("cal",l.getFoodItem_Cal());
-            model.addAttribute("save",l.getFoodItem_Save());
-            model.addAttribute("date",l.getFoodItem_Date());
-            model.addAttribute("c_name", l.getCartList().get(0).getC_name());
-            model.addAttribute("count",l.getFoodItem_Count());
+            model.addAttribute("title",l.getF_title());
+            model.addAttribute("price",l.getF_price());
+            model.addAttribute("volume",l.getF_volume());
+            model.addAttribute("cal",l.getF_cal());
+            model.addAttribute("save",l.getF_save());
+            model.addAttribute("date",l.getF_date());
+            model.addAttribute("c_name", l.getCList().get(0).getC_name());
+            model.addAttribute("count",l.getF_count());
         });
             String info=fSer.fooditemDetailinfo(num,"foodInfo");
             model.addAttribute("info",info);

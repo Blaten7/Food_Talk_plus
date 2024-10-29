@@ -1,6 +1,7 @@
 package com.icia.recipe.controller.mainRestController;
 
 import com.icia.recipe.dto.mainDto.Member;
+import com.icia.recipe.dto.manageDto.MemberDto;
 import com.icia.recipe.service.mainService.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +23,7 @@ public class RestMemberController {
     PasswordRecoveryController pr;
 
     @GetMapping("/search/idpw")
-    public List<Member> search(@RequestParam("param") ArrayList param) {
+    public List<MemberDto> search(@RequestParam("param") ArrayList param) {
         log.info("[찾기] 컨트롤러 진입");
         switch (param.get(0).toString()) {
             case "아이디":
@@ -72,7 +73,7 @@ public class RestMemberController {
         }
         String mList = mSer.getSearchPw(id, name, phone);
         if (mList != null) {
-            Member mem = new Member();
+            MemberDto mem = new MemberDto();
             mem.setM_id(id);
             mem.setM_name(name);
             mem.setM_phone(phone);
@@ -102,7 +103,7 @@ public class RestMemberController {
     }
 
     @PostMapping("/member/checkId")
-    public List<Member> checkId(@RequestParam("m_id") String m_id) {
+    public List<MemberDto> checkId(@RequestParam("m_id") String m_id) {
         return mSer.checkId(m_id);
     }
 

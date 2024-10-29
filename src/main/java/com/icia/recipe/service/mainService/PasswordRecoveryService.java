@@ -1,6 +1,7 @@
 package com.icia.recipe.service.mainService;
 
 import com.icia.recipe.dto.mainDto.Member;
+import com.icia.recipe.dto.manageDto.MemberDto;
 import com.icia.recipe.repository.MemberRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,7 @@ public class PasswordRecoveryService {
     @Autowired
     HttpSession session;
 
-    public String PasswordRecovery(Member member) {
+    public String PasswordRecovery(MemberDto member) {
         //검증하고 처리하는 로직
         String user=mr.passwordRecovery(member);
 

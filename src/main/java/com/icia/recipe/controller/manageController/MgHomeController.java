@@ -1,6 +1,5 @@
 package com.icia.recipe.controller.manageController;
 
-import com.icia.recipe.management.service.*;
 import com.icia.recipe.service.manageService.BoardService;
 import com.icia.recipe.service.manageService.InvenService;
 import com.icia.recipe.service.manageService.MoneyService;
@@ -25,13 +24,10 @@ public class MgHomeController {
 
     @Autowired
     BoardService bSer;
-
     @Autowired
     InvenService iSer;
-
     @Autowired
     SearchService sSer;
-
     @Autowired
     MoneyService mSer;
 

@@ -1,5 +1,6 @@
 package com.icia.recipe.service.manageService;
 
+import com.icia.recipe.dto.mainDto.FooditemDto;
 import com.icia.recipe.dto.manageDto.FoodItemDto;
 import com.icia.recipe.entity.Category;
 import com.icia.recipe.repository.*;
@@ -142,7 +143,8 @@ public class BoardService {
             // 파일 저장 및 DB 삽입
             try {
                 mf.transferTo(new File(uploadPath + sysFileName));
-                boolean isInserted = imgr.insertFoodItemImg(oriFileName, sysFileName, realPath, role, filesize);
+                String maxNum = imgr.getMaxFNum();
+                boolean isInserted = imgr.insertFoodItemImg(oriFileName, sysFileName, realPath, role, filesize, maxNum);
                 if (!isInserted) return false;  // 하나라도 실패하면 false 반환
             } catch (IOException e) {
                 log.error("[파일] 업로드 실패: {}", e.getMessage());
@@ -350,7 +352,7 @@ public class BoardService {
         log.info("[식자재 검색] 진입");
         log.info("검색어 : {}", searchKeyword);
 
-        List<FoodItemDto> fsearchList = fr.getFoodItemList();
+        List<FoodItemDto> fsearchList = fr.getFooditemList();
         for (FoodItemDto fis : fsearchList) {
             fis.setC_num(cr.getFoodItemListNaming(fis.getC_num()));
             fis.setC_num2(cr.getFoodItemListNaming2(fis.getC_num2()));

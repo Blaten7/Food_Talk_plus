@@ -1,8 +1,11 @@
 package com.icia.recipe.controller.mainController;
 
+import com.icia.recipe.dto.mainDto.FooditemDto;
+import com.icia.recipe.dto.manageDto.FoodItemDto;
 import com.icia.recipe.entity.FoodItem;
 import com.icia.recipe.entity.Member;
 import com.icia.recipe.service.mainService.MemberService;
+import jakarta.persistence.Tuple;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +34,9 @@ public class HomeController {
             model.addAttribute("msg", session.getAttribute("msg"));
             session.removeAttribute("msg");
         }
-        List<FoodItem> Rank = mSer.getRanking();
+        List<FoodItemDto> Rank = mSer.getRanking();
         model.addAttribute("Rank", Rank);
+        log.warn("랭크 씨발아 좀 갖고 온나" + Rank.toString());
         return "index";
     }
 

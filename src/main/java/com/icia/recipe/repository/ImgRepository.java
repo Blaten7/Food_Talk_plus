@@ -42,18 +42,19 @@ public interface ImgRepository extends JpaRepository<Img, Long> {
     String getFiImg(@Param("code") String code);
 
     // INSERT
+
     @Query(value = "SELECT CAST(MAX(CAST(f_num AS UNSIGNED)) AS CHAR) FROM fooditem", nativeQuery = true)
-    String getMaxFoodItemNum();
+    String getMaxFNum();
 
     @Modifying
     @Query(value = "INSERT INTO img (i_path, i_sys_name, i_original_name, f_num, m_id, i_filesize) " +
-            "VALUES (:realPath, :iSysName, :iOriginalName, :maxNum, :mId, :iFileSize)",
-            nativeQuery = true)
-    boolean insertFoodItemImg(@Param("oriFileName") String oriFileName,
-                              @Param("sysFileName") String sysFileName,
-                              @Param("realPath") String realPath,
-                              @Param("role") String role,
-                              @Param("filesize") String filesize);
+            "VALUES (:iPath, :iSysName, :iOriginalName, :maxNum, :mId, :iFileSize)", nativeQuery = true)
+    boolean insertFoodItemImg(@Param("iPath") String iPath,
+                           @Param("iSysName") String iSysName,
+                           @Param("iOriginalName") String iOriginalName,
+                           @Param("maxNum") String maxNum,
+                           @Param("mId") String mId,
+                           @Param("iFileSize") String iFileSize);
 
 
 

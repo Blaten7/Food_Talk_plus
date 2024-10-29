@@ -1,16 +1,14 @@
 package com.icia.recipe.service.mainService;
 
-import com.icia.recipe.dto.mainDto.NoticeDto;
-import com.icia.recipe.dto.mainDto.OrderDto;
-import com.icia.recipe.dto.mainDto.SearchDto;
+import com.icia.recipe.dto.mainDto.*;
+import com.icia.recipe.dto.manageDto.FoodItemDto;
+import com.icia.recipe.dto.manageDto.MemberDto;
 import com.icia.recipe.entity.FoodItem;
-import com.icia.recipe.entity.Member;
-import com.icia.recipe.entity.Notice;
-import com.icia.recipe.entity.Order;
 import com.icia.recipe.repository.FoodItemRepository;
 import com.icia.recipe.repository.MemberRepository;
 import com.icia.recipe.repository.NoticeRepository;
 import com.icia.recipe.repository.OrderRepository;
+import jakarta.persistence.Tuple;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,22 +36,26 @@ public class MemberService {
     PasswordManager pm = new PasswordManager();
     private int pageCount = 0;
 
-    public String join(Member member) {
+    public boolean join(Member member) {
         System.out.println("pwEncoder: " + passwordEncoder);
-        member.setMember_pw(passwordEncoder.encode(member.getMember_pw()));
-        return member.getMember_pw();
+        member.setM_pw(passwordEncoder.encode(member.getM_pw()));
+        if (member.getM_pw()!=null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public String searchid(Member member) {
+    public String searchid(MemberDto member) {
         return mr.searchid(member);
     }
 
-    public String searchpw(Member member) {
+    public String searchpw(MemberDto member) {
         return mr.searchpw(member);
     }
 
-    public boolean changepw(Member member) {
-        member.setMember_pw(passwordEncoder.encode(member.getMember_pw()));
+    public boolean changepw(MemberDto member) {
+        member.setM_pw(passwordEncoder.encode(member.getM_pw()));
         return mr.changepw(member);
     }
 
@@ -61,7 +63,7 @@ public class MemberService {
         return mr.findId(m_id);
     }
 
-    public List<Member> getSearchIdPw(String mname, String phone) {
+    public List<MemberDto> getSearchIdPw(String mname, String phone) {
         return mr.getSearchIdPw(mname, phone);
     }
 
@@ -250,7 +252,7 @@ public class MemberService {
         return sb.toString();
     }
 
-    public List<FoodItem> getRanking() {
+    public List<FoodItemDto> getRanking() {
         return fr.getRanking();
     }
 
@@ -266,7 +268,7 @@ public class MemberService {
         return nList;
     }
 
-    public List<Member> checkId(String m_id) {
+    public List<MemberDto> checkId(String m_id) {
         log.info(">>>>>>>" + mr.checkId(m_id));
         return mr.checkId(m_id);
     }

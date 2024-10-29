@@ -8,10 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
@@ -68,7 +65,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "WHERE o.m_id = :id GROUP BY o.o_num " +
             "ORDER BY o.o_num DESC LIMIT :#{#sDto.startIdx}, :#{#sDto.listCnt}",
           nativeQuery = true)
-    List<OrderDto> selectOrder(@Param("id")String id, @Param("searchDto")SearchDto sDto);
+    List<OrderDto> selectOrder(@Param("id")String id, @Param("sDto")SearchDto sDto);
 
     @Query(value = "SELECT COUNT(*) FROM order1 WHERE m_id = :id", nativeQuery = true)
     Integer getOrderCount(@Param("id") String id);
@@ -81,6 +78,13 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query(value = "SELECT COALESCE(SUM(o_total), 0) FROM order1 WHERE DATE_FORMAT(o_date, '%Y-%m') = :month", nativeQuery = true)
     Integer getMonthlyProfit(@Param("month") int month);
+
+    @Query(value = "SELECT COUNT(*) FROM order1_status_log " +
+            "WHERE new_status = 2 " +
+            "AND updated_at BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 1 DAY) " +
+            "AND old_status != 2", nativeQuery = true)
+    Integer getTodayOrderDelivery();
+
 
 
 

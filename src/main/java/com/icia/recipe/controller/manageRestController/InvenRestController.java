@@ -1,8 +1,8 @@
 package com.icia.recipe.controller.manageRestController;
 
-import com.icia.recipe.management.dao.InvenDao;
-import com.icia.recipe.management.dto.FoodItemDto;
-import com.icia.recipe.management.dto.InvenDto;
+import com.icia.recipe.dto.manageDto.FoodItemDto;
+import com.icia.recipe.dto.manageDto.InvenDto;
+import com.icia.recipe.repository.InvenAddRepository;
 import com.icia.recipe.service.manageService.InvenService;
 import com.icia.recipe.service.manageService.SearchService;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +22,11 @@ public class InvenRestController {
 
     @Autowired
     private InvenService iSer;
-
-    @Autowired
-    private InvenDao iDao;
-
     @Autowired
     private SearchService sSer;
+
+    @Autowired
+    InvenAddRepository ir;
 
     @GetMapping("/inventory/list")
     @Secured("ROLE_ADMIN")

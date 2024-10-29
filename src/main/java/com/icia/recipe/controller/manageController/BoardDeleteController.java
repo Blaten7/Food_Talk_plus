@@ -1,6 +1,6 @@
 package com.icia.recipe.controller.manageController;
 
-import com.icia.recipe.management.dto.FoodItemDto;
+import com.icia.recipe.dto.manageDto.FoodItemDto;
 import com.icia.recipe.service.manageService.BoardService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

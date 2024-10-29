@@ -6,13 +6,14 @@ import com.icia.recipe.dto.mainDto.SearchDto;
 import com.icia.recipe.dto.manageDto.FoodItemDto;
 import com.icia.recipe.entity.FoodItem;
 import jakarta.annotation.Nullable;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.persistence.Tuple;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -57,9 +58,9 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
     List<FoodItemDto> getModalDetailsInfoUpdateBeforeList(@Param("fnum") String fnum);
 
 
-    @Query(value = "select * from fooditem " +
-            "where status = 1", nativeQuery = true)
-    List<FoodItemDto> getFoodItemList();
+//    @Query(value = "select * from fooditem " +
+//            "where status = 1", nativeQuery = true)
+//    List<FoodItemDto> getFoodItemList();
 
     @Query(value = "SELECT f.f_num, i.i_path, i.i_sys_name, f.f_title, FORMAT(f.f_price, 0) AS f_price, " +
             "f.f_views, c1.c_num AS c1_num, c2.c_num AS c2_num, c3.c_num AS c3_num, i.i_num " +
@@ -140,7 +141,7 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
                                    @Param("bigCgNum") String bigCgNum);
 
     @Query(value = "select * from fooditem", nativeQuery = true)
-    List<FooditemDto> getFooditemList();
+    List<FoodItemDto> getFooditemList();
 
 
     @Query(value = "SELECT f.f_num, f.c_num, f.c_num2, f.f_title, f.f_price, f.f_count, " +
@@ -155,12 +156,18 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
             nativeQuery = true)
     List<FoodItemDto> getDeleteFooditemList();
 
-    @Query(value = "SELECT f.f_title, f.f_price, f.f_views, f.f_code, f.f_volume, f.f_origin, " +
-            "f.f_cal, f.f_save, i.i_path, i.i_sys_name, i.i_original_name " +
-            "FROM fooditem f JOIN img i ON f.f_num = i.f_num " +
-            "WHERE f.status = 1 ORDER BY f.f_views DESC LIMIT 4",
-            nativeQuery = true)
-    List<FoodItem> getRanking();
+    @Query("SELECT new com.icia.recipe.dto.manageDto.FoodItemDto(" +
+            "f.fooditem_num, f.foodItem_Title, f.foodItem_price, f.foodItem_Views, f.foodItem_Code, " +
+            "f.foodItem_Volume, f.foodItem_Origin, f.foodItem_Cal, f.foodItem_Save, " +
+            "i.img_path, i.img_sys_name, i.img_origin_name) " +
+            "FROM FoodItem f JOIN Img i " +
+            "ON f.fooditem_num = i.img_num " +
+            "WHERE f.status = 1 " +
+            "ORDER BY f.foodItem_Views DESC")
+    List<FoodItemDto> getRanking();
+
+
+
 
     @Query(value = "SELECT f.f_num, f.f_title, f.f_price, f.f_views, f.f_code, f.f_volume, " +
             "f.f_origin, f.f_cal, f.f_save, i.i_path, i.i_sys_name, i.i_original_name " +
@@ -274,6 +281,7 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
     void deleteFromFoodItem(@Param("code") String code,
                             @Param("title") String title,
                             @Param("bigCgNum") String bigCgNum);
+
 
 
 

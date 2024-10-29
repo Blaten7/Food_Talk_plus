@@ -82,7 +82,7 @@ public interface InvenAddRepository extends JpaRepository<InvenAdd, Long> {
             @Param("deleteKey") List<String> deleteKey
     );
 
-    List<?> getSearchModalDetailsInven(String company, String iname);
+//    List<?> getSearchModalDetailsInven(String company, String iname);
 
     @Modifying
     @Query(value = "DELETE FROM invenAdd WHERE iv_num IN :deleteKeys", nativeQuery = true)

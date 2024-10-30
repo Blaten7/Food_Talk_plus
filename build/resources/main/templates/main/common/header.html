@@ -1,6 +1,5 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ko">
-
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="ko">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
@@ -8,88 +7,28 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
-
-    <!-- 정적 자원을 불러오기 위한 Thymeleaf 구문 적용 -->
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css?h=cb606d99bb2418df19b6bc818b41e412">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
+    <link rel="stylesheet" href="/assets/css/styles.min.css?h=94c76ca45cf1136042bce4cad72a7b5e">
     <link rel="stylesheet" th:href="@{/assets/css/header.css}">
-    <script defer th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js}"></script>
-    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js}"></script>
-    <link rel="stylesheet" th:href="@{/assets/bootstrap/css/bootstrap.min.css}?h=cb606d99bb2418df19b6bc818b41e412">
-    <link rel="stylesheet" th:href="@{https://use.fontawesome.com/releases/v5.12.0/css/all.css}">
-    <link rel="stylesheet" th:href="@{/assets/css/styles.min.css}?h=94c76ca45cf1136042bce4cad72a7b5e">
-    <script th:src="@{https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js}"></script>
-    <script th:src="@{/assets/js/header.js}"></script>
-
-
 </head>
 
 <style>
     #header {
         border: 1px solid #e6e7e8;
     }
-
-    * {
-        font-family: 'Noto Sans KR';
-        font-weight: 500;
-    }
-
+    /** {*/
+    /*    font-family: 'Noto Sans KR';*/
+    /*    font-weight: 500;*/
+    /*}*/
     a {
         text-decoration: none;
         color: gray;
     }
-
     li {
         list-style: none;
     }
 </style>
-<script>
-    $(() => {
-        document.getElementById('titleName1').classList.remove("on")
-        document.getElementById('titleName2').classList.remove("on")
-        switch (window.location.pathname) {
-            case "/":
-                document.getElementById('titleName1').classList.add("on")
-                break;
-            case "/careMain":
-                document.getElementById('titleName2').classList.add("on")
-                break;
-            default:
-                document.getElementById('titleName1').classList.add("on")
-        }
-        if("${cartCount}"!== null && "${cartCount}" !== ""){
-            const cartCount = document.getElementById("cartCnt")
-            cartCount.innerHTML = "${cartCount}";
-        }else{
-            cartCount.innerHTML = 0;
-        }
-    })
-    function saveTitleName(titleName) {
-        console.log("현재 타이틀 이름은 ?")
-        let tName = titleName.innerHTML
-        console.log(window.location.pathname)
-        switch (tName) {
-            case "건강마켓":
-                window.location.href="/"
-                break;
-            case "식단관리":
-                window.location.href="/careMain"
-                break;
-            default:
-                console.log("건강/식단 선택 에러")
-        }
-    }
-    function commonSearch(keyword, event) {
-        console.log("충격과 공포의 검색기능 시작이다 그지깽깽이들아")
-        if (event.keyCode === 13) {
-            if (window.find(keyword)) {
-                $('#searchInput2').focus()
-            } else {
-                console.log("일단 여기는 없다 니모를 찾아서 ㄱㄱ")
-                window.location.href="/common/main/search?value="+keyword
-            }
-        }
-
-    }
-</script>
 <body id="main" class="hd">
 <div id="wrap" th:fragment="header">
     <header id="header" class="hd__header">
@@ -97,14 +36,13 @@
             <section class="user-area">
                 <ul class="user-area__menu" style="margin: 0">
                         <li sec:authorize="isAnonymous()">
-                            <a th:href="@{/loginfrm}">로그인</a>
+                            <a href="/loginfrm}">로그인</a>
                         </li>
                         <li sec:authorize="isAnonymous()">
-                            <a th:href="@{/joinfrm}">회원가입</a>
+                            <a href="/joinfrm">회원가입</a>
                         </li>
                     <sec:authorize access="isAuthenticated()">
                         <li><a href="/member/logout">로그아웃</a></li>
-
                         <!-- 관리자 권한 확인 -->
                         <sec:authorize access="hasRole('ADMIN')">
                             <li><a href="/main">관리자 페이지</a></li>
@@ -155,10 +93,10 @@
                             <a class="btn__modal-open" data-login="n" data-popup-name="popup_search">검색</a></div>
 
                         <a href="/member/mypage">
-                            <img src="/uploadedImg/main/내정보.png" width="69" height="66">
+                            <img src="/uploadedImg/main/mypage.png" width="69" height="66">
                         </a>
                         <a href="/cart/test">
-                            <img src="/uploadedImg/main/글쓰기.png?h=9f0eff141daebd0b04983e61b2ea4b97"
+                            <img src="/uploadedImg/main/write.png"
                                  width="72" height="75" style="margin-bottom: -2px;margin-top: -11px;">
                         </a>
                         <a class="direct__heart"> <img id="heartIMG"></a>
@@ -185,5 +123,9 @@
         </div>
     </header>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
+<script src="/assets/js/header.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </body>
 </html>

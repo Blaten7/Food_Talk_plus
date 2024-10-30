@@ -27,6 +27,8 @@ repositories {
 dependencies {
     // Spring Security 의존성 (보안 관련 기능 제공)
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
+
 
     // Spring Web 의존성 (웹 애플리케이션 개발에 필수)
     implementation 'org.springframework.boot:spring-boot-starter-web'

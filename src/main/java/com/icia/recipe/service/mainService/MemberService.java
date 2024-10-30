@@ -250,17 +250,8 @@ public class MemberService {
         return sb.toString();
     }
 
-    public List<FoodItemDto> getRanking() {
-        List<FoodItemDto> rankingList = fr.getRanking().stream()
-                .map(obj -> new FoodItemDto(
-                        ((Number) obj[0]).longValue(), // 숫자형을 `long`으로 변환
-                        (String) obj[1],               // `String` 타입
-                        Integer.parseInt((String) obj[2]), // `String`을 `Integer`로 변환
-                        // 추가 필드들
-                        (String) obj[10], (String) obj[11], (String) obj[12]
-                ))
-                .toList();
-        return rankingList;
+    public List<Object[]> getRanking() {
+        return fr.getRanking();
     }
 
     public boolean insertNotice(String title, String contents, String id) {

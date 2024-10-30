@@ -36,7 +36,7 @@ public class HomeController {
         }
         List<FoodItemDto> Rank = mSer.getRanking();
         model.addAttribute("Rank", Rank);
-        log.warn("랭크 씨발아 좀 갖고 온나" + Rank.toString());
+//        log.warn("랭크 씨발아 좀 갖고 온나" + Rank.toString());
         return "index";
     }
 

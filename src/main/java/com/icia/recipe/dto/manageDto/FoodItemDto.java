@@ -43,4 +43,6 @@ public class FoodItemDto {
     private String i_filesize;
     private String i_register_date;
 
+    public FoodItemDto(Long aLong, String s, Integer integer, String s1, String s2, String s3) {
+    }
 }

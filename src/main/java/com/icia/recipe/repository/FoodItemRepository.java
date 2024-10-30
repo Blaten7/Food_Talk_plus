@@ -156,15 +156,20 @@ public interface FoodItemRepository extends JpaRepository<FoodItem, Long> {
             nativeQuery = true)
     List<FoodItemDto> getDeleteFooditemList();
 
-    @Query("SELECT new com.icia.recipe.dto.manageDto.FoodItemDto(" +
-            "f.fooditem_num, f.foodItem_Title, f.foodItem_price, f.foodItem_Views, f.foodItem_Code, " +
-            "f.foodItem_Volume, f.foodItem_Origin, f.foodItem_Cal, f.foodItem_Save, " +
-            "i.img_path, i.img_sys_name, i.img_origin_name) " +
-            "FROM FoodItem f JOIN Img i " +
-            "ON f.fooditem_num = i.img_num " +
-            "WHERE f.status = 1 " +
-            "ORDER BY f.foodItem_Views DESC")
-    List<FoodItemDto> getRanking();
+//    @Query("SELECT " +
+//            "f.fooditem_num, f.foodItem_Title, f.foodItem_price, f.foodItem_Views, f.foodItem_Code, " +
+//            "f.foodItem_Volume, f.foodItem_Origin, f.foodItem_Cal, f.foodItem_Save, " +
+//            "i.img_path, i.img_sys_name, i.img_origin_name " +
+//            "FROM FoodItem f JOIN Img i " +
+//            "ON f.fooditem_num = i.img_num " +
+//            "WHERE f.status = 1 " +
+//            "ORDER BY f.foodItem_Views DESC")
+//    List<FoodItem> getRanking();
+    @Query(value = "select * from FoodItem f " +
+            "join img i " +
+            "on i.f_num = f.f_num where f.status = 1 " +
+            "order by f.f_views desc", nativeQuery = true)
+    List<Object[]> getRanking();
 
 
 

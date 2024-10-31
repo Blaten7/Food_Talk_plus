@@ -1,131 +1,111 @@
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-      lang="ko">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ko">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Title</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css?h=cb606d99bb2418df19b6bc818b41e412">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
-    <link rel="stylesheet" href="/assets/css/styles.min.css?h=94c76ca45cf1136042bce4cad72a7b5e">
-    <link rel="stylesheet" th:href="@{/assets/css/header.css}">
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
+    <script src="/assets/js/header.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
+<body id="main" class="hd" style="margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif;">
+<header id="header" class="hd__header">
+    <main style="display: flex; flex-direction: column;">
+        <!-- 상단 로그인/회원가입 영역 -->
+        <section class="header-top" style="display: flex; justify-content: flex-end; padding: 1% 2%; font-size: 1.2vw;">
+            <a sec:authorize="isAnonymous()" href="/loginfrm" style="text-decoration: none; color: gray; margin-right: 2%;">로그인</a>
+            <a sec:authorize="isAnonymous()" href="/joinfrm" style="text-decoration: none; color: gray; margin-right: 2%;">회원가입</a>
+            <a sec:authorize access="isAuthenticated()" href="/member/logout" style="text-decoration: none; color: gray; margin-right: 2%;">로그아웃</a>
+            <a sec:authorize access="isAuthenticated()" href="/delivery/info" style="text-decoration: none; color: gray; margin-right: 2%;">배송정보</a>
+            <a sec:authorize access="isAuthenticated()" href="/customer/center" style="text-decoration: none; color: gray;">고객센터</a>
+        </section>
 
-<style>
-    #header {
-        border: 1px solid #e6e7e8;
-    }
-    /** {*/
-    /*    font-family: 'Noto Sans KR';*/
-    /*    font-weight: 500;*/
-    /*}*/
-    a {
-        text-decoration: none;
-        color: gray;
-    }
-    li {
-        list-style: none;
-    }
-</style>
-<body id="main" class="hd">
-<div id="wrap" th:fragment="header">
-    <header id="header" class="hd__header">
-        <div class="header">
-            <section class="user-area">
-                <ul class="user-area__menu" style="margin: 0">
-                        <li sec:authorize="isAnonymous()">
-                            <a href="/loginfrm}">로그인</a>
-                        </li>
-                        <li sec:authorize="isAnonymous()">
-                            <a href="/joinfrm">회원가입</a>
-                        </li>
-                    <sec:authorize access="isAuthenticated()">
-                        <li><a href="/member/logout">로그아웃</a></li>
-                        <!-- 관리자 권한 확인 -->
-                        <sec:authorize access="hasRole('ADMIN')">
-                            <li><a href="/main">관리자 페이지</a></li>
-                        </sec:authorize>
-                    </sec:authorize>
-
-                    <li><a href="/delivery/info">배송정보</a></li>
-                    <li><a href="/customer/center">고객센터</a></li>&nbsp;&nbsp;&nbsp;&nbsp;
-                    <sec:authorize access="isAuthenticated()">
-                        <li id="noticelist" class="nav-item dropdown no-arrow mx-1">
-                            <div class="nav-item dropdown no-arrow">
-                                <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown"
-                                   href="#">
-                                    <span id="span-notice-count" class="badge bg-danger badge-counter"></span>
-                                    <i class="fas fa-bell fa-fw"></i></a>
-                                <div id="socketAlert"
-                                     class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
-                                    <h6 class="dropdown-header">알림</h6>
-                                </div>
-                            </div>
-                        </li>
-                    </sec:authorize>
-                </ul>
-            </section>
-            <div class="header__inner">
-                <div class="header__sec">
-                    <h1 class="logo"style="height: 80px;display: inline-block" >
-                        <a href="/">
-                            <img src="/uploadedImg/main/logo.png" alt="" style="width: 180px;">
-                        </a>
-                    </h1>
-                    <div class="menu">
-                        <a id="titleName1" href="javascript:void(0)" onclick="saveTitleName(this)">건강마켓</a>
-                        <a id="titleName2" href="javascript:void(0)" onclick="saveTitleName(this)">식단관리</a>
-                    </div>
-                    <input id="savedTitleName" style="display: none">
-                    <nav class="direct">
-                        <div class="direct__search btn__modal-open" data-login="y" id="searchPopup"
-                             data-popup-name="popup_search" style="margin-bottom: 10px;">
-                            <input type="text"
-                                   style="height: 50px"
-                                   id="searchInput2"
-                                   class="search-input"
-                                   placeholder="재료를 입력해 주세요"
-                                   autocomplete="off"
-                                   onkeypress="commonSearch(this.value, event)">
-                            <button type="button" class="direct__search-remove" style="display: none;">지우기</button>
-                            <a class="btn__modal-open" data-login="n" data-popup-name="popup_search">검색</a></div>
-
-                        <a href="/member/mypage">
-                            <img src="/uploadedImg/main/mypage.png" width="69" height="66">
-                        </a>
-                        <a href="/cart/test">
-                            <img src="/uploadedImg/main/write.png"
-                                 width="72" height="75" style="margin-bottom: -2px;margin-top: -11px;">
-                        </a>
-                        <a class="direct__heart"> <img id="heartIMG"></a>
-                        <a href="/cart/main" class="direct__cart"> <span id="cartCnt">0</span>
-                            <img src="/uploadedImg/main/icon_header_cart.png?h=b0cf2eaea34afb39f82041851f5691b1"
-                                 alt="장바구니"></a>
-                    </nav>
-                </div>
-                <div class="gnb">
-                    <div class="gnb__inner">
-                        <div class="swiper-container">
-                            <div class="swiper-wrapper">
-                                <li class="gnb__list"><a id="headCardLink" class="gnb__list-name" href="/fooditem/main">식자재</a>
-                                </li>
-                                <li class="gnb__list"><a class="gnb__list-name main_tab" href="/fooditem/ranking">베스트</a></li>
-                                <li class="gnb__list"><a class="gnb__list-name main_tab" href="/recipe/main">분류</a></li>
-                                <li class="gnb__list"><a class="gnb__list-name main_tab" href="/trade/main">물물교환</a>
-                                </li>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <section class="header-middle" style="height: 10%; width: 80%; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 3%;">
+            <!-- 로고 영역 -->
+            <div style="width: 10%; display: flex; align-items: center;">
+                <a href="/">
+                    <img src="/uploadedImg/main/logo.png" style="width: 100%; height: auto;" alt="Food Talk 로고">
+                </a>
             </div>
-        </div>
-    </header>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.5.1/dist/sockjs.min.js"></script>
-<script src="/assets/js/header.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+            <!-- 텍스트 링크 영역 -->
+            <div style="display: flex; align-items: center; gap: 2%;">
+                <a id="titleName1" href="javascript:void(0)" onclick="saveTitleName(this)" style="padding: 1% 2%; color: #4CAF50; font-weight: bold; text-decoration: none; background-color: #e9f5e5; border-radius: 5px; white-space: nowrap;">건강마켓</a>
+                <a id="titleName2" href="javascript:void(0)" onclick="saveTitleName(this)" style="padding: 1% 2%; color: #4CAF50; font-weight: bold; text-decoration: none; background-color: #e9f5e5; border-radius: 5px; white-space: nowrap;">식단관리</a>
+            </div>
+
+
+            <!-- 검색 및 아이콘 영역 -->
+            <div class="direct__search btn__modal-open" data-login="y" id="searchPopup" data-popup-name="popup_search" style="display: flex; align-items: center; gap: 2%; margin-left: 3%;">
+                <input type="text" id="searchInput2" class="search-input" placeholder="재료를 입력해 주세요" autocomplete="off" onkeypress="commonSearch(this.value, event)" style="width: 18vw; height: 3vw; padding: 0.5% 2%; border: 0.2vw solid #c8e6c9; border-radius: 10px;">
+                <a href="/member/mypage"><img src="/uploadedImg/main/mypage.png" alt="마이페이지" style="width: 3vw;"></a>
+                <a href="/cart/test"><img src="/uploadedImg/main/write.png" alt="작성" style="width: 3vw;"></a>
+                <a href="/cart/main"><img src="/uploadedImg/main/icon_header_cart.png?h=b0cf2eaea34afb39f82041851f5691b1" alt="장바구니" style="width: 3vw;"></a>
+            </div>
+        </section>
+
+
+        <!-- 하단 내비게이션 영역 -->
+        <section class="header-bottom" style="height: 8%; width: 80%; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+            <a id="headCardLink" class="gnb__list-name" href="/fooditem/main" style="text-decoration: none; color: gray; font-size: 1.5vw; padding: 0 1%;">식자재</a>
+            <a class="gnb__list-name main_tab" href="/fooditem/ranking" style="text-decoration: none; color: gray; font-size: 1.5vw; padding: 0 1%;">베스트</a>
+            <a class="gnb__list-name main_tab" href="/recipe/main" style="text-decoration: none; color: gray; font-size: 1.5vw; padding: 0 1%;">분류</a>
+            <a class="gnb__list-name main_tab" href="/trade/main" style="text-decoration: none; color: gray; font-size: 1.5vw; padding: 0 1%;">물물교환</a>
+        </section>
+    </main>
+
+    <input id="savedTitleName" style="display: none">
+    <script th:inline="javascript">
+        $(() => {
+            document.getElementById('titleName1').classList.remove("on")
+            document.getElementById('titleName2').classList.remove("on")
+            switch (window.location.pathname) {
+                case "/":
+                    document.getElementById('titleName1').classList.add("on")
+                    break;
+                case "/careMain":
+                    document.getElementById('titleName2').classList.add("on")
+                    break;
+                default:
+                    document.getElementById('titleName1').classList.add("on")
+            }
+            if ("${cartCount}" !== null && "${cartCount}" !== "") {
+                const cartCount = document.getElementById("cartCnt")
+                cartCount.innerHTML = "${cartCount}";
+            } else {
+                cartCount.innerHTML = 0;
+            }
+        })
+
+        function saveTitleName(titleName) {
+            console.log("현재 타이틀 이름은 ?")
+            let tName = titleName.innerHTML
+            console.log(window.location.pathname)
+            switch (tName) {
+                case "건강마켓":
+                    window.location.href = "/"
+                    break;
+                case "식단관리":
+                    window.location.href = "/careMain"
+                    break;
+                default:
+                    console.log("건강/식단 선택 에러")
+            }
+        }
+
+        function commonSearch(keyword, event) {
+            console.log("검색 기능 시작")
+            if (event.keyCode === 13) {
+                if (window.find(keyword)) {
+                    $('#searchInput2').focus()
+                } else {
+                    console.log("검색 결과 없음")
+                    window.location.href = "/common/main/search?value=" + keyword
+                }
+            }
+        }
+    </script>
+</header>
 </body>
 </html>

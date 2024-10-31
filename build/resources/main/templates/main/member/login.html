@@ -1,12 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: user
-  Date: 24. 7. 3.
-  Time: 오전 10:58
-  To change this template use File | Settings | File Templates.
---}
-<%@ page contentType="text/html;charset=UTF-8" language="java" }
-<html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <title>로그인</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -20,8 +12,8 @@
         }
     </style>
     <script>
-        const msg = '${msg}'
-        if (msg !== "") {
+        let msg = /*[[${msg}]]*/ [];
+        if (!msg || msg.length === 0) {
             alert(msg)
         }
 
@@ -194,12 +186,7 @@
                         document.getElementById("checkCodeBtn").disabled = "true"
                         let divBtn = $('#makeBtn')
                         divBtn.html("<button type='button' onclick='makeNewPw()' class='btn' style='background-color: #77b347; color: white'>새 비밀번호 생성</button>")
-                        // let divBtn2 = $('#pwChangeForm')
-                        // let str2 = "";
-                        // str2 += "<button type='button' onclick='changePw()' id='changePwBtn' className='btn' style='background-color: #77b347; color: white'>비밀번호 변경</button>"
-                        //     divBtn2.append(str2)
                         $('#changePwBtn').css('display', 'block')
-                        // document.getElementById('changePwBtn').display = 'false'
                     } else {
                         document.getElementById("checkCode").innerHTML = "인증번호가 일치하지 않습니다"
                         document.getElementById("serPwBtn").addEventListener('click', function () {
@@ -242,7 +229,7 @@
 </head>
 <body>
 <header>
-    <jsp:include page="../common/header.html"></jsp:include>
+    <div th:replace="~{main/common/header :: header}"></div>
 </header>
 <h1 style="font-size: large; margin-top: 10px; margin-left: 400px">HOME > 로그인</h1><br>
 <!-- 아이디 찾기 Modal -->
@@ -286,7 +273,6 @@
 <button id="searchIdModal" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#searchId"
         style="display: none">
 </button>
-<!-- 비밀번호 찾기 Modal -->
 <div class="modal fade" id="searchPw" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
      aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -365,11 +351,6 @@
                style="margin-bottom: 20px;margin-top: 5px; height: 60px; width: 400px"
                autocomplete="off"><br>
         <div style="display: flex;justify-content: space-between">
-            <div class="hd-checkbox">
-                <input type="checkbox" id="chk2" class="hidden" data-check="n" data-checked="n"
-                       data-gtm-form-interact-field-id="0">
-                <label for="chk2">아이디 저장</label>
-            </div>
             <button style="display: none; margin-bottom: 30px">css용 ㅇㅇ 건드리지말것</button>
         </div>
         <button type="submit"
@@ -380,9 +361,6 @@
     </form>
 </main>
 <div style="text-align: center; margin-top: 30px">
-    <%--    <a href="searchfrm">--}
-    <%--        <button type="submit" class="btn btn-danger">아이디/비밀번호찾기</button>--}
-    <%--    </a>--}
     <a href="javascript:document.querySelector('#searchIdModal').click()">아이디 찾기</a> |
     <a href="javascript:document.querySelector('#searchPwModal').click()">비밀번호 찾기</a> |
     <a href="/joinfrm">회원가입</a>
@@ -401,7 +379,7 @@
 <br>
 <br>
 <footer>
-    <jsp:include page="../common/footer.jsp"></jsp:include>
+    <div th:replace="~{main/common/footer :: footer}"></div>
 </footer>
 </body>
 </html>

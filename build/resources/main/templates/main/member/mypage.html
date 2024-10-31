@@ -12,18 +12,13 @@
 </head>
 <body>
 <header>
-    <jsp:include page="../common/header.html"></jsp:include>
+    <div th:replace="~{main/common/header :: header}"></div>
 </header>
 <style>
     .myPageCgSort:hover {
         background-color: #77b347;
         color: white;
     }
-
-    /*.myPageCgSort activated {*/
-    /*    background-color: #77b347;*/
-    /*    color: white;*/
-    /*}*/
 </style>
 <script>
     function myPageCgSelector(value) {
@@ -303,7 +298,7 @@
 <br>
 <br>
 <footer>
-    <jsp:include page="../common/footer.jsp"></jsp:include>
+    <div th:replace="~{main/common/footer :: footer}"></div>
 </footer>
 <script>
     const dvModal = document.getElementsByClassName("modal-body");

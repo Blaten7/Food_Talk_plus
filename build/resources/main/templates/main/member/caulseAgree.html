@@ -72,7 +72,7 @@
 </head>
 <body>
 <header>
-    <jsp:include page="../common/header.html"></jsp:include>
+    <div th:replace="~{main/common/header :: header}"></div>
 </header>
 <main>
 
@@ -259,7 +259,7 @@
 <br>
 </main>
 <footer>
-    <jsp:include page="../common/footer.jsp"></jsp:include>
+    <div th:replace="~{main/common/footer :: footer}"></div>
 </footer>
 <script>
     function checkAgreement() {

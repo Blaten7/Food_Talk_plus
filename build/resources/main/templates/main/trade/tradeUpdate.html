@@ -2,7 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ko">
 <head>
     <title>Title</title>
-<%--    <script defer src="/common/js/common.js"></script>--}
+    <%--
+    <script defer src="/common/js/common.js"></script>
+    --}
     <script defer src="/common/js/jquery-3.7.1.min.js"></script>
     <style>
         .zz {
@@ -249,22 +251,24 @@
                                class="form-control" style="font-weight:bold;font-size:18px;width:210px;" disabled/>
                     </p>
                     <ul id="divMaterialArea_1" class="ui-sortable">
-                        <c:forEach items="${tUList}" var="trades" varStatus="loop">
-                            <li id="liMaterial_1_${loop.index+1}" class="liMaterial_1_1">
-                                <input type="text" name="t_item" id="trade_no1_1" class="form-control"
-                                       value="${trades.t_item}">
-                                <input type="text" name="t_itemcount" id="trade_no1_2" class="form-control"
-                                       value="${trades.t_itemcount}">
-                                <input type="text" name="t_unit" id="trade_no1_3" class="form-control"
-                                       value="${trades.t_unit}">
-                                <input type="text" name="t_change" id="trade_no1_4" class="form-control"
-                                       value="${trades.t_change}">
-                                <input type="text" name="t_order" id="trade_no1_5" value="${trades.t_order}" style="display: none" class="order">
-                                <button id="btn-del" type="button" class="btn-del"
-                                        style="display: none"></button>
-                                <br>
-                            </li>
-                        </c:forEach>
+                        <li th:each="trades, loop : ${tUList}"
+                            th:id="'liMaterial_1_' + ${loop.index + 1}"
+                            class="liMaterial_1_1">
+
+                            <input type="text" name="t_item" id="trade_no1_1" class="form-control"
+                                   th:value="${trades.t_item}">
+                            <input type="text" name="t_itemcount" id="trade_no1_2" class="form-control"
+                                   th:value="${trades.t_itemcount}">
+                            <input type="text" name="t_unit" id="trade_no1_3" class="form-control"
+                                   th:value="${trades.t_unit}">
+                            <input type="text" name="t_change" id="trade_no1_4" class="form-control"
+                                   th:value="${trades.t_change}">
+                            <input type="text" name="t_order" id="trade_no1_5" class="order"
+                                   th:value="${trades.t_order}" style="display: none;">
+
+                            <button id="btn-del" type="button" class="btn-del" style="display: none;"></button>
+                            <br>
+                        </li>
                     </ul>
                     <div class="btn_add" style="padding:0 0 20px 350px; width: 800px;">
                         <button id="addBtn" type="button" class="btn btn-default">
@@ -282,7 +286,7 @@
     </form>
 </div>
 <footer>
-    <jsp:include page="../common/footer.jsp"></jsp:include>
+    <div th:replace="~{main/common/footer :: footer}"></div>
 </footer>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -291,7 +295,7 @@
 
         document.getElementById("addBtn").addEventListener("click", function () {
             let orders = document.querySelectorAll(".order");
-            let count=orders[orders.length-1].value
+            let count = orders[orders.length - 1].value
             console.log("최대 값:", count);
             let newLi = document.createElement("li")
             let newBtn = document.createElement("button")
@@ -325,10 +329,10 @@
                         newInput.name = "t_change"
                         break;
                     case 5:
-                        newInput.value=''+count
-                        newInput.name="t_order"
-                        newInput.className="order"
-                        newInput.style.display="none"
+                        newInput.value = '' + count
+                        newInput.name = "t_order"
+                        newInput.className = "order"
+                        newInput.style.display = "none"
                         break;
                 }
                 newLi.appendChild(newInput)
@@ -349,24 +353,24 @@
             });
         })
     })
-    let li=document.getElementsByClassName("liMaterial_1_1")
-    for(let i=0;i<li.length;i++) {
-        let lis=li[i]
-        let delBtn =lis.querySelector(".btn-del")
+    let li = document.getElementsByClassName("liMaterial_1_1")
+    for (let i = 0; i < li.length; i++) {
+        let lis = li[i]
+        let delBtn = lis.querySelector(".btn-del")
         lis.addEventListener("mouseover", function () {
             delBtn.style.display = "inline-block"
         })
         lis.addEventListener("mouseout", function () {
             delBtn.style.display = "none"
         })
-        delBtn.addEventListener("click",function (){
-            let order=lis.querySelectorAll("input")
-            order[0].name=""
-            order[1].name=""
-            order[2].name=""
-            order[3].name=""
-            order[4].name="order"
-            lis.style.display="none"
+        delBtn.addEventListener("click", function () {
+            let order = lis.querySelectorAll("input")
+            order[0].name = ""
+            order[1].name = ""
+            order[2].name = ""
+            order[3].name = ""
+            order[4].name = "order"
+            lis.style.display = "none"
             // lis.remove()
         })
     }

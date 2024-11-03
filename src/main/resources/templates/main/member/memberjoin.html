@@ -1,12 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: user
-  Date: 24. 7. 5.
-  Time: 오후 3:24
-  To change this template use File | Settings | File Templates.
---}
-<%@ page contentType="text/html;charset=UTF-8" language="java" }
-<html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <title>회원가입</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -17,7 +9,7 @@
 </head>
 <body>
 <header>
-    <jsp:include page="../common/header.html"></jsp:include>
+    <div th:replace="~{main/common/header :: header}"></div>
 </header>
 <h1 style="font-size: xxx-large; text-align: center;margin-top: 70px">회원가입</h1>
 <div style="margin-left: 400px; width: 1100px;">
@@ -32,12 +24,9 @@
 </div>
 <hr>
 <div style="display: flex; flex-direction: row; width: 45%; margin: 0 auto 0">
-<button class="btn btn-cancel"><img style="width: 100px; height: 100px" src="/uploadedImg/main/MainPage/카카오톡.png"></button>
-<button class="btn btn-cancel"><img style="width: 60px; height: 60px" src="/uploadedImg/main/MainPage/네이년.png"></button>
-<button class="btn btn-cancel"><img style="width: 80px; height: 80px" src="/uploadedImg/main/MainPage/구글.png"></button>
 </div>
 <footer>
-    <jsp:include page="../common/footer.jsp"></jsp:include>
+    <div th:replace="~{main/common/footer :: footer}"></div>
 </footer>
 </body>
 </html>

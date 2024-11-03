@@ -1,14 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: dnjs1
-  Date: 24. 7. 10.
-  Time: 오후 4:26
-  To change this template use File | Settings | File Templates.
---}
-<%@ page contentType="text/html;charset=UTF-8" language="java" }
-<%@ taglib uri="http://www.springframework.org/security/tags"
-           prefix="sec" }
-<html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ko">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
@@ -49,8 +39,8 @@
         }
     </style>
 </head>
-<header>
-    <jsp:include page="../common/header.html"></jsp:include>
+<header>    <div th:replace="~{main/common/header :: header}"></div>
+
 </header>
 <!-- Slick Carousel 라이브러리 -->
 <script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
@@ -255,7 +245,7 @@
     </div>
 </div>
 <footer>
-    <jsp:include page="../common/footer.jsp"></jsp:include>
+    <div th:replace="~{main/common/footer :: footer}"></div>
 </footer>
 <form id="orderForm" method="POST" action="/cart/order" style="display:none;"></form>
 <script>

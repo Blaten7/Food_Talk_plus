@@ -1,25 +1,17 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: user
-  Date: 24. 7. 31.
-  Time: 오후 3:51
-  To change this template use File | Settings | File Templates.
---}
-<%@ page contentType="text/html;charset=UTF-8" language="java" }
-<html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <title>Title</title>
+    <style>
+        .myPageCgSort:hover {
+            background-color: #77b347;
+            color: white;
+        }
+    </style>
 </head>
 <body>
 <header>
     <div th:replace="~{main/common/header :: header}"></div>
 </header>
-<style>
-    .myPageCgSort:hover {
-        background-color: #77b347;
-        color: white;
-    }
-</style>
 <script>
     function myPageCgSelector(value) {
         console.log(value.innerText)

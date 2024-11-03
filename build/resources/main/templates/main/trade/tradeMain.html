@@ -135,19 +135,16 @@
             </ul>
         </div>
         <div id="tradeList" class="trade-List">
-
-            <c:forEach var="trades" items="${tList}">
-                <c:if test="${trades.visible=='1'}">
-                    <div class="trade-card" id="${trades.visible}">
-                        <a href="/trade/detail?t_num=${trades.t_num}">${trades.t_title}
-                            <span id="trade_m_id">작성자: ${trades.m_id}</span>
-                            <span>날짜: ${trades.t_date}</span>
-                            <span>조회수: ${trades.t_views}</span>
-                            <span>추천수: ${trades.t_count}</span>
-                        </a>
-                    </div>
-                </c:if>
-            </c:forEach>
+            <div th:each="trades : ${tList}">
+                <div th:if="${trades.visible == '1'}" class="trade-card" th:id="${trades.visible}">
+                    <a th:href="@{/trade/detail(t_num=${trades.t_num})}" th:text="${trades.t_title}">
+                        <span id="trade_m_id">작성자: <span th:text="${trades.m_id}"></span></span>
+                        <span>날짜: <span th:text="${trades.t_date}"></span></span>
+                        <span>조회수: <span th:text="${trades.t_views}"></span></span>
+                        <span>추천수: <span th:text="${trades.t_count}"></span></span>
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
     <div style="margin-left: 370px; width: 1100px; text-align: center; margin-top: 25px">
@@ -185,8 +182,7 @@
         </nav>
     </div>
 </div>
-<footer>
-    <jsp:include page="../common/footer.jsp"></jsp:include>
+<footer><div th:replace="~{main/common/footer :: footer}"></div>
 </footer>
 <script>
     $(document).ready(function () {

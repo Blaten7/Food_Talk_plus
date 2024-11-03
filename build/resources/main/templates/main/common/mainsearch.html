@@ -1,20 +1,9 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: user
-  Date: 24. 8. 1.
-  Time: 오후 1:21
-  To change this template use File | Settings | File Templates.
---}
-<%@ page contentType="text/html;charset=UTF-8" language="java" }
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" }
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" }
-<html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ko">
 <head>
     <title>Title</title>
 </head>
 <body>
-<header>
-    <jsp:include page="header.html"></jsp:include>
+<header>    <div th:replace="~{main/common/header :: header}"></div>
 </header>
 <script>
     console.log(${mainSearchList})
@@ -200,8 +189,7 @@
 <br>
 <br>
 <br>
-<footer>
-    <jsp:include page="../common/footer.jsp"></jsp:include>
+<footer><div th:replace="~{main/common/footer :: footer}"></div>
 </footer>
 </body>
 </html>

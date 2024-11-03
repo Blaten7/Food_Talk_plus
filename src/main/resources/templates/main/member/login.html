@@ -1,4 +1,5 @@
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ko">
 <head>
     <title>로그인</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -13,7 +14,7 @@
     </style>
     <script>
         let msg = /*[[${msg}]]*/ [];
-        if (!msg || msg.length === 0) {
+        if (!msg && msg.length === 0) {
             alert(msg)
         }
 

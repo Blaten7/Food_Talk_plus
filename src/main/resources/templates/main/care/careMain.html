@@ -1,12 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: user
-  Date: 24. 7. 10.
-  Time: 오전 9:56
-  To change this template use File | Settings | File Templates.
---}
-<%@ page contentType="text/html;charset=UTF-8" language="java" }
-<html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <title>Title</title>
     <script defer src="/common/js/common.js"></script>
@@ -55,7 +47,7 @@
     </style>
 </head>
 <body>
-<jsp:include page="../common/header.html"></jsp:include>
+<div th:replace="~{main/common/header :: header}"></div>
 <div class="careMain">
 <div style="display: flex;flex-direction: column; text-align: center">
     <a href="javacript:void(0)" onclick="careServiceInfoOpenModal()"><strong>건강식단 ></strong></a><br>
@@ -96,7 +88,8 @@
 <br>
 <br>
 <footer>
-    <jsp:include page="../common/footer.jsp"></jsp:include>
+
+    <div th:replace="~{main/common/footer :: footer}"></div>
 </footer>
 </body>
 </html>

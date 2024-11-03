@@ -1,12 +1,6 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: dnjs1
-  Date: 24. 7. 5.
-  Time: 오전 8:50
-  To change this template use File | Settings | File Templates.
---}
-<%@ page contentType="text/html;charset=UTF-8" language="java" }
-<html>
+
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ko">
+
 <head>
     <title>Title</title>
     <script defer src="/common/js/jquery-3.7.1.min.js"></script>
@@ -157,8 +151,8 @@
     </style>
 
 </head>
-<body>
-<jsp:include page="../common/header.html"></jsp:include>
+<body>    <div th:replace="~{main/common/header :: header}"></div>
+
 <main >
     <div class="main__div">
         <div class="categoryon">
@@ -394,8 +388,8 @@
         }
     </script>
 </main>
-<footer>
-    <jsp:include page="../common/footer.jsp"></jsp:include>
+<footer><div th:replace="~{main/common/footer :: footer}"></div>
+
 </footer>
 </body>
 </html>

@@ -1,12 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: dnjs1
-  Date: 24. 7. 26.
-  Time: 오후 2:59
-  To change this template use File | Settings | File Templates.
---}
-<%@ page contentType="text/html;charset=UTF-8" language="java" }
-<html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ko">
 <head>
     <title>Title</title>
     <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css?h=3f30c2c47d7d23c7a994db0c862d45a5">
@@ -19,7 +11,8 @@
     }
 </style>
 <body id="orderPayment" class="hd">
-<jsp:include page="../common/header.html"></jsp:include>
+<div th:replace="~{main/common/header :: header}"></div>
+
 <div id="wrap">
     <main id="contents" class="hd__orderPayment">
         <ul class="breadcrumb">
@@ -530,5 +523,6 @@
         });
     }
 </script>
+<div th:replace="~{main/common/footer :: footer}"></div>
 </body>
 </html>

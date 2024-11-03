@@ -1,18 +1,9 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: user
-  Date: 24. 7. 30.
-  Time: 오후 6:16
-  To change this template use File | Settings | File Templates.
---}
-<%@ page contentType="text/html;charset=UTF-8" language="java" }
-<html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ko">
 <head>
     <title>Title</title>
 </head>
 <body>
-<header>
-    <jsp:include page="../common/header.html"></jsp:include>
+<header>    <div th:replace="~{main/common/header :: header}"></div>
 </header>
 <main>
     <h1 style="font-size: large; margin-top: 10px; margin-left: 400px">HOME > 고객센터 > 1:1문의</h1>
@@ -186,8 +177,7 @@
         </div>
     </div>
 </main>
-<footer>
-    <jsp:include page="../common/footer.jsp"></jsp:include>
+<footer><div th:replace="~{main/common/footer :: footer}"></div>
 </footer>
 </body>
 </html>

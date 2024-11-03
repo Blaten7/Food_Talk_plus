@@ -64,10 +64,10 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
             "LEFT JOIN category c3 ON c2.c_num = c3.c_num2 " +
             "WHERE LEFT(c1.c_num, 1) = 1",
             nativeQuery = true)
-    List<CtgDto> searchCtg();
+    List<Object[]> searchCtg();
 
     @Query(value = "select * from category", nativeQuery = true)
-    List<CtgDto> getCategoryList();
+    List<Object[]> getCategoryList();
 
 
 

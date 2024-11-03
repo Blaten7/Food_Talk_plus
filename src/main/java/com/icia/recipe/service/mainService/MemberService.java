@@ -150,7 +150,7 @@ public class MemberService {
         HashMap<String,String> hMap = new HashMap<>();
         hMap.put("id",id);
         sDto.setData(hMap);
-        List<OrderDto> list = or.selectOrder(id, sDto);
+        List<Object[]> list = or.selectOrder(id, sDto);
         log.info("selectOrder:{}",list);
         model.addAttribute("orderTable", makeOrder(list));
         model.addAttribute("empty", "ok");
@@ -205,7 +205,7 @@ public class MemberService {
     }
 
     public String selectOrderDetail(String num) {
-        List<OrderDto> list = or.selectOrderDetail(num);
+        List<Object[]> list = or.selectOrderDetail(num);
         log.info("selectOrderDetail:,{}", list);
         return makeOrderDatail(list);
     }

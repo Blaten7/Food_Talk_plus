@@ -175,8 +175,8 @@ public class BoardService {
 
     // 식자재 리스트 가져오기. 대분류 중분류에 해당하는 이름으로 바꾸고 ㅇㅇ
     public List<FoodItemDto> getFoodItemList(Integer pageNum, Integer pageSize) {
-        List<FoodItemDto> fiList = fr.getFoodItemList2();
-        for (FoodItemDto fi : fiList) {
+        List<Object[]> fiList = fr.getFoodItemList2();
+        for (Object[] fi : fiList) {
             fi.setC_num(cr.getFoodItemListNaming(fi.getC_num()));
             fi.setC_num2(cr.getFoodItemListNaming2(fi.getC_num2()));
             if (fi.getC_num().length() > 6) {
@@ -241,8 +241,8 @@ public class BoardService {
                 break;
 
         }
-        List<FoodItemDto> fiList = fr.getSortedFoodItemList(param);
-        for (FoodItemDto fi : fiList) {
+        List<Object[]> fiList = fr.getSortedFoodItemList(param);
+        for (Object[] fi : fiList) {
             fi.setC_num(cr.getFoodItemListNaming(fi.getC_num()));
             fi.setC_num2(cr.getFoodItemListNaming2(fi.getC_num2()));
             if (fi.getF_title().length() >=5) {
@@ -338,9 +338,9 @@ public class BoardService {
         }
     }
 
-    public List<FoodItemDto> getModalFIDetails(String trCode) {
-        List<FoodItemDto> details = fr.getModalFIDetails(trCode);
-        for (FoodItemDto fi : details) {
+    public List<Object[]> getModalFIDetails(String trCode) {
+        List<Object[]> details = fr.getModalFIDetails(trCode);
+        for (Object[] fi : details) {
             fi.setF_img(imgr.getFiImg(trCode));
             fi.setC_numName(cr.getFoodItemListNaming(fi.getC_num()));
             fi.setC_num2Name(cr.getFoodItemListNaming2(fi.getC_num2()));
@@ -352,8 +352,8 @@ public class BoardService {
         log.info("[식자재 검색] 진입");
         log.info("검색어 : {}", searchKeyword);
 
-        List<FoodItemDto> fsearchList = fr.getFooditemList();
-        for (FoodItemDto fis : fsearchList) {
+        List<Object[]> fsearchList = fr.getFooditemList();
+        for (Object[] fis : fsearchList) {
             fis.setC_num(cr.getFoodItemListNaming(fis.getC_num()));
             fis.setC_num2(cr.getFoodItemListNaming2(fis.getC_num2()));
         }
@@ -383,7 +383,7 @@ public class BoardService {
     }
 
 
-    public List<FoodItemDto> modalDetailsInfoUpdate(List<String> Cdata, List<String> Udata) {
+    public List<Object[]> modalDetailsInfoUpdate(List<String> Cdata, List<String> Udata) {
         String c_cnum = Cdata.get(0);
         String c_cnum2 = Cdata.get(1);
         String c_ftitle = Cdata.get(2);

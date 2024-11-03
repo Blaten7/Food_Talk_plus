@@ -21,9 +21,9 @@ public class InvenService {
     @Autowired
     FoodItemRepository fr;
 
-    public List<FoodItemDto> getInvenList(Integer pageNum, Integer pageSize) {
+    public List<Object[]> getInvenList(Integer pageNum, Integer pageSize) {
         log.info("[재고] 서비스 진입");
-        List<FoodItemDto> fList = fr.getInvenList();
+        List<Object[]> fList = fr.getInvenList();
         int totalListCnt = fList.size();
         int fromIdx = (pageNum - 1) * pageSize;
         int toIdx = Math.min(fromIdx + pageSize, totalListCnt);
@@ -37,7 +37,7 @@ public class InvenService {
         if (fromIdx >= totalListCnt) {
             return List.of(); // 페이지 범위가 전체 리스트 크기를 초과하는 경우 빈 리스트 반환
         }
-        for (FoodItemDto fi : fList) {
+        for (Object[] fi : fList) {
             if (fi.getF_title().length() >= 6) {
                 fi.setF_title(fi.getF_title().substring(0, 5) + "...");
             }
@@ -107,8 +107,8 @@ public class InvenService {
                     return null;
             }
         }
-        List<FoodItemDto> iList = fr.getSortedInvenList(param, sort);
-        for (FoodItemDto fi : iList) {
+        List<Object[]> iList = fr.getSortedInvenList(param, sort);
+        for (Object[] fi : iList) {
             if (fi.getF_title().length() >= 6) {
                 fi.setF_title(fi.getF_title().substring(0, 5) + "...");
             }
@@ -145,7 +145,7 @@ public class InvenService {
         }
     }
 
-    public List<InvenDto> finalOrder() {
+    public List<Object[]> finalOrder() {
         boolean update = ir.finalOrder();
         if (update) {
             return ir.getInvenAddList();
@@ -157,8 +157,8 @@ public class InvenService {
 
     public List<?> getSearchListInven(Integer pageNum, Integer pageSize, String searchKeyword, String tab) {
         String table = "";
-        List<FoodItemDto> fList = null;
-        List<InvenDto> iList = null;
+        List<Object[]> fList = null;
+        List<Object[]> iList = null;
         List<?> searchList = null;
         switch (tab) {
             case "invenM":
@@ -206,8 +206,8 @@ public class InvenService {
         return searchList.subList(fromIdx, toIdx);
     }
 
-    public List<InvenDto> getInvenAddList(Integer pageNum, Integer pageSize) {
-        List<InvenDto> iList = ir.getInvenAddList();
+    public List<Object[]> getInvenAddList(Integer pageNum, Integer pageSize) {
+        List<Object[]> iList = ir.getInvenAddList();
         int totalListCnt = iList.size();
         int fromIdx = (pageNum - 1) * pageSize;
         int toIdx = Math.min(fromIdx + pageSize, totalListCnt);
@@ -257,7 +257,7 @@ public class InvenService {
             default:
                 log.info("[발주 정렬] 서비스 에러");
         }
-        List<InvenDto> iList = ir.getInvenAddListSort(param, sort);
+        List<Object[]> iList = ir.getInvenAddListSort(param, sort);
         int totalListCnt = iList.size();
         int fromIdx = (pageNum - 1) * pageSize;
         int toIdx = Math.min(fromIdx + pageSize, totalListCnt);
@@ -269,12 +269,12 @@ public class InvenService {
 
     }
 
-    public List<FoodItemDto> emptyFoodItem() {
+    public List<Object[]> emptyFoodItem() {
         return fr.emptyFoodItem();
     }
 
     public List<FoodItemDto> getFoodItemList(Integer pageNum, Integer pageSize) {
-        List<FoodItemDto> fList = fr.getDeleteFooditemList();
+        List<Object[]> fList = fr.getDeleteFooditemList();
         int totalListCnt = fList.size();
         int fromIdx = (pageNum - 1) * pageSize;
         int toIdx = Math.min(fromIdx + pageSize, totalListCnt);

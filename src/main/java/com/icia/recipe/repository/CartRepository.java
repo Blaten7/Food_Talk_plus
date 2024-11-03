@@ -23,7 +23,7 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
             "JOIN category c ON c.c_num = f.c_num " +
             "WHERE ca.m_id = :name",
             nativeQuery = true)
-    List<CartDto> selectCart(@Param("name") String name);
+    List<Object[]> selectCart(@Param("name") String name);
 
     @Query(value = "SELECT COUNT(*) FROM cart WHERE m_id = :mId", nativeQuery = true)
     String selectCartCount(@Param("mId") String mId);

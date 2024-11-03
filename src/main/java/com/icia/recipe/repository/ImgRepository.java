@@ -18,14 +18,14 @@ public interface ImgRepository extends JpaRepository<Img, Long> {
     @Query(value = "select i_sys_name " +
             "from Img " +
             "where f_num = :code", nativeQuery = true)
-    List<String> getFiImgSysName(
+    List<Object[]> getFiImgSysName(
             @Param("code") String code
     );
 
     @Query(value = "select i_path " +
             "from Img " +
             "where f_num = :code", nativeQuery = true)
-    List<String> getFiImgPath(
+    List<Object[]> getFiImgPath(
             @Param("code") String code
     );
 
@@ -33,7 +33,7 @@ public interface ImgRepository extends JpaRepository<Img, Long> {
             "JOIN category c ON c.c_num = f.c_num WHERE c.c_num = :bigCgNum " +
             "AND f.f_title = :title AND f.f_code = :code AND c.c_name = :cgName",
             nativeQuery = true)
-    List<Img> getImg(@Param("bigCgNum") String bigCgNum,
+    List<Object[]> getImg(@Param("bigCgNum") String bigCgNum,
                      @Param("title") String title,
                      @Param("code") String code,
                      @Param("cgName") String cgName);

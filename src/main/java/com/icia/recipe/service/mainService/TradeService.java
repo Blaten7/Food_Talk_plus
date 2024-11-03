@@ -34,7 +34,7 @@ public class TradeService {
         return tr.saveTrade(tDto);
     }
 
-    public List<TradeDto> tradeDetail(Integer t_num) {
+    public List<Object[]> tradeDetail(Integer t_num) {
         tr.viewsCount(t_num);
         return tr.tradeDetail(t_num);
     }

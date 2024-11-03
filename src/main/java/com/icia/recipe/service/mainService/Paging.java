@@ -42,9 +42,7 @@ public class Paging {
 		int start = (currentGroup * pageCount) 
 				    - (pageCount - 1);
 		//현재그룹의 끝 페이지 번호
-		int end = (currentGroup * pageCount >= totalPage)
-				? totalPage
-				: currentGroup * pageCount;
+		int end = Math.min(currentGroup * pageCount, totalPage);
 
 		sb.append("<nav aria-label=\"Page navigation example\">")
 				.append("<ul class=\"pagination justify-content-center\">")

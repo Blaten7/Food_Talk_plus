@@ -12,166 +12,115 @@
     <h1 style="font-weight: bold; color: #77b347; margin-top: 50px; margin-left: 100px">● - - - - - 검색결과</h1>
 </section>
 <main id="searchMain" style="justify-content: center; background-color: white;">
-    <%--    <div style="width: 80%; margin-left: 10%">--}
-    <%--        <c:choose>--}
-    <%--            <c:when test="${not empty mainSearchList}">--}
-    <%--                <c:set var="isEmptyList" value="true"/>--}
-    <%--                <c:forEach var="item" items="${mainSearchList}">--}
-    <%--                    <c:if test="${not empty item}">--}
-    <%--                        <c:set var="isEmptyList" value="false"/>--}
-    <%--                    </c:if>--}
-    <%--                </c:forEach>--}
-    <%--                <c:if test="${not isEmptyList}">--}
-    <%--                    <h3 style="color: #77b347; text-align: center">리스트 확인용</h3>--}
-    <%--                    <c:forEach var="item" items="${mainSearchList}">--}
-    <%--                        <c:forEach var="subItem" items="${item}">--}
-    <%--                            ${subItem}--}
-    <%--                            <hr style="height: 3px; border: 0; background-color: #77b347">--}
-    <%--                        </c:forEach>--}
-    <%--                    </c:forEach>--}
-    <%--                </c:if>--}
-    <%--            </c:when>--}
-    <%--            <c:otherwise>--}
-    <%--                <h2 style="color: #77b347; text-align: center">검색 결과가 존재하지 않습니다.</h2>--}
-    <%--            </c:otherwise>--}
-    <%--        </c:choose>--}
-    <%--    </div>--}
     <div style="margin-top: 100px">
-        <c:forEach var="innerList" items="${mainSearchList}" varStatus="status">
-            <c:if test="${not empty innerList}">
-                <c:choose>
-                    <c:when test="${status.index == 0 and not empty mainSearchList[0]}">
-                        <div style="width: 30%; text-align: center; margin: 0 auto 0">
-                            <h3 style="color: #77b347; text-align: center">카테고리</h3><br>
-                            <table class='table my-0' id='dataList'>
-                                <tr id='mInven'
-                                    style='vertical-align: center;background-color: #77b347; color: white'>
-                                    <th class='no-hover'>#</th>
-                                    <th class='no-hover'>
-                                        <h4>분류 코드</h4>
-                                    </th>
-                                    <th class='no-hover'>
-                                        <h4>이름</h4>
-                                    </th>
-                                </tr>
-                                <c:forEach var="elem" items="${mainSearchList[0]}" varStatus="i">
-                                    <tr class='inven' onclick="searchDetailModal(this);">
-                                        <td>${i.count}</td>
-                                        <td>${elem.c_num}</td>
-                                        <td>${elem.c_name}</td>
-                                    </tr>
-                                </c:forEach>
-                            </table>
-                            <br><br>
-                        </div>
-                    </c:when>
-                    <c:when test="${status.index == 1 and not empty mainSearchList[1]}">
-                        <div style="width: 80%; text-align: center; margin-left: 10%">
-                            <h3 style="color: #77b347">식자재</h3><br>
-                            <table class='table my-0'>
-                                <tr style='vertical-align: center; background-color: #77b347; color: white'>
-                                    <td class='no-hover'>#</td>
-                                    <th class='no-hover'>
-                                        <h4>글 번호</h4>
-                                    </th>
-                                    <th class='no-hover'>
-                                        <h4>이름</h4>
-                                    </th>
-                                    <th class='no-hover'>
-                                        <h4>가격</h4>
-                                    </th>
-                                    <th class='no-hover'>
-                                        <h4>수량</h4>
-                                    </th>
-                                    <th class='no-hover'>
-                                        <h4>등록일</h4>
-                                    </th>
-                                    <th class='no-hover'>
-                                        <h4>유통기한</h4>
-                                    </th>
-                                    <th class='no-hover'>
-                                        <h4>조회수</h4>
-                                    </th>
-                                </tr>
-                                <c:forEach var="elem" items="${mainSearchList[1]}" varStatus="i">
-                                    <tr class="invenAdd" onclick="searchDetailModal(this)">
-                                        <td>${i.count}</td>
-                                        <td>${elem.f_num}</td>
-                                        <td>${elem.f_title}</td>
-                                        <td>${elem.f_price}</td>
-                                        <td>${elem.f_count}</td>
-                                        <td>${elem.f_date}</td>
-                                        <td>${elem.f_edate}</td>
-                                        <td>${elem.f_views}</td>
-                                    </tr>
-                                </c:forEach>
-                            </table>
-                            <br><br>
-                        </div>
-                    </c:when>
-                    <c:when test="${status.index == 2 and not empty mainSearchList[2]}">
-                        <div style="width: 80%; text-align: center; margin-left: 10%">
-                            <h1 style="color: #77b347">물물교환 작성자</h1>
-                            <table class='table my-0'>
-                                <tr style='vertical-align: center; background-color: #77b347; color: white'>
-                                    <th class="no-hover">#</th>
-                                    <th class="no-hover">작성자 이름</th>
-                                    <th class="no-hover">작성자 아이디</th>
-                                    <th class="no-hover">게시글 제목</th>
-                                    <th class="no-hover">등록일</th>
-                                    <th class="no-hover">조회수</th>
-                                    <th class="no-hover">상태</th>
-                                    <c:forEach var="elem" items="${mainSearchList[2]}" varStatus="i">
-                                <tr>
-                                    <td>${i.count}</td>
-                                    <td>${elem.m_name}</td>
-                                    <td>${elem.m_id}</td>
-                                    <td>${elem.t_title}</td>
-                                    <td>${elem.t_date}</td>
-                                    <td>${elem.t_views}</td>
-                                    <c:choose>
-                                        <c:when test="${elem.visible == 1}">
-                                            <td>교환 진행중</td>
-                                        </c:when>
-                                        <c:when test="${elem.visible == 2}">
-                                            <td>교환 완료</td>
-                                        </c:when>
-                                    </c:choose>
-                                </tr>
-                                </c:forEach>
-                            </table>
-                            <br><br>
-                        </div>
-                    </c:when>
-                    <c:when test="${status.index == 3 and not empty mainSearchList[3]}">
-                        <div style="width: 50%; text-align: center; margin: 0 auto 0">
-                            <h1 style="color: #77b347">교환 목록</h1>
-                            <table class='table my-0'>
-                                <tr style='vertical-align: center; background-color: #77b347; color: white'>
-                                    <th class="no-hover">#</th>
-                                    <th class="no-hover">교환 등록된 식자재</th>
-                                    <th class="no-hover">수량</th>
-                                    <th class="no-hover">필요한 식자재</th>
-                                    <c:forEach var="elem" items="${mainSearchList[3]}" varStatus="i">
-                                <tr>
-                                    <td>${i.count}</td>
-                                    <td>${elem.t_item}</td>
-                                    <td>${elem.t_itemcount}</td>
-                                    <td>${elem.t_change}</td>
-                                </tr>
-                                </c:forEach>
-                            </table>
-                            <br><br>
-                        </div>
-                    </c:when>
-                    <c:otherwise>
-                        <h2>검색 결과가 존재하지 않습니다.</h2>
-                    </c:otherwise>
-                </c:choose>
-            </c:if>
-        </c:forEach>
+        <div th:each="innerList, status : ${mainSearchList}">
+            <div th:if="${#lists.isNotEmpty(innerList)}">
+                <div th:switch="${status.index}">
+                    <!-- 카테고리 -->
+                    <div th:case="0" th:if="${#lists.isNotEmpty(mainSearchList[0])}" style="width: 30%; text-align: center; margin: 0 auto;">
+                        <h3 style="color: #77b347; text-align: center">카테고리</h3><br>
+                        <table class='table my-0' id='dataList'>
+                            <tr id='mInven' style='vertical-align: center; background-color: #77b347; color: white'>
+                                <th class='no-hover'>#</th>
+                                <th class='no-hover'><h4>분류 코드</h4></th>
+                                <th class='no-hover'><h4>이름</h4></th>
+                            </tr>
+                            <tr th:each="elem, i : ${mainSearchList[0]}" class='inven' onclick="searchDetailModal(this);">
+                                <td th:text="${i.count}"></td>
+                                <td th:text="${elem.c_num}"></td>
+                                <td th:text="${elem.c_name}"></td>
+                            </tr>
+                        </table>
+                        <br><br>
+                    </div>
+
+                    <!-- 식자재 -->
+                    <div th:case="1" th:if="${#lists.isNotEmpty(mainSearchList[1])}" style="width: 80%; text-align: center; margin-left: 10%;">
+                        <h3 style="color: #77b347">식자재</h3><br>
+                        <table class='table my-0'>
+                            <tr style='vertical-align: center; background-color: #77b347; color: white'>
+                                <td class='no-hover'>#</td>
+                                <th class='no-hover'><h4>글 번호</h4></th>
+                                <th class='no-hover'><h4>이름</h4></th>
+                                <th class='no-hover'><h4>가격</h4></th>
+                                <th class='no-hover'><h4>수량</h4></th>
+                                <th class='no-hover'><h4>등록일</h4></th>
+                                <th class='no-hover'><h4>유통기한</h4></th>
+                                <th class='no-hover'><h4>조회수</h4></th>
+                            </tr>
+                            <tr th:each="elem, i : ${mainSearchList[1]}" class="invenAdd" onclick="searchDetailModal(this);">
+                                <td th:text="${i.count}"></td>
+                                <td th:text="${elem.f_num}"></td>
+                                <td th:text="${elem.f_title}"></td>
+                                <td th:text="${elem.f_price}"></td>
+                                <td th:text="${elem.f_count}"></td>
+                                <td th:text="${elem.f_date}"></td>
+                                <td th:text="${elem.f_edate}"></td>
+                                <td th:text="${elem.f_views}"></td>
+                            </tr>
+                        </table>
+                        <br><br>
+                    </div>
+
+                    <!-- 물물교환 작성자 -->
+                    <div th:case="2" th:if="${#lists.isNotEmpty(mainSearchList[2])}" style="width: 80%; text-align: center; margin-left: 10%;">
+                        <h1 style="color: #77b347">물물교환 작성자</h1>
+                        <table class='table my-0'>
+                            <tr style='vertical-align: center; background-color: #77b347; color: white'>
+                                <th class="no-hover">#</th>
+                                <th class="no-hover">작성자 이름</th>
+                                <th class="no-hover">작성자 아이디</th>
+                                <th class="no-hover">게시글 제목</th>
+                                <th class="no-hover">등록일</th>
+                                <th class="no-hover">조회수</th>
+                                <th class="no-hover">상태</th>
+                            </tr>
+                            <tr th:each="elem, i : ${mainSearchList[2]}">
+                                <td th:text="${i.count}"></td>
+                                <td th:text="${elem.m_name}"></td>
+                                <td th:text="${elem.m_id}"></td>
+                                <td th:text="${elem.t_title}"></td>
+                                <td th:text="${elem.t_date}"></td>
+                                <td th:text="${elem.t_views}"></td>
+                                <td>
+                                    <span th:if="${elem.visible == 1}" th:text="'교환 진행중'"></span>
+                                    <span th:if="${elem.visible == 2}" th:text="'교환 완료'"></span>
+                                </td>
+                            </tr>
+                        </table>
+                        <br><br>
+                    </div>
+
+                    <!-- 교환 목록 -->
+                    <div th:case="3" th:if="${#lists.isNotEmpty(mainSearchList[3])}" style="width: 50%; text-align: center; margin: 0 auto;">
+                        <h1 style="color: #77b347">교환 목록</h1>
+                        <table class='table my-0'>
+                            <tr style='vertical-align: center; background-color: #77b347; color: white'>
+                                <th class="no-hover">#</th>
+                                <th class="no-hover">교환 등록된 식자재</th>
+                                <th class="no-hover">수량</th>
+                                <th class="no-hover">필요한 식자재</th>
+                            </tr>
+                            <tr th:each="elem, i : ${mainSearchList[3]}">
+                                <td th:text="${i.count}"></td>
+                                <td th:text="${elem.t_item}"></td>
+                                <td th:text="${elem.t_itemcount}"></td>
+                                <td th:text="${elem.t_change}"></td>
+                            </tr>
+                        </table>
+                        <br><br>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 검색 결과가 존재하지 않을 경우 -->
+        <div th:if="${#lists.isEmpty(mainSearchList)}">
+            <h2 style="color: #77b347; text-align: center">검색 결과가 존재하지 않습니다.</h2>
+        </div>
     </div>
 </main>
+
 
 <br>
 <br>

@@ -39,7 +39,7 @@ public class CartService {
     }
 
     public String selectCart(String name, Model model) {
-        List<CartDto> cDto = cr.selectCart(name);
+        List<Object[]> cDto = cr.selectCart(name);
         log.info("장바구니에 있는 수: {}", cDto.size());
         model.addAttribute("count", cDto.size());
         return makeCartList(cDto);
@@ -86,7 +86,7 @@ public class CartService {
         for (Long e : num) {
             int result = cr.deleteCart(e);
         }
-        List<CartDto> cDto = cr.selectCart(name);
+        List<Object[]> cDto = cr.selectCart(name);
         return makeCartList(cDto);
     }
 

@@ -78,7 +78,7 @@ public class FooditemService {
 
         log.info("order: {},{}", name, sort);
         log.info("ctg: {},{}", numName, num);
-        List<FooditemDto> list = null; //new ArrayList<>();
+        List<Object[]> list = null; //new ArrayList<>();
         HashMap<String, String> hMap = new HashMap<>();
         hMap.put("name", name);
         hMap.put("sort", sort);
@@ -141,7 +141,7 @@ public class FooditemService {
 
     public String fooditemctg() {
         HashMap<String, String> hMap = new HashMap<>();
-        List<CtgDto> cList = new ArrayList<>();
+        List<Object[]> cList = new ArrayList<>();
         cList = cr.searchCtg();
         /* log.info("cList: {}",cList);*/
         return ctgMakeHtml(cList);
@@ -197,11 +197,11 @@ public class FooditemService {
 
     public List<FooditemDto> searchFoodDetail(String num, Model model) {
         log.info("views : ", fr.viewsPlus(num));
-        List<FooditemDto> list = fr.searchFoodDetail(num);
-        if (!list.get(0).getCList().isEmpty()) {
-            String img = makeFoodDetailImg(list.get(0).getIList());
-            model.addAttribute("img", img);
-        }
+        List<Object[]> list = fr.searchFoodDetail(num);
+//        if (!list.get(0).getCList().isEmpty()) {
+//            String img = makeFoodDetailImg(list.get(0).getIList());
+//            model.addAttribute("img", img);
+//        }
         return list;
     }
 
@@ -216,7 +216,7 @@ public class FooditemService {
     }
 
     public String fooditemDetailinfo(String num, String type) {
-        List<FooditemDto> fDto = null;
+        List<Object[]> fDto = null;
         String makeHtml = "";
         switch (type) {
             case "foodInfo":

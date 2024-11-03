@@ -65,7 +65,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "WHERE o.m_id = :id GROUP BY o.o_num " +
             "ORDER BY o.o_num DESC LIMIT :#{#sDto.startIdx}, :#{#sDto.listCnt}",
           nativeQuery = true)
-    List<OrderDto> selectOrder(@Param("id")String id, @Param("sDto")SearchDto sDto);
+    List<Object[]> selectOrder(@Param("id")String id, @Param("sDto")SearchDto sDto);
 
     @Query(value = "SELECT COUNT(*) FROM order1 WHERE m_id = :id", nativeQuery = true)
     Integer getOrderCount(@Param("id") String id);
@@ -118,7 +118,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "ON min.min_inum = i.i_num " +
             "WHERE o.o_num = :num ORDER BY o.o_num",
             nativeQuery = true)
-    List<OrderDto> selectOrderDetail(@Param("num") String num);
+    List<Object[]> selectOrderDetail(@Param("num") String num);
 
     @Modifying
     @Query(value = "INSERT INTO order1 (o_num, m_id, o_total, o_date, o_name, o_address, o_phone, o_count, o_delivery, o_post) " +

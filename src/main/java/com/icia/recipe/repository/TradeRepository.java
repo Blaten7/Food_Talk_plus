@@ -46,7 +46,7 @@ public interface TradeRepository extends JpaRepository<Trade, Long> {
     @Query(value = "SELECT ti.t_num, t.m_id, t.t_title, ti.t_item, ti.t_itemcount, ti.t_unit, ti.t_change, t.visible " +
             "FROM trade t JOIN tradeitem ti ON t.t_num = ti.t_num WHERE ti.t_num = :#{#tDto.t_num}",
             nativeQuery = true)
-    List<TradeDto> tradeDetail(@Param("tDto")Integer tDto);
+    List<Object[]> tradeDetail(@Param("tDto")Integer tDto);
 
     @Query(value = "SELECT * FROM tradeitem WHERE t_num = :tNum", nativeQuery = true)
     List<TradeDto> tradeUpList(@Param("tNum")Integer tNum);

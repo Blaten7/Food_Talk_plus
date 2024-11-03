@@ -20,14 +20,14 @@ public interface InvenAddRepository extends JpaRepository<InvenAdd, Long> {
             "FORMAT((iv_price + iv_vat), 0) AS iv_priceSum FROM invenAdd " +
             "ORDER BY iv_num DESC",
             nativeQuery = true)
-    List<InvenDto> getInvenAddList();
+    List<Object[]> getInvenAddList();
 
     @Query(value = "SELECT iv_num, iv_company, iv_name, iv_count, FORMAT(iv_price, 0) AS iv_price, " +
             "FORMAT(iv_vat, 0) AS iv_vat, FORMAT(iv_total, 0) AS iv_total, iv_current, " +
             "FORMAT((iv_price + iv_vat), 0) AS iv_priceSum FROM invenAdd " +
             "ORDER BY :param :sort",
             nativeQuery = true)
-    List<InvenDto> getInvenAddListSort(@Param("param") String param,
+    List<Object[]> getInvenAddListSort(@Param("param") String param,
                                        @Param("sort") String sort);
 
     @Query(value = "SELECT MIN(f.f_date) AS f_date, " +
@@ -45,7 +45,7 @@ public interface InvenAddRepository extends JpaRepository<InvenAdd, Long> {
             "WHERE c.c_name = :cname " +
             "AND f.f_code = :code " +
             "AND f.f_title LIKE :name", nativeQuery = true)
-    List<FoodItemDto> getSearchModalDetails(@Param("cname") String cname,
+    List<Object[]> getSearchModalDetails(@Param("cname") String cname,
                                             @Param("code") String code,
                                             @Param("name") String name);
 
@@ -53,7 +53,7 @@ public interface InvenAddRepository extends JpaRepository<InvenAdd, Long> {
     @Query(value = "SELECT iv_company, iv_name, (iv_price * 0.1) AS iv_vat, (iv_price * 0.9) AS iv_price, " +
             "iv_count, iv_current, iv_price AS iv_priceSum, iv_total FROM invenAdd",
             nativeQuery = true)
-    List<InvenAdd> getInvenAddList2();
+    List<Object[]> getInvenAddList2();
 
 
 

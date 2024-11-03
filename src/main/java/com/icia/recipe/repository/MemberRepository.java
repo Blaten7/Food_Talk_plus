@@ -57,7 +57,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
 
     // INSERT
-    @Query(value = "insert into member values (#{m_id},#{m_pw},#{m_name},#{m_address},#{m_phone},default,default)", nativeQuery = true)
+    @Query(value = "insert into member values (m_id, m_pw, m_name, m_address, m_phone, default, default)", nativeQuery = true)
     boolean join(Member member);
 
 

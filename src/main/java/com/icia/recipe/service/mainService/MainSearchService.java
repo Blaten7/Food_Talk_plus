@@ -32,8 +32,8 @@ public class MainSearchService {
 
 
     public List<?> getAllTableList(String value) {
-        List<CtgDto> categoryList = cr.getCategoryList();
-        List<FoodItemDto> fooditemList = fr.getFooditemList();
+        List<Object[]> categoryList = cr.getCategoryList();
+        List<Object[]> fooditemList = fr.getFooditemList();
         List<TradeDto> tradeList = tr.getTradeList();
         List<TradeItemDto> tradeItemList = tr.getTradeItemList();
         String[] values;
@@ -45,7 +45,7 @@ public class MainSearchService {
             values = null;
         }
         if (values != null) {
-            List<CtgDto> cgFilterList = categoryList.stream()
+            List<Object[]> cgFilterList = categoryList.stream()
                     .filter(cg ->
                             Arrays.stream(values).anyMatch(val -> cg.getC_num().contains(val)) ||
                                     cg.getC_name().contains(value))

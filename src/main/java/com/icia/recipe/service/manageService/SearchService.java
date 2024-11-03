@@ -56,7 +56,7 @@ public class SearchService {
             keywords = null;
         }
         // 재고
-        List<FoodItemDto> inven = fr.getInvenList();
+        List<Object[]> inven = fr.getInvenList();
         List<FoodItemDto> searchInven = inven.stream()
                 .filter(fis -> keywords == null ? (
                         fis.getC_name().contains(Keyword) ||
@@ -82,7 +82,7 @@ public class SearchService {
                 .toList();
 
 // 발주내역
-        List<InvenDto> invenAdd = ir.getInvenAddList();
+        List<Object[]> invenAdd = ir.getInvenAddList();
         List<InvenDto> searchInvenAdd = invenAdd.stream()
                 .filter(ia -> keywords == null ? (
                         ia.getIv_vat().contains(Keyword) ||
@@ -105,7 +105,7 @@ public class SearchService {
                 ))
                 .toList();
         // 식자재
-        List<FoodItemDto> fiList = fr.getFooditemList();
+        List<Object[]> fiList = fr.getFooditemList();
         List<FoodItemDto> searchFoodItem = fiList.stream()
                 .filter(fi -> keywords == null ? (
                         fi.getF_title().contains(Keyword) ||

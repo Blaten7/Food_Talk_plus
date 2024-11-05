@@ -176,24 +176,54 @@ public class BoardService {
     // 식자재 리스트 가져오기. 대분류 중분류에 해당하는 이름으로 바꾸고 ㅇㅇ
     public List<FoodItemDto> getFoodItemList(Integer pageNum, Integer pageSize) {
         List<Object[]> fiList = fr.getFoodItemList2();
+        List<FoodItemDto> foodItemList = new ArrayList<>();
+
         for (Object[] fi : fiList) {
-            fi.setC_num(cr.getFoodItemListNaming(fi.getC_num()));
-            fi.setC_num2(cr.getFoodItemListNaming2(fi.getC_num2()));
-            if (fi.getC_num().length() > 6) {
-                fi.setC_num(fi.getC_num().substring(0, 6) + "...");
-            }
-            if (fi.getF_title().length() > 5) {
-                fi.setF_title(fi.getF_title().substring(0, 5) + "...");
-            }
+            FoodItemDto foodItem = FoodItemDto.builder()
+                    .f_num((int) fi[0])
+                    .c_num(cr.getFoodItemListNaming((String) fi[1]))
+                    .c_numName((String) fi[2])
+                    .c_num2(cr.getFoodItemListNaming2((String) fi[3]))
+                    .c_num2Name((String) fi[4])
+                    .c_name((String) fi[5])
+                    .total((String) fi[6])
+                    .f_title(((String) fi[7]).length() > 5 ? ((String) fi[7]).substring(0, 5) + "..." : (String) fi[7])
+                    .f_contents((String) fi[8])
+                    .f_price((String) fi[9])
+                    .f_count((String) fi[10])
+                    .f_date((String) fi[11])
+                    .f_date2((String) fi[12])
+                    .f_edate((String) fi[13])
+                    .f_edate2((String) fi[14])
+                    .f_code((String) fi[15])
+                    .f_origin((String) fi[16])
+                    .f_save((String) fi[17])
+                    .f_img((String) fi[18])
+                    .f_views((String) fi[19])
+                    .f_volume((String) fi[20])
+                    .f_cal((String) fi[21])
+                    .f_total((String) fi[22])
+                    .i_num((String) fi[23])
+                    .i_path((String) fi[24])
+                    .i_sys_name((String) fi[25])
+                    .i_original_name((String) fi[26])
+                    .m_id((String) fi[27])
+                    .i_filesize((String) fi[28])
+                    .i_register_date((String) fi[29])
+                    .build();
+
+            foodItemList.add(foodItem);
         }
-        int totalListCnt = fiList.size();
+
+        int totalListCnt = foodItemList.size();
         int fromIdx = (pageNum - 1) * pageSize;
         int toIdx = Math.min(fromIdx + pageSize, totalListCnt);
         if (fromIdx > totalListCnt) {
             return List.of();
         }
-        return fiList.subList(fromIdx, toIdx);
+        return foodItemList.subList(fromIdx, toIdx);
     }
+
 
     public Object getRecipeList() {
         return rr.getRecipeList();
@@ -204,16 +234,15 @@ public class BoardService {
 
     public List<FoodItemDto> getSortedFoodItemList(String id, Integer pageNum, Integer pageSize) {
         log.info("[식자재정렬] 서비스 진입");
-        String sort = "";
-        if (flag) {
-            sort = "desc";
-            flag = false;
-        } else {
-            sort = "asc";
-            flag = true;
-        }
+
+        // 정렬 방향 설정
+        String sort = flag ? "desc" : "asc";
+        flag = !flag;
+
         log.info("ORDER BY {}", sort);
-        String param = "";
+
+        // 정렬 파라미터 설정
+        String param;
         switch (id) {
             case "fcode":
                 param = "f_code";
@@ -239,24 +268,62 @@ public class BoardService {
             case "fedate":
                 param = "f_edate";
                 break;
+            default:
+                param = "f_title"; // 기본값 설정
+        }
 
-        }
         List<Object[]> fiList = fr.getSortedFoodItemList(param);
+        List<FoodItemDto> foodItemList = new ArrayList<>();
+
+        // Object[] 배열을 FoodItemDto 객체로 변환
         for (Object[] fi : fiList) {
-            fi.setC_num(cr.getFoodItemListNaming(fi.getC_num()));
-            fi.setC_num2(cr.getFoodItemListNaming2(fi.getC_num2()));
-            if (fi.getF_title().length() >=5) {
-                fi.setF_title(fi.getF_title().substring(0, 5) + "...");
-            }
+            FoodItemDto foodItem = FoodItemDto.builder()
+                    .f_num((int) fi[0])
+                    .c_num(cr.getFoodItemListNaming((String) fi[1]))
+                    .c_numName((String) fi[2])
+                    .c_num2(cr.getFoodItemListNaming2((String) fi[3]))
+                    .c_num2Name((String) fi[4])
+                    .c_name((String) fi[5])
+                    .total((String) fi[6])
+                    .f_title(((String) fi[7]).length() > 5 ? ((String) fi[7]).substring(0, 5) + "..." : (String) fi[7])
+                    .f_contents((String) fi[8])
+                    .f_price((String) fi[9])
+                    .f_count((String) fi[10])
+                    .f_date((String) fi[11])
+                    .f_date2((String) fi[12])
+                    .f_edate((String) fi[13])
+                    .f_edate2((String) fi[14])
+                    .f_code((String) fi[15])
+                    .f_origin((String) fi[16])
+                    .f_save((String) fi[17])
+                    .f_img((String) fi[18])
+                    .f_views((String) fi[19])
+                    .f_volume((String) fi[20])
+                    .f_cal((String) fi[21])
+                    .f_total((String) fi[22])
+                    .i_num((String) fi[23])
+                    .i_path((String) fi[24])
+                    .i_sys_name((String) fi[25])
+                    .i_original_name((String) fi[26])
+                    .m_id((String) fi[27])
+                    .i_filesize((String) fi[28])
+                    .i_register_date((String) fi[29])
+                    .build();
+
+            foodItemList.add(foodItem);
         }
-        int totalListCnt = fiList.size();
-        Integer fromIdx = (pageNum - 1) * pageSize;
-        Integer toIdx = Math.min(fromIdx + pageSize, totalListCnt);
+
+        int totalListCnt = foodItemList.size();
+        int fromIdx = (pageNum - 1) * pageSize;
+        int toIdx = Math.min(fromIdx + pageSize, totalListCnt);
+
         if (fromIdx > totalListCnt) {
             return List.of();
         }
-        return fiList.subList(fromIdx, toIdx);
+
+        return foodItemList.subList(fromIdx, toIdx);
     }
+
 
     public Object getSortedRecipeList(String id) {
         log.info("[정렬] 레시피리스트 미구현");
@@ -340,37 +407,71 @@ public class BoardService {
 
     public List<Object[]> getModalFIDetails(String trCode) {
         List<Object[]> details = fr.getModalFIDetails(trCode);
+
         for (Object[] fi : details) {
-            fi.setF_img(imgr.getFiImg(trCode));
-            fi.setC_numName(cr.getFoodItemListNaming(fi.getC_num()));
-            fi.setC_num2Name(cr.getFoodItemListNaming2(fi.getC_num2()));
+            // Object[] 배열에서 각 필드를 인덱스로 참조하여 필요한 필드를 설정합니다
+            fi[18] = imgr.getFiImg(trCode); // f_img가 위치하는 인덱스
+            fi[2] = cr.getFoodItemListNaming((String) fi[1]); // c_numName 설정 (c_num을 기반으로)
+            fi[4] = cr.getFoodItemListNaming2((String) fi[3]); // c_num2Name 설정 (c_num2를 기반으로)
         }
+
         return details;
     }
+
 
     public List<FoodItemDto> getSearchListFI(Integer pageNum, Integer pageSize, String searchKeyword) {
         log.info("[식자재 검색] 진입");
         log.info("검색어 : {}", searchKeyword);
 
         List<Object[]> fsearchList = fr.getFooditemList();
+        List<FoodItemDto> foodItemList = new ArrayList<>();
+
+        // Object[] 배열을 FoodItemDto로 변환하면서 필요한 필드 설정
         for (Object[] fis : fsearchList) {
-            fis.setC_num(cr.getFoodItemListNaming(fis.getC_num()));
-            fis.setC_num2(cr.getFoodItemListNaming2(fis.getC_num2()));
+            FoodItemDto foodItem = FoodItemDto.builder()
+                    .f_num((int) fis[0])
+                    .c_num(cr.getFoodItemListNaming((String) fis[1]))
+                    .c_numName((String) fis[2])
+                    .c_num2(cr.getFoodItemListNaming2((String) fis[3]))
+                    .c_num2Name((String) fis[4])
+                    .c_name((String) fis[5])
+                    .total((String) fis[6])
+                    .f_title((String) fis[7])
+                    .f_contents((String) fis[8])
+                    .f_price((String) fis[9])
+                    .f_count((String) fis[10])
+                    .f_date((String) fis[11])
+                    .f_edate((String) fis[13])
+                    .f_code((String) fis[15])
+                    .f_origin((String) fis[16])
+                    .f_save((String) fis[17])
+                    .f_img((String) fis[18])
+                    .f_views((String) fis[19])
+                    .f_volume((String) fis[20])
+                    .f_cal((String) fis[21])
+                    .i_path((String) fis[24])
+                    .i_sys_name((String) fis[25])
+                    .i_original_name((String) fis[26])
+                    .build();
+
+            foodItemList.add(foodItem);
         }
 
-        List<FoodItemDto> filteredList = fsearchList.stream()
-                .filter(fis ->
-                        fis.getF_title().contains(searchKeyword) ||
-                                fis.getC_num().contains(searchKeyword) ||
-                                fis.getC_num2().contains(searchKeyword) ||
-                                fis.getF_code().contains(searchKeyword) ||
-                                fis.getF_price().contains(searchKeyword) ||
-                                fis.getF_count().contains(searchKeyword) ||
-                                fis.getF_date().contains(searchKeyword) ||
-                                fis.getF_edate().contains(searchKeyword) ||
-                                fis.getF_contents().contains(searchKeyword))
+        // 검색어로 필터링
+        List<FoodItemDto> filteredList = foodItemList.stream()
+                .filter(fi ->
+                        fi.getF_title().contains(searchKeyword) ||
+                                fi.getC_num().contains(searchKeyword) ||
+                                fi.getC_num2().contains(searchKeyword) ||
+                                fi.getF_code().contains(searchKeyword) ||
+                                fi.getF_price().contains(searchKeyword) ||
+                                fi.getF_count().contains(searchKeyword) ||
+                                fi.getF_date().contains(searchKeyword) ||
+                                fi.getF_edate().contains(searchKeyword) ||
+                                fi.getF_contents().contains(searchKeyword))
                 .collect(Collectors.toList());
 
+        // 페이징 처리
         int totalListCnt = filteredList.size();
         int fromIdx = (pageNum - 1) * pageSize;
         int toIdx = Math.min(fromIdx + pageSize, totalListCnt);
@@ -381,6 +482,7 @@ public class BoardService {
 
         return filteredList.subList(fromIdx, toIdx);
     }
+
 
 
     public List<Object[]> modalDetailsInfoUpdate(List<String> Cdata, List<String> Udata) {
@@ -433,7 +535,7 @@ public class BoardService {
         return cr.getCategory2();
     }
 
-    public List<FoodItemDto> permanentDelte(ArrayList deleteKey) {
+    public List<Object[]> permanentDelte(ArrayList deleteKey) {
         boolean result = fr.permanentDeleteFoodItem(deleteKey);
         if (result) {
             return iSer.getFoodItemList(1, 10);

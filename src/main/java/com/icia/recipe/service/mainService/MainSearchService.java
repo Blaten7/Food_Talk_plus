@@ -20,8 +20,6 @@ import java.util.List;
 @Slf4j
 public class MainSearchService {
 
-//    @Autowired
-//    CommonDao cDao;
     @Autowired
     CategoryRepository cr;
     @Autowired
@@ -34,9 +32,10 @@ public class MainSearchService {
     public List<?> getAllTableList(String value) {
         List<Object[]> categoryList = cr.getCategoryList();
         List<Object[]> fooditemList = fr.getFooditemList();
-        List<TradeDto> tradeList = tr.getTradeList();
-        List<TradeItemDto> tradeItemList = tr.getTradeItemList();
+        List<Object[]> tradeList = tr.getTradeList();
+        List<Object[]> tradeItemList = tr.getTradeItemList();
         String[] values;
+
         if (value.contains(" ")) {
             values = value.split(" ");
         } else if (value.contains(", ")) {
@@ -44,37 +43,37 @@ public class MainSearchService {
         } else {
             values = null;
         }
+
         if (values != null) {
             List<Object[]> cgFilterList = categoryList.stream()
                     .filter(cg ->
-                            Arrays.stream(values).anyMatch(val -> cg.getC_num().contains(val)) ||
-                                    cg.getC_name().contains(value))
-                    .toList();
-            List<FoodItemDto> fiFilterList = fooditemList.stream()
+                            Arrays.stream(values).anyMatch(val ->
+                                    ((String) cg[0]).contains(val) || // c_num
+                                            ((String) cg[1]).contains(value)) // c_name
+                    ).toList();
+
+            List<Object[]> fiFilterList = fooditemList.stream()
                     .filter(fi ->
                             Arrays.stream(values).anyMatch(val ->
-                                    fi.getF_title().contains(val) ||
-                                            fi.getF_price().contains(val) ||
-                                            fi.getF_count().contains(val) ||
-                                            fi.getF_date().contains(val) ||
-                                            fi.getF_edate().contains(val)
-                            )
+                                    ((String) fi[1]).contains(val) || // f_title
+                                            ((String) fi[3]).contains(val) || // f_price
+                                            ((String) fi[4]).contains(val) || // f_count
+                                            ((String) fi[5]).contains(val) || // f_date
+                                            ((String) fi[6]).contains(val))   // f_edate
                     ).toList();
 
-            List<TradeDto> tFilterList = tradeList.stream()
+            List<Object[]> tFilterList = tradeList.stream()
                     .filter(t ->
                             Arrays.stream(values).anyMatch(val ->
-                                    t.getM_name().contains(val) ||
-                                            t.getT_title().contains(val)
-                            )
+                                    ((String) t[2]).contains(val) || // m_name
+                                            ((String) t[6]).contains(val))   // t_title
                     ).toList();
 
-            List<TradeItemDto> tiFilterList = tradeItemList.stream()
+            List<Object[]> tiFilterList = tradeItemList.stream()
                     .filter(ti ->
                             Arrays.stream(values).anyMatch(val ->
-                                    ti.getT_item().contains(val) ||
-                                            ti.getT_change().contains(val)
-                            )
+                                    ((String) ti[2]).contains(val) || // t_item
+                                            ((String) ti[5]).contains(val))   // t_change
                     ).toList();
 
             List<List<?>> allList = new ArrayList<>();
@@ -85,29 +84,32 @@ public class MainSearchService {
             return allList;
 
         } else {
-            List<CtgDto> cgFilterList = categoryList.stream()
+            List<Object[]> cgFilterList = categoryList.stream()
                     .filter(cg ->
-                            cg.getC_num().contains(value) ||
-                                    cg.getC_name().contains(value))
-                    .toList();
-            List<FoodItemDto> fiFilterList = fooditemList.stream()
+                            ((String) cg[0]).contains(value) || // c_num
+                                    ((String) cg[1]).contains(value))   // c_name
+                .toList();
+
+            List<Object[]> fiFilterList = fooditemList.stream()
                     .filter(fi ->
-                            fi.getF_title().contains(value) ||
-                                    fi.getF_price().contains(value) ||
-                                    fi.getF_count().contains(value) ||
-                                    fi.getF_date().contains(value) ||
-                                    fi.getF_edate().contains(value))
-                    .toList();
-            List<TradeDto> tFilterList = tradeList.stream()
+                            ((String) fi[1]).contains(value) || // f_title
+                                    ((String) fi[3]).contains(value) || // f_price
+                                    ((String) fi[4]).contains(value) || // f_count
+                                    ((String) fi[5]).contains(value) || // f_date
+                                    ((String) fi[6]).contains(value))   // f_edate
+                .toList();
+
+            List<Object[]> tFilterList = tradeList.stream()
                     .filter(t ->
-                            t.getM_name().contains(value) ||
-                                    t.getT_title().contains(value))
-                    .toList();
-            List<TradeItemDto> tiFilterList = tradeItemList.stream()
+                            ((String) t[2]).contains(value) || // m_name
+                                    ((String) t[6]).contains(value))   // t_title
+                .toList();
+
+            List<Object[]> tiFilterList = tradeItemList.stream()
                     .filter(ti ->
-                            ti.getT_item().contains(value) ||
-                                    ti.getT_change().contains(value))
-                    .toList();
+                            ((String) ti[2]).contains(value) || // t_item
+                                    ((String) ti[5]).contains(value))   // t_change
+                .toList();
 
             List<List<?>> allList = new ArrayList<>();
             allList.add(cgFilterList);
@@ -116,6 +118,6 @@ public class MainSearchService {
             allList.add(tiFilterList);
             return allList;
         }
-
     }
+
 }

@@ -65,7 +65,7 @@ public class FooditemController {
     }
     @GetMapping("/fooditem/ranking")
     public String ranking(Model model) {
-        List<FoodItem> fList = fSer.getRanking50();
+        List<Object[]> fList = fSer.getRanking50();
         model.addAttribute("list", fList);
         return "main/fooditem/ranking";
     }

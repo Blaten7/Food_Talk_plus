@@ -15,13 +15,13 @@ import java.util.Map;
 @Builder
 @Accessors(chain=true)
 public class OrderDto {
-    private String o_total;
-    private String o_count;
-    private String o_num;
-    List<ImgDto> iList;
-    List<FooditemDto> fList;
-    List<ItemListDto> oList;
-    private Map<String,Object> data;
-    private String o_delivery;
+    private String o_total; //0
+    private String o_count; //1
+    private String o_num; // 2
+    List<ImgDto> iList; //3
+    List<FooditemDto> fList; // 4
+    List<ItemListDto> oList; // 5
+    private Map<String,Object> data; // 6
+    private String o_delivery; // 7
 
 }

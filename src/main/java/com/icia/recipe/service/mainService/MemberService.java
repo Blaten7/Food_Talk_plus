@@ -156,17 +156,21 @@ public class MemberService {
         model.addAttribute("empty", "ok");
     }
 
-    private String makeOrder(List<OrderDto> list) {
+    private String makeOrder(List<Object[]> list) {
         StringBuilder sb = new StringBuilder();
         sb.append("<section class=\"orderPayment__sect accordion itemConfirm\">")
                 .append("<div class=\"orderPayment__cont\" id=\"dvCartListArea\" style=\"padding-bottom: 0;\">")
                 .append("<strong id=\"normalTitle\" class=\"itemConfirm__title normal-title\">-진행중인 주문</strong>");
+
         list.forEach(l -> {
             int index = 0;
-            String price = l.getO_total();
-            price = price.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
-            String delivery = null;
-            switch (l.getO_delivery()){
+
+            // 데이터 추출
+            String price = ((String) l[0]).replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
+            String delivery;
+
+            // 배송 상태 결정
+            switch ((String) l[7]) {
                 case "0":
                     delivery = "배송 준비중";
                     break;
@@ -176,20 +180,30 @@ public class MemberService {
                 case "2":
                     delivery = "배송 완료";
                     break;
+                default:
+                    delivery = "알 수 없음";
+                    break;
             }
-            int count = Integer.parseInt(l.getO_count())-1;
+
+            int count = Integer.parseInt(l[1].toString()) - 1;
+
+            // 리스트 데이터 추출
+            List<FooditemDto> fList = (List<FooditemDto>) l[4];
+            List<ImgDto> iList = (List<ImgDto>) l[3];
+
+            // HTML 생성
             sb.append("<div class=\"planMeals box\" id=\"normal-item\">")
                     .append("<div class=\"box__list single\">")
                     .append("<strong class=\"title\">")
-                    .append("<a href=\"javascript:void(0)\" onclick=\"modalOpen("+l.getO_num()+")\">" + l.getFList().get(index).getF_title() +"...외"+  count + "개</a>")
+                    .append("<a href=\"javascript:void(0)\" onclick=\"modalOpen(" + l[2] + ")\">" + fList.get(index).getF_title() + "...외" + count + "개</a>")
                     .append("</strong>")
                     .append("<div class=\"boxInner\">")
                     .append("<figure class=\"boxInner__thumb\">")
-                    .append("<img src=\"" + l.getIList().get(index).getI_path() + l.getIList().get(index).getI_sys_name() + "\">")
+                    .append("<img src=\"" + iList.get(index).getI_path() + iList.get(index).getI_sys_name() + "\">")
                     .append("</figure>")
                     .append("<div class=\"detail\">")
                     .append("<div class=\"detail__lft\">")
-                    .append("<p class=\"boxInner__txt\">옵션 : " + l.getFList().get(index).getF_title() + "</p>")
+                    .append("<p class=\"boxInner__txt\">옵션 : " + fList.get(index).getF_title() + "</p>")
                     .append("</div>")
                     .append("<div class=\"detail__rgt price\">")
                     .append("<span class=\"price__list\">배송상태: <span class=\"num\">" + delivery + "</span></span>")
@@ -199,43 +213,44 @@ public class MemberService {
                     .append("</div>")
                     .append("</div>");
         });
+
         sb.append("</div>").append("</section>");
         return sb.toString();
-
     }
+
 
     public String selectOrderDetail(String num) {
         List<Object[]> list = or.selectOrderDetail(num);
         log.info("selectOrderDetail:,{}", list);
-        return makeOrderDatail(list);
+        return makeOrderDetail(list);
     }
 
-    private String makeOrderDatail(List<OrderDto> list) {
+    private String makeOrderDetail(List<Object[]> list) {
         StringBuilder sb = new StringBuilder();
         sb.append("<section class=\"orderPayment__sect accordion itemConfirm\">")
                 .append("<div class=\"orderPayment__cont\" id=\"dvCartListArea\" style=\"padding-bottom: 0;\">")
                 .append("<strong id=\"normalTitle\" class=\"itemConfirm__title normal-title\">- 주문 상세목록</strong>");
         list.forEach(l -> {
-            int index = l.getFList().size();
+            int index = ((List<?>) l[4]).size();
             for (int i = 0; i < index; i++) {
-                String dvPrice = l.getFList().get(i).getF_price().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
-                int price = Integer.parseInt(l.getFList().get(i).getF_price());
-                int count = Integer.parseInt(l.getOList().get(i).getDvCartCount());
+                String dvPrice = ((List<FooditemDto>) l[4]).get(i).getF_price().replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
+                int price = Integer.parseInt(((List<FooditemDto>) l[4]).get(i).getF_price());
+                int count = Integer.parseInt(((List<ItemListDto>) l[5]).get(i).getDvCartCount());
                 String price1 = (price * count) + "";
                 price1 = price1.replaceAll("\\B(?=(\\d{3})+(?!\\d))", ",");
                 sb.append("<div class=\"planMeals box\" id=\"normal-item\">")
                         .append("<div class=\"box__list single\">")
                         .append("<strong class=\"title\">")
-                        .append("<a href=\"/fooditem/detail?f_num=" + l.getFList().get(i).getF_num() + "\">" + l.getFList().get(i).getF_title() + "</a>")
+                        .append("<a href=\"/fooditem/detail?f_num=" + ((List<FooditemDto>) l[4]).get(i).getF_num() + "\">" + ((List<FooditemDto>) l[4]).get(i).getF_title() + "</a>")
                         .append("</strong>")
                         .append("<div class=\"boxInner\">")
                         .append("<figure class=\"boxInner__thumb\">")
-                        .append("<img src=\"" + l.getFList().get(i).getIList().get(0).getI_path() + l.getFList().get(i).getIList().get(0).getI_sys_name() + "\">")
+                        .append("<img src=\"" + ((List<FooditemDto>) l[4]).get(i).getIList().get(0).getI_path() + ((List<FooditemDto>) l[4]).get(i).getIList().get(0).getI_sys_name() + "\">")
                         .append("</figure>")
                         .append("<div class=\"detail\">")
                         .append("<div class=\"detail__lft\">")
-                        .append("<p class=\"boxInner__txt\">옵션 : " + l.getFList().get(i).getF_title() + "</p>")
-                        .append("<p class=\"boxInner__txt\">수량 : " + l.getOList().get(i).getDvCartCount() + "개 </p>")
+                        .append("<p class=\"boxInner__txt\">옵션 : " + ((List<FooditemDto>) l[4]).get(i).getF_title() + "</p>")
+                        .append("<p class=\"boxInner__txt\">수량 : " + ((List<ItemListDto>) l[5]).get(i).getDvCartCount() + "개 </p>")
                         .append("</div>")
                         .append("<div class=\"detail__rgt price\">")
                         .append("<span class=\"price__list\" id=\"total_price_list\">상품금액 <span class=\"num\">" + dvPrice + "원</span></span>")
@@ -249,6 +264,7 @@ public class MemberService {
         sb.append("</div>").append("</section>");
         return sb.toString();
     }
+
 
     public List<Object[]> getRanking() {
         return fr.getRanking();

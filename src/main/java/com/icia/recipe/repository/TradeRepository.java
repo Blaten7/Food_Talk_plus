@@ -52,10 +52,10 @@ public interface TradeRepository extends JpaRepository<Trade, Long> {
     List<TradeDto> tradeUpList(@Param("tNum")Integer tNum);
 
     @Query(value = "select * from trade t join member m on t.m_id = m.m_id", nativeQuery = true)
-    List<TradeDto> getTradeList();
+    List<Object[]> getTradeList();
 
     @Query(value = "select * from tradeitem", nativeQuery = true)
-    List<TradeItemDto> getTradeItemList();
+    List<Object[]> getTradeItemList();
 
 
     // INSERT

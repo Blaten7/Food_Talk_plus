@@ -21,29 +21,53 @@ public class InvenService {
     @Autowired
     FoodItemRepository fr;
 
-    public List<Object[]> getInvenList(Integer pageNum, Integer pageSize) {
+    public List<FoodItemDto> getInvenList(Integer pageNum, Integer pageSize) {
         log.info("[재고] 서비스 진입");
-        List<Object[]> fList = fr.getInvenList();
+
+        List<Object[]> fListData = fr.getInvenList();
+        List<FoodItemDto> fList = new ArrayList<>();
+
+        // Object[] 데이터를 FoodItemDto 객체로 변환
+        for (Object[] fiData : fListData) {
+            FoodItemDto fi = FoodItemDto.builder()
+                    .f_num((int) fiData[0])
+                    .c_num((String) fiData[1])
+                    .c_numName((String) fiData[2])
+                    .c_num2((String) fiData[3])
+                    .c_num2Name((String) fiData[4])
+                    .c_name((String) fiData[5])
+                    .total((String) fiData[6])
+                    .f_title(((String) fiData[7]).length() > 5 ? ((String) fiData[7]).substring(0, 5) + "..." : (String) fiData[7])
+                    .f_contents((String) fiData[8])
+                    .f_price((String) fiData[9])
+                    .f_count((String) fiData[10])
+                    .f_date((String) fiData[11])
+                    .f_edate((String) fiData[13])
+                    .f_code((String) fiData[15])
+                    .f_origin((String) fiData[16])
+                    .f_save((String) fiData[17])
+                    .f_img((String) fiData[18])
+                    .f_views((String) fiData[19])
+                    .f_volume((String) fiData[20])
+                    .f_cal((String) fiData[21])
+                    .i_path((String) fiData[24])
+                    .i_sys_name((String) fiData[25])
+                    .i_original_name((String) fiData[26])
+                    .build();
+            fList.add(fi);
+        }
+
         int totalListCnt = fList.size();
         int fromIdx = (pageNum - 1) * pageSize;
         int toIdx = Math.min(fromIdx + pageSize, totalListCnt);
-//        for (FoodItemDto fi : fList) {
-//            String count = fi.getF_count();
-//            if (count.equals('0')) {
-//
-//            }
-//        }
 
         if (fromIdx >= totalListCnt) {
             return List.of(); // 페이지 범위가 전체 리스트 크기를 초과하는 경우 빈 리스트 반환
         }
-        for (Object[] fi : fList) {
-            if (fi.getF_title().length() >= 6) {
-                fi.setF_title(fi.getF_title().substring(0, 5) + "...");
-            }
-        }
+
         return fList.subList(fromIdx, toIdx);
     }
+
 
     boolean flag = true;
 
@@ -109,8 +133,13 @@ public class InvenService {
         }
         List<Object[]> iList = fr.getSortedInvenList(param, sort);
         for (Object[] fi : iList) {
-            if (fi.getF_title().length() >= 6) {
-                fi.setF_title(fi.getF_title().substring(0, 5) + "...");
+            // f_title이 위치한 인덱스를 설정 (예: 인덱스 7이 f_title로 가정)
+            int fTitleIndex = 7; // 정확한 위치로 수정 필요
+            String fTitle = (String) fi[fTitleIndex];
+
+            // 제목이 6자 이상일 경우 잘라서 저장
+            if (fTitle.length() >= 6) {
+                fi[fTitleIndex] = fTitle.substring(0, 5) + "...";
             }
         }
         int totalListCnt = iList.size();
@@ -155,56 +184,54 @@ public class InvenService {
         }
     }
 
-    public List<?> getSearchListInven(Integer pageNum, Integer pageSize, String searchKeyword, String tab) {
-        String table = "";
-        List<Object[]> fList = null;
-        List<Object[]> iList = null;
-        List<?> searchList = null;
+    public List<Object[]> getSearchListInven(Integer pageNum, Integer pageSize, String searchKeyword, String tab) {
+        List<Object[]> resultList = new ArrayList<>();
+
         switch (tab) {
             case "invenM":
             case "invenE": // 재고량 확인, 유통기한
-                fList = fr.getInvenList();
+                List<Object[]> fList = fr.getInvenList(); // Object[]로 결과 받음
+                resultList = fList.stream()
+                        .filter(fis ->
+                                fis[7].toString().contains(searchKeyword) ||  // f_title
+                                        fis[15].toString().contains(searchKeyword) || // f_code
+                                        fis[10].toString().contains(searchKeyword) || // f_count
+                                        fis[9].toString().contains(searchKeyword) ||  // f_price
+                                        fis[5].toString().contains(searchKeyword))    // c_name
+                        .toList();
                 break;
+
             case "invenO": // 발주
-                iList = ir.getInvenAddList();
+                List<Object[]> iList = ir.getInvenAddList(); // Object[]로 결과 받음
+                resultList = iList.stream()
+                        .filter(iv ->
+                                iv[1].toString().contains(searchKeyword) || // iv_company
+                                        iv[3].toString().contains(searchKeyword) || // iv_priceSum
+                                        iv[5].toString().contains(searchKeyword) || // iv_count
+                                        iv[6].toString().contains(searchKeyword) || // iv_current
+                                        iv[0].toString().contains(searchKeyword) || // iv_name
+                                        iv[2].toString().contains(searchKeyword) || // iv_price
+                                        iv[4].toString().contains(searchKeyword) || // iv_total
+                                        iv[7].toString().contains(searchKeyword))   // iv_vat
+                        .toList();
                 break;
+
             case "invenD": // 폐기함
                 return null;
         }
-        if (fList != null) {
-            searchList = fList.stream()
-                    .filter(fis ->
-                            fis.getF_title().contains(searchKeyword) ||
-                                    fis.getF_code().contains(searchKeyword) ||
-                                    fis.getF_count().contains(searchKeyword) ||
-                                    fis.getF_price().contains(searchKeyword) ||
-                                    fis.getC_name().contains(searchKeyword))
-                    .toList();
-        } else if (iList != null) {
-            searchList = iList.stream()
-                    .filter(iv ->
-                            iv.getIv_company().contains(searchKeyword) ||
-                                    iv.getIv_priceSum().contains(searchKeyword) ||
-                                    iv.getIv_count().contains(searchKeyword) ||
-                                    iv.getIv_current().contains(searchKeyword) ||
-                                    iv.getIv_name().contains(searchKeyword) ||
-                                    iv.getIv_price().contains(searchKeyword) ||
-                                    iv.getIv_total().contains(searchKeyword) ||
-                                    iv.getIv_vat().contains(searchKeyword))
-                    .toList();
-        } else {
-            log.info("[재고 검색] 서비스 에러");
-            return null;
-        }
-        int totalListCnt = searchList.size();
+
+        // 페이지네이션 처리
+        int totalListCnt = resultList.size();
         int fromIdx = (pageNum - 1) * pageSize;
         int toIdx = Math.min(fromIdx + pageSize, totalListCnt);
 
         if (fromIdx >= totalListCnt) {
-            return List.of();
+            return List.of(); // 페이지 범위가 전체 리스트 크기를 초과하는 경우 빈 리스트 반환
         }
-        return searchList.subList(fromIdx, toIdx);
+
+        return resultList.subList(fromIdx, toIdx);
     }
+
 
     public List<Object[]> getInvenAddList(Integer pageNum, Integer pageSize) {
         List<Object[]> iList = ir.getInvenAddList();
@@ -220,7 +247,7 @@ public class InvenService {
 
     boolean flag2 = true;
 
-    public List<InvenDto> getInvenAddListSort(String id, Integer pageNum, Integer pageSize) {
+    public List<Object[]> getInvenAddListSort(String id, Integer pageNum, Integer pageSize) {
         String param = "";
         String sort = "";
         if (flag2) {
@@ -273,7 +300,7 @@ public class InvenService {
         return fr.emptyFoodItem();
     }
 
-    public List<FoodItemDto> getFoodItemList(Integer pageNum, Integer pageSize) {
+    public List<Object[]> getFoodItemList(Integer pageNum, Integer pageSize) {
         List<Object[]> fList = fr.getDeleteFooditemList();
         int totalListCnt = fList.size();
         int fromIdx = (pageNum - 1) * pageSize;

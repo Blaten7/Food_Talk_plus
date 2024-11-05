@@ -46,6 +46,7 @@ public class SearchService {
         log.info(thisList.toString());
         return thisList;
     }
+
     public List<?> getSearchListAll(String Keyword) {
         String[] keywords;
         if (Keyword.contains(" ")) {
@@ -55,84 +56,90 @@ public class SearchService {
         } else {
             keywords = null;
         }
+
         // 재고
         List<Object[]> inven = fr.getInvenList();
-        List<FoodItemDto> searchInven = inven.stream()
+        List<Object[]> searchInven = inven.stream()
                 .filter(fis -> keywords == null ? (
-                        fis.getC_name().contains(Keyword) ||
-                                fis.getF_date().contains(Keyword) ||
-                                fis.getF_date2().contains(Keyword) ||
-                                fis.getF_edate().contains(Keyword) ||
-                                fis.getF_edate2().contains(Keyword) ||
-                                fis.getF_price().contains(Keyword) ||
-                                fis.getF_code().contains(Keyword) ||
-                                fis.getF_count().contains(Keyword) ||
-                                fis.getF_title().contains(Keyword)
+                        fis[1].toString().contains(Keyword) || // C_name
+                                fis[5].toString().contains(Keyword) || // F_date
+                                fis[6].toString().contains(Keyword) || // F_date2
+                                fis[7].toString().contains(Keyword) || // F_edate
+                                fis[8].toString().contains(Keyword) || // F_edate2
+                                fis[2].toString().contains(Keyword) || // F_price
+                                fis[3].toString().contains(Keyword) || // F_code
+                                fis[4].toString().contains(Keyword) || // F_count
+                                fis[0].toString().contains(Keyword)   // F_title
                 ) : Arrays.stream(keywords).anyMatch(k ->
-                        fis.getC_name().contains(k) ||
-                                fis.getF_date().contains(k) ||
-                                fis.getF_date2().contains(k) ||
-                                fis.getF_edate().contains(k) ||
-                                fis.getF_edate2().contains(k) ||
-                                fis.getF_price().contains(k) ||
-                                fis.getF_code().contains(k) ||
-                                fis.getF_count().contains(k) ||
-                                fis.getF_title().contains(k)
+                        fis[1].toString().contains(k) ||
+                                fis[5].toString().contains(k) ||
+                                fis[6].toString().contains(k) ||
+                                fis[7].toString().contains(k) ||
+                                fis[8].toString().contains(k) ||
+                                fis[2].toString().contains(k) ||
+                                fis[3].toString().contains(k) ||
+                                fis[4].toString().contains(k) ||
+                                fis[0].toString().contains(k)
                 ))
                 .toList();
 
-// 발주내역
+        // 발주내역
         List<Object[]> invenAdd = ir.getInvenAddList();
-        List<InvenDto> searchInvenAdd = invenAdd.stream()
+        List<Object[]> searchInvenAdd = invenAdd.stream()
                 .filter(ia -> keywords == null ? (
-                        ia.getIv_vat().contains(Keyword) ||
-                                ia.getIv_total().contains(Keyword) ||
-                                ia.getIv_price().contains(Keyword) ||
-                                ia.getIv_name().contains(Keyword) ||
-                                ia.getIv_current().contains(Keyword) ||
-                                ia.getIv_count().contains(Keyword) ||
-                                ia.getIv_company().contains(Keyword) ||
-                                ia.getIv_priceSum().contains(Keyword)
+                        ia[7].toString().contains(Keyword) || // Iv_vat
+                                ia[6].toString().contains(Keyword) || // Iv_total
+                                ia[5].toString().contains(Keyword) || // Iv_price
+                                ia[4].toString().contains(Keyword) || // Iv_name
+                                ia[3].toString().contains(Keyword) || // Iv_current
+                                ia[2].toString().contains(Keyword) || // Iv_count
+                                ia[1].toString().contains(Keyword) || // Iv_company
+                                ia[0].toString().contains(Keyword)    // Iv_priceSum
                 ) : Arrays.stream(keywords).anyMatch(k ->
-                        ia.getIv_vat().contains(k) ||
-                                ia.getIv_total().contains(k) ||
-                                ia.getIv_price().contains(k) ||
-                                ia.getIv_name().contains(k) ||
-                                ia.getIv_current().contains(k) ||
-                                ia.getIv_count().contains(k) ||
-                                ia.getIv_company().contains(k) ||
-                                ia.getIv_priceSum().contains(k)
+                        ia[7].toString().contains(k) ||
+                                ia[6].toString().contains(k) ||
+                                ia[5].toString().contains(k) ||
+                                ia[4].toString().contains(k) ||
+                                ia[3].toString().contains(k) ||
+                                ia[2].toString().contains(k) ||
+                                ia[1].toString().contains(k) ||
+                                ia[0].toString().contains(k)
                 ))
                 .toList();
+
         // 식자재
         List<Object[]> fiList = fr.getFooditemList();
-        List<FoodItemDto> searchFoodItem = fiList.stream()
+        List<Object[]> searchFoodItem = fiList.stream()
                 .filter(fi -> keywords == null ? (
-                        fi.getF_title().contains(Keyword) ||
-                                fi.getF_price().contains(Keyword) ||
-                                fi.getF_count().contains(Keyword) ||
-                                fi.getF_date().contains(Keyword) ||
-                                fi.getF_edate().contains(Keyword)
-                        ) : Arrays.stream(keywords).anyMatch(k ->
-                        fi.getF_title().contains(k) ||
-                                fi.getF_price().contains(k) ||
-                                fi.getF_count().contains(k) ||
-                                fi.getF_date().contains(k) ||
-                                fi.getF_edate().contains(k)
-                )).toList();
-        List<MemberDto> memList = mr.getMemberList();
-        List<MemberDto> searchMember = memList.stream()
+                        fi[0].toString().contains(Keyword) || // F_title
+                                fi[1].toString().contains(Keyword) || // F_price
+                                fi[2].toString().contains(Keyword) || // F_count
+                                fi[3].toString().contains(Keyword) || // F_date
+                                fi[4].toString().contains(Keyword)    // F_edate
+                ) : Arrays.stream(keywords).anyMatch(k ->
+                        fi[0].toString().contains(k) ||
+                                fi[1].toString().contains(k) ||
+                                fi[2].toString().contains(k) ||
+                                fi[3].toString().contains(k) ||
+                                fi[4].toString().contains(k)
+                ))
+                .toList();
+
+        List<Object[]> memList = mr.getMemberList();
+        List<Object[]> searchMember = memList.stream()
                 .filter(m -> keywords == null ? (
-                        m.getM_id().contains(Keyword) ||
-                                m.getM_name().contains(Keyword) ||
-                                m.getM_address().contains(Keyword) ||
-                                m.getM_phone().contains(Keyword)
-                        ) : Arrays.stream(keywords).anyMatch(k ->
-                        m.getM_id().contains(k) ||
-                        m.getM_name().contains(k) ||
-                                m.getM_address().contains(k) ||
-                                m.getM_phone().contains(k)
-                        )).toList();
+                        m[0].toString().contains(Keyword) || // M_id
+                                m[1].toString().contains(Keyword) || // M_name
+                                m[2].toString().contains(Keyword) || // M_address
+                                m[3].toString().contains(Keyword)    // M_phone
+                ) : Arrays.stream(keywords).anyMatch(k ->
+                        m[0].toString().contains(k) ||
+                                m[1].toString().contains(k) ||
+                                m[2].toString().contains(k) ||
+                                m[3].toString().contains(k)
+                ))
+                .toList();
+
         List<List<?>> combinedList = new ArrayList<>();
         combinedList.add(searchInven);
         combinedList.add(searchInvenAdd);
@@ -140,4 +147,5 @@ public class SearchService {
         combinedList.add(searchMember);
         return combinedList;
     }
+
 }

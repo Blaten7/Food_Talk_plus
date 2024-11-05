@@ -86,7 +86,7 @@ public class InvenRestController {
     }
     @GetMapping("/inventory/order")
     @Secured("ROLE_ADMIN")
-    public List<InvenDto> finalOrder() {
+    public List<Object[]> finalOrder() {
         return iSer.finalOrder();
     }
 
@@ -99,7 +99,7 @@ public class InvenRestController {
 
     @GetMapping("/get/empty/food/item")
     @Secured("ROLE_ADMIN")
-    public List<FoodItemDto> emptyFoodItem(){
+    public List<Object[]> emptyFoodItem(){
         log.info("[품절] 깐뜨롤러 진입");
         return iSer.emptyFoodItem();
     }

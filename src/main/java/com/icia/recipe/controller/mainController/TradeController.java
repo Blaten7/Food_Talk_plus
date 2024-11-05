@@ -38,15 +38,17 @@ public class TradeController {
     @GetMapping("/detail")
     public String tradeDetail(Model model, @RequestParam("t_num") Integer t_num) {
         log.info("...." + t_num);
-        List<TradeDto> tDList = tSer.tradeDetail(t_num);
+        List<Object[]> tDList = tSer.tradeDetail(t_num);
         log.info(">>>>>tDList:{}", tDList);
-        int tNum = tDList.get(0).getT_num();
-        String t_title = tDList.get(0).getT_title();
-        String m_id = tDList.get(0).getM_id();
-        String t_item=tDList.get(0).getT_item();
-        int t_itemcount=tDList.get(0).getT_itemcount();
-        String t_unit=tDList.get(0).getT_unit();
-        String t_change=tDList.get(0).getT_change();
+
+        int tNum = (Integer) tDList.get(0)[0]; // t_num
+        String t_title = (String) tDList.get(0)[1]; // t_title
+        String m_id = (String) tDList.get(0)[2]; // m_id
+        String t_item = (String) tDList.get(0)[3]; // t_item
+        int t_itemcount = (Integer) tDList.get(0)[4]; // t_itemcount
+        String t_unit = (String) tDList.get(0)[5]; // t_unit
+        String t_change = (String) tDList.get(0)[6]; // t_change
+
         String m_name = tSer.getMemberName(m_id);
 
         log.info(">>>>>m_id:{}", m_id);
@@ -59,8 +61,10 @@ public class TradeController {
         model.addAttribute("t_itemcount", t_itemcount);
         model.addAttribute("t_unit", t_unit);
         model.addAttribute("t_change", t_change);
+
         return "/main/trade/tradeDetail";
     }
+
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/write")
@@ -206,16 +210,17 @@ public class TradeController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/exchangefrm")
-    public String tradeExcnahgeFrm(Model model, @RequestParam("t_num") Integer t_num){
-        List<TradeDto> tDList = tSer.tradeDetail(t_num);
-        log.info("tDList:{} ",tDList);
-        int tNum = tDList.get(0).getT_num();
-        String t_title = tDList.get(0).getT_title();
-        String m_id = tDList.get(0).getM_id();
-        String t_item=tDList.get(0).getT_item();
-        int t_itemcount=tDList.get(0).getT_itemcount();
-        String t_unit=tDList.get(0).getT_unit();
-        String t_change=tDList.get(0).getT_change();
+    public String tradeExcnahgeFrm(Model model, @RequestParam("t_num") Integer t_num) {
+        List<Object[]> tDList = tSer.tradeDetail(t_num);
+        log.info("tDList:{} ", tDList);
+
+        int tNum = (Integer) tDList.get(0)[0]; // t_num
+        String t_title = (String) tDList.get(0)[1]; // t_title
+        String m_id = (String) tDList.get(0)[2]; // m_id
+        String t_item = (String) tDList.get(0)[3]; // t_item
+        int t_itemcount = (Integer) tDList.get(0)[4]; // t_itemcount
+        String t_unit = (String) tDList.get(0)[5]; // t_unit
+        String t_change = (String) tDList.get(0)[6]; // t_change
 
         // 모델에 배열을 저장
         log.info(">>>>>m_id:{}", m_id);
@@ -227,8 +232,10 @@ public class TradeController {
         model.addAttribute("t_itemcount", t_itemcount);
         model.addAttribute("t_unit", t_unit);
         model.addAttribute("t_change", t_change);
+
         return "/main/trade/exchangefrm";
     }
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/refrigerator")
     public String NaengJangGo() {

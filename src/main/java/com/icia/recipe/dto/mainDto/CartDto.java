@@ -18,9 +18,7 @@ public class CartDto {
     private String ca_num;
     private int ca_count;
     private String ca_date;
-
     private String c_name;
-
     private List<FooditemDto> fList;
     private List<ImgDto> iList;
 }

@@ -1,7 +1,6 @@
 package com.icia.recipe.service.mainService;
 
 import com.icia.recipe.dto.mainDto.*;
-import com.icia.recipe.dto.manageDto.FoodItemDto;
 import com.icia.recipe.dto.manageDto.MemberDto;
 import com.icia.recipe.repository.FoodItemRepository;
 import com.icia.recipe.repository.MemberRepository;
@@ -282,8 +281,7 @@ public class MemberService {
         return nList;
     }
 
-    public List<MemberDto> checkId(String m_id) {
-        log.info(">>>>>>>" + mr.checkId(m_id));
+    public List<Object[]> checkId(String m_id) {
         return mr.checkId(m_id);
     }
 }

@@ -103,7 +103,7 @@ public class RestMemberController {
     }
 
     @PostMapping("/member/checkId")
-    public List<MemberDto> checkId(@RequestParam("m_id") String m_id) {
+    public List<Object[]> checkId(@RequestParam("m_id") String m_id) {
         return mSer.checkId(m_id);
     }
 

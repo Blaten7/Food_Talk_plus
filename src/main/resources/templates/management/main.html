@@ -1,10 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8" }
-<%@ taglib uri="http://www.springframework.org/security/tags"
-           prefix="sec" }
-
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -220,7 +215,6 @@
 </script>
 <body id="page-top">
 <div id="wrapper">
-    <%--    사이드바 E R P--}
     <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
         <div class="container-fluid d-flex flex-column p-0"><br><br><br>
             <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="/main">
@@ -230,7 +224,6 @@
             </a><br><br>
             <hr class="sidebar-divider my-0"/>
             <ul class="navbar-nav text-light" id="accordionSidebar">
-                <%--                사이드바 메뉴 구성--}
                 <li class="nav-item"><a class="nav-link active" href="/main"><i class="fas fa-tachometer-alt"></i>
                     <span> 매출 관리</span></a></li>
                 <li class="nav-item"><a class="nav-link" href="/delivery"><i class="fas fa-user"></i>
@@ -255,7 +248,6 @@
                 <div class="container-fluid">
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle me-3" type="button"><i
                             class="fas fa-bars"></i></button>
-                    <%--                    검색란 --}
                     <div class="input-group" style="width: 500px">
                         <input id="commonSearch" class="bg-light form-control border-0 small" type="text"
                                placeholder="검색어를 입력하세요" onkeypress="commonSearch(this.value, event)"/>
@@ -264,7 +256,6 @@
                         </button>
                     </div>
                     <ul class="navbar-nav flex-nowrap ms-auto">
-                        <%--                        우측 상단 헤더 알림--}
                         <li id="noticelist" class="nav-item dropdown no-arrow mx-1">
                             <div class="nav-item dropdown no-arrow">
                                 <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown"
@@ -274,12 +265,10 @@
                                 <div id="managementAlert"
                                      class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
                                     <h6 class="dropdown-header">알림</h6>
-                                    <%--                                    <a class="dropdown-item text-center small text-gray-500" href="#">--}
-                                    <%--                                        모든 알림 보기</a>--}
+<!--                                   <a class="dropdown-item text-center small text-gray-500" href="#">-->
                                 </div>
                             </div>
                         </li>
-                        <%--                        우측 상단 메세지 리스트--}
                         <li id="messagelist" class="nav-item dropdown no-arrow mx-1">
                             <div class="nav-item dropdown no-arrow">
                                 <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown"
@@ -339,7 +328,6 @@
                             <div class="shadow dropdown-list dropdown-menu dropdown-menu-end"
                                  aria-labelledby="alertsDropdown"></div>
                         </li>
-                        <%--                        우측 상단 프로필--}
                         <div class="d-none d-sm-block topbar-divider"></div>
                         <li class="nav-item dropdown no-arrow">
                             <input id="nowId" type="text" value="${m_id}" style="display: none">
@@ -364,7 +352,6 @@
                     </ul>
                 </div>
             </nav>
-            <%--            네비게이션 바 END--}
             <div class="container-fluid">
                 <div class="d-sm-flex justify-content-between align-items-center mb-4">
                     <h3 class="text-dark mb-0">매출 관리</h3>

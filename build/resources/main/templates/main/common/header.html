@@ -14,11 +14,12 @@
     <main style="display: flex; flex-direction: column;">
         <!-- 상단 로그인/회원가입 영역 -->
         <section class="header-top" style="display: flex; justify-content: flex-end; padding: 1% 2%; font-size: 1.2vw;">
-            <a sec:authorize="isAnonymous()" href="/loginfrm" style="text-decoration: none; color: gray; margin-right: 2%;">로그인</a>
-            <a sec:authorize="isAnonymous()" href="/joinfrm" style="text-decoration: none; color: gray; margin-right: 2%;">회원가입</a>
-            <a sec:authorize access="isAuthenticated()" href="/member/logout" style="text-decoration: none; color: gray; margin-right: 2%;">로그아웃</a>
-            <a sec:authorize access="isAuthenticated()" href="/delivery/info" style="text-decoration: none; color: gray; margin-right: 2%;">배송정보</a>
-            <a sec:authorize access="isAuthenticated()" href="/customer/center" style="text-decoration: none; color: gray;">고객센터</a>
+            <a sec:authorize="isAnonymous()" href="/loginfrm" style="text-decoration: none; color: gray; margin-right: 2%; font-size: small">로그인</a>
+            <a sec:authorize="isAnonymous()" href="/joinfrm" style="text-decoration: none; color: gray; margin-right: 2%; font-size: small">회원가입</a>
+            <a sec:authorize="isAuthenticated()" href="/member/logout" style="text-decoration: none; color: gray; margin-right: 2%; font-size: small">로그아웃</a>
+            <a sec:authorize="hasRole('ADMIN')" href="/main" style="text-decoration: none; color: gray; margin-right: 2%; font-size: small">관리자 페이지</a>
+            <a sec:authorize="isAuthenticated()" href="/delivery/info" style="text-decoration: none; color: gray; margin-right: 2%; font-size: small">배송정보</a>
+            <a sec:authorize="isAuthenticated()" href="/customer/center" style="text-decoration: none; color: gray; font-size: small">고객센터</a>
         </section>
 
         <section class="header-middle" style="height: 10%; width: 80%; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 3%;">

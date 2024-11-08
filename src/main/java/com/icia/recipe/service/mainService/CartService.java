@@ -1,9 +1,6 @@
 package com.icia.recipe.service.mainService;
 
-import com.icia.recipe.dto.mainDto.CartDto;
-import com.icia.recipe.dto.mainDto.FooditemDto;
-import com.icia.recipe.dto.mainDto.ImgDto;
-import com.icia.recipe.dto.mainDto.InputOrderDto;
+import com.icia.recipe.dto.mainDto.*;
 import com.icia.recipe.dto.manageDto.MemberDto;
 import com.icia.recipe.repository.CartRepository;
 import com.icia.recipe.repository.FoodItemRepository;
@@ -103,13 +100,11 @@ public class CartService {
     }
 
     public void selectMember(String name, Model model) {
-        Object[] mDto = mr.check(name);
-        String item1 = mDto[4]+"";
-        String item2 = mDto[0]+"";
-        String[] phoneNumber = item1.split("-");
-        String[] memberId = item2.split("@");
+        Member mDto = mr.check(name);
+        String[] phoneNumber = mDto.getM_phone().split("-");
+        String[] memberId = mDto.getM_id().split("@");
         Arrays.stream(phoneNumber).forEach(c -> log.info("번호:{}", c));
-        model.addAttribute("name", mDto[2]);
+        model.addAttribute("name", mDto.getM_name());
         model.addAttribute("phoneNumber1", phoneNumber[1]);
         model.addAttribute("phoneNubmer2", phoneNumber[2]);
         model.addAttribute("memberId1", memberId[0]);

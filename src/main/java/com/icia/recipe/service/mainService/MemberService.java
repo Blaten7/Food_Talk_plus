@@ -37,6 +37,7 @@ public class MemberService {
         System.out.println("pwEncoder: " + passwordEncoder);
         member.setM_pw(passwordEncoder.encode(member.getM_pw()));
         if (member.getM_pw()!=null) {
+            mr.join(member);
             return true;
         } else {
             return false;

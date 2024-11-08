@@ -1,15 +1,18 @@
 package com.icia.recipe.repository;
 
+import com.icia.recipe.dto.mainDto.Member;
 import com.icia.recipe.dto.manageDto.MemberDto;
-import com.icia.recipe.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 @Repository
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRepository extends JpaRepository<com.icia.recipe.entity.Member, Long> {
 
     // SELECT
     @Query(value = "SELECT m_id, m_name, m_phone FROM member WHERE m_id = :m_id", nativeQuery = true)
@@ -22,10 +25,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     String getMemberName(@Param("mId") String mId);
 
     @Query(value = "select * from member where m_id= :m_id", nativeQuery = true)
-    Object[] check(@Param("m_id") String m_id);
+    com.icia.recipe.dto.mainDto.Member check(@Param("m_id") String m_id);
 
-    @Query(value = "select * from member where m_id= :username", nativeQuery = true)
-    Member getMemberInfo(@Param("username") String username);
+    @Query(value = "SELECT m_id, m_pw, m_name, role FROM member WHERE m_id = :username", nativeQuery = true)
+    Object[] getMemberInfo(@Param("username") String username);
 
     @Query(value = "select m_name from member where m_id= :m_id", nativeQuery = true)
     MemberDto getMemberInfoId(@Param("m_id") String m_id);
@@ -55,9 +58,13 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     String tempPwConfirm(@Param("pw") String pw);
 
     // INSERT
-    @Query(value = "insert into member values (:m_id, :m_pw, :m_name, :m_address, :m_phone, default, default)", nativeQuery = true)
-    boolean join(@Param("m_id") String m_id, @Param("m_pw") String m_pw, @Param("m_name") String m_name,
-                 @Param("m_address") String m_address, @Param("m_phone") String m_phone);
+    @Modifying
+    @Transactional
+    @Query(value = "INSERT INTO member (m_id, m_pw, m_name, m_address, m_phone) " +
+            "VALUES (:#{#member.m_id}, :#{#member.m_pw}, :#{#member.m_name}, :#{#member.m_address}, :#{#member.m_phone})",
+            nativeQuery = true)
+    int join(@Param("member") com.icia.recipe.dto.mainDto.Member member);
+
 
     // UPDATE
     @Query(value = "update member set m_pw= :#{#member.m_pw} where m_id= :#{#member.m_id}", nativeQuery = true)

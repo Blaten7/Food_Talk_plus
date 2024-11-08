@@ -44,7 +44,9 @@ public class MemberController {
 
     @PostMapping("/join")
     public String join(@ModelAttribute Member member) {
+        System.out.println(member);
         boolean result = mSer.join(member);
+        System.out.println(result);
         if (result) {
             log.info("회원가입 성공");
             return "main/member/login";

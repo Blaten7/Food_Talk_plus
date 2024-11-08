@@ -22,10 +22,10 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     String getMemberName(@Param("mId") String mId);
 
     @Query(value = "select * from member where m_id= :m_id", nativeQuery = true)
-    MemberDto check(@Param("m_id") String m_id);
+    Object[] check(@Param("m_id") String m_id);
 
     @Query(value = "select * from member where m_id= :m_id", nativeQuery = true)
-    MemberDto getMemberInfo(@Param("m_id") String m_id);
+    Member getMemberInfo(@Param("m_id") String m_id);
 
     @Query(value = "select m_name from member where m_id= :m_id", nativeQuery = true)
     MemberDto getMemberInfoId(@Param("m_id") String m_id);

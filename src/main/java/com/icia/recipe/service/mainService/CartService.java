@@ -103,11 +103,11 @@ public class CartService {
     }
 
     public void selectMember(String name, Model model) {
-        MemberDto mDto = mr.check(name);
-        String[] phoneNumber = mDto.getM_phone().split("-");
-        String[] memberId = mDto.getM_id().split("@");
+        Object[] mDto = mr.check(name);
+        String[] phoneNumber = mDto[4].toString().split("-");
+        String[] memberId = mDto[0].toString().split("@");
         Arrays.stream(phoneNumber).forEach(c -> log.info("번호:{}", c));
-        model.addAttribute("name", mDto.getM_name());
+        model.addAttribute("name", mDto[2]);
         model.addAttribute("phoneNumber1", phoneNumber[1]);
         model.addAttribute("phoneNubmer2", phoneNumber[2]);
         model.addAttribute("memberId1", memberId[0]);

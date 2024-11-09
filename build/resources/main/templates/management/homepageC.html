@@ -1,6 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" }
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" }
-<html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ko">
 <head>
     <title>E R P</title>
     <link rel="icon" href="/uploadedImg/main/Management/캡처.PNG" type="image/png">
@@ -13,7 +11,7 @@
 </head>
 <body id="page-top">
 <script>
-    if ('${msg}' != '') {
+    if ('${msg}' !== '') {
         alert('${msg}');
     }
 
@@ -192,7 +190,6 @@
             </a><br><br>
             <hr class="sidebar-divider my-0"/>
             <ul class="navbar-nav text-light" id="accordionSidebar">
-                <%--                사이드바 메뉴 구성--}
                 <li class="nav-item"><a class="nav-link" href="/main"><i class="fas fa-tachometer-alt"></i>
                     <span> 매출 관리</span></a></li>
                 <li class="nav-item"><a class="nav-link" href="/delivery"><i class="fas fa-user"></i>
@@ -211,7 +208,6 @@
             </div>
         </div>
     </nav>
-    <%--    사이드바 End--}
     <div class="d-flex flex-column" id="content-wrapper">
         <div id="content">
             <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
@@ -224,7 +220,6 @@
                             <button class="btn btn-primary py-0" type="button"><i class="fas fa-search"></i></button>
                         </div>
                     <ul class="navbar-nav flex-nowrap ms-auto">
-                        <%--                        우측 상단 헤더 알림--}
                         <li id="noticelist" class="nav-item dropdown no-arrow mx-1">
                             <div class="nav-item dropdown no-arrow">
                                 <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown"
@@ -234,12 +229,9 @@
                                 <div id="managementAlert"
                                      class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
                                     <h6 class="dropdown-header">알림</h6>
-                                    <%--                                    <a class="dropdown-item text-center small text-gray-500" href="#">--}
-                                    <%--                                        모든 알림 보기</a>--}
                                 </div>
                             </div>
                         </li>
-                        <%--                        우측 상단 메세지 리스트--}
                         <li id="messagelist" class="nav-item dropdown no-arrow mx-1">
                             <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link"
                                                                        aria-expanded="false" data-bs-toggle="dropdown"
@@ -327,9 +319,6 @@
                     <div class="col-md-6 text-nowrap" style="margin-left: 10px">
                         <br>
                         <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable">
-                            대분류 선택&nbsp;&nbsp;
-                            <%--                            <a href="/category?cg=recipe">레시피</a>--}
-                            <%--                            <a href="/category?cg=fooditem">식자재</a>--}
                             <label>
                                 <select name="categorySelect" onchange="BigCg(this.value)">
                                     <option value="none" selected>--선택--</option>
@@ -342,7 +331,6 @@
                         <br>
                     </div>
                     <div style="">
-                        <%--대분류카테고리--}
                         <div id="leftDiv" style="float: left; width: 45%; height: 800px;">
                             <h4 style="text-align: center">대분류</h4>
                             <div style="text-align: center">
@@ -354,7 +342,6 @@
                             </div>
 
                         </div>
-                        <%--중분류카테고리--}
                         <div id="rightDiv"
                              style="float: right; width: 50%; height: 300px; margin-right: 3%;">
                             <h4 style="text-align: center">중분류</h4>
@@ -365,7 +352,6 @@
                                     <button onclick="categoryAdd('mid')">+</button>
                                 </div>
                         </div>
-                        <%--소분류카테고리--}
                         <div id="smallDiv"
                              style="float: right; width: 50%; height: 450px; margin-top: 3%; margin-right: 3%;">
                             <h4 style="text-align: center">소분류</h4>
@@ -378,7 +364,6 @@
                                 <button onclick="categoryAdd('sm')">+</button>
                             </div>
                         </div>
-                        <%--숨겨진 보물상자--}
                         <div style="display: none">
                                 <input type="hidden" id="selectedBigCgNum">
                                 <input type="hidden" id="selectedMidCgNum">

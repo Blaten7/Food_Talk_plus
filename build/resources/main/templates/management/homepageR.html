@@ -1,6 +1,4 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" }
-<%@ page contentType="text/html;charset=UTF-8" language="java" }
-<html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ko">
 <head>
     <title>E R P</title>
     <link rel="icon" href="/uploadedImg/main/Management/캡처.PNG" type="image/png">
@@ -76,8 +74,8 @@
                         <div>
                             <input class="border-bottom-primary" name="foodItemTitle-modalInput" id="outerContentsTitle" type="text" placeholder="제 목"
                                    style="width: 100%;height: 70px; font-size: xx-large;border: none">
-<%--                            <input class="border-bottom-primary" name='foodItemContents-modalInput' id="outerContents" type="text" placeholder="내 용"--}
-<%--                                   style="width: 100%;height: 400px;border: none">--}
+<!--<%&#45;&#45;                            <input class="border-bottom-primary" name='foodItemContents-modalInput' id="outerContents" type="text" placeholder="내 용"&#45;&#45;}-->
+<!--<%&#45;&#45;                                   style="width: 100%;height: 400px;border: none">&#45;&#45;}-->
                             <textarea id="summernote" name="summernoteModalContents"></textarea>
 
                         </div>
@@ -92,7 +90,6 @@
         </div>
     </div>
 </div>
-<%-- 리스트 상세보기 모달--}
 <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
         <div class="modal-content">
@@ -137,7 +134,6 @@
     </div>
 </div>
 
-<%--모달 끝 행복(?) 시작--}
 <div id="wrapper">
     <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
         <div class="container-fluid d-flex flex-column p-0"><br><br><br>
@@ -148,7 +144,6 @@
             </a><br><br>
             <hr class="sidebar-divider my-0"/>
             <ul class="navbar-nav text-light" id="accordionSidebar">
-                <%--                사이드바 메뉴 구성--}
                 <li class="nav-item"><a class="nav-link" href="/main"><i class="fas fa-tachometer-alt"></i>
                     <span> 매출 관리</span></a></li>
                 <li class="nav-item"><a class="nav-link" href="/delivery"><i class="fas fa-user"></i>
@@ -167,7 +162,6 @@
             </div>
         </div>
     </nav>
-    <%--    사이드바 End--}
     <div class="d-flex flex-column" id="content-wrapper">
         <div id="content">
             <nav class="navbar navbar-light navbar-expand bg-white shadow mb-4 topbar static-top">
@@ -180,7 +174,6 @@
                             <button class="btn btn-primary py-0" type="button"><i class="fas fa-search"></i></button>
                         </div>
                     <ul class="navbar-nav flex-nowrap ms-auto">
-                        <%--                        우측 상단 헤더 알림--}
                         <li id="noticelist" class="nav-item dropdown no-arrow mx-1">
                             <div class="nav-item dropdown no-arrow">
                                 <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown"
@@ -190,12 +183,9 @@
                                 <div id="managementAlert"
                                      class="dropdown-menu dropdown-menu-end dropdown-list animated--grow-in">
                                     <h6 class="dropdown-header">알림</h6>
-                                    <%--                                    <a class="dropdown-item text-center small text-gray-500" href="#">--}
-                                    <%--                                        모든 알림 보기</a>--}
                                 </div>
                             </div>
                         </li>
-                        <%--                        우측 상단 메세지 리스트--}
                         <li id="messagelist" class="nav-item dropdown no-arrow mx-1">
                             <div class="nav-item dropdown no-arrow">
                                 <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown"
@@ -255,7 +245,6 @@
                             <div class="shadow dropdown-list dropdown-menu dropdown-menu-end"
                                  aria-labelledby="alertsDropdown"></div>
                         </li>
-                        <%--                        우측 상단 프로필--}
                         <div class="d-none d-sm-block topbar-divider"></div>
                         <li class="nav-item dropdown no-arrow">
                             <input id="nowId" type="text" value="${m_id}" style="display: none">
@@ -325,9 +314,6 @@
                         </div>
                         <div class="table-responsive table mt-2" id="dataTable" role="grid"
                              aria-describedby="dataTable_info">
-                            <%--                            ====================================================================================--}
-                            <%--데이터 리스트--}
-                            <%--                            ====================================================================================--}
                             <h1 id="data" style="text-align: center">레시피/식자재 을(를) 선택해주세요</h1>
                         </div>
                         <div id="tableIsHere">
@@ -340,7 +326,6 @@
                                     <span id="startIdx"></span>
                                     to <span id="endIdx"></span>
                                     of List
-<%--                                    <span id="totalCnt"></span></p> 전체 글의 갯수. 근데 페이징하고 나서 어떻게 해야될지 모르겠다--}
                             </div>
                             <div class="col-md-6">
                                 <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">

@@ -27,8 +27,6 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
         http.cors(AbstractHttpConfigurer::disable);
-//        http.csrf(AbstractHttpConfigurer::disable);
-//        http.csrf(AbstractHttpConfigurer::disable);
         http.formLogin(form->form.loginPage("/member/login").loginProcessingUrl("/member/login").defaultSuccessUrl("/")
                 .failureUrl("/member/login/error"));
 

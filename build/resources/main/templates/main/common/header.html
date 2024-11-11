@@ -14,16 +14,26 @@
     <main style="display: flex; flex-direction: column;">
         <!-- 상단 로그인/회원가입 영역 -->
         <section class="header-top" style="display: flex; justify-content: flex-end; padding: 1% 2%; font-size: 1.2vw;">
-            <a sec:authorize="isAnonymous()" href="/loginfrm" style="text-decoration: none; color: gray; margin-right: 2%; font-size: small">로그인</a>
-            <a sec:authorize="isAnonymous()" href="/joinfrm" style="text-decoration: none; color: gray; margin-right: 2%; font-size: small">회원가입</a>
-            <button sec:authorize="isAuthenticated()" href="/main" style="text-decoration: none; color: gray; margin-right: 2%; font-size: small">갱신</button>
-            <a sec:authorize="isAuthenticated()" href="/member/logout" style="text-decoration: none; color: gray; margin-right: 2%; font-size: small">로그아웃</a>
-            <a sec:authorize="hasRole('ADMIN')" href="/main" style="text-decoration: none; color: gray; margin-right: 2%; font-size: small">관리자 페이지</a>
-            <a sec:authorize="isAuthenticated()" href="/delivery/info" style="text-decoration: none; color: gray; margin-right: 2%; font-size: small">배송정보</a>
-            <a sec:authorize="isAuthenticated()" href="/customer/center" style="text-decoration: none; color: gray; font-size: small">고객센터</a>
+            <a sec:authorize="isAnonymous()" href="/loginfrm"
+               style="text-decoration: none; color: gray; margin-right: 2%; font-size: small">로그인</a>
+            <a sec:authorize="isAnonymous()" href="/joinfrm"
+               style="text-decoration: none; color: gray; margin-right: 2%; font-size: small">회원가입</a>
+            <button sec:authorize="isAuthenticated()" href="/main"
+                    style="text-decoration: none; color: gray; margin-right: 2%; font-size: small">갱신
+            </button>
+            <a sec:authorize="isAuthenticated()" href="/member/logout"
+               style="text-decoration: none; color: gray; margin-right: 2%; font-size: small">로그아웃</a>
+            <a id="adminPageLink" href="/main"
+               style="text-decoration: none; color: gray; margin-right: 2%; font-size: small; display: none;">관리자
+                페이지</a>
+            <a sec:authorize="isAuthenticated()" href="/delivery/info"
+               style="text-decoration: none; color: gray; margin-right: 2%; font-size: small">배송정보</a>
+            <a sec:authorize="isAuthenticated()" href="/customer/center"
+               style="text-decoration: none; color: gray; font-size: small">고객센터</a>
         </section>
 
-        <section class="header-middle" style="height: 10%; width: 80%; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 3%;">
+        <section class="header-middle"
+                 style="height: 10%; width: 80%; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 3%;">
             <!-- 로고 영역 -->
             <div style="width: 10%; display: flex; align-items: center;">
                 <a href="/">
@@ -33,52 +43,87 @@
 
             <!-- 텍스트 링크 영역 -->
             <div style="display: flex; align-items: center; gap: 2%;">
-                <a id="titleName1" href="javascript:void(0)" onclick="saveTitleName(this)" style="padding: 1% 2%; color: #4CAF50; font-weight: bold; text-decoration: none; background-color: #e9f5e5; border-radius: 5px; white-space: nowrap;">건강마켓</a>
-                <a id="titleName2" href="javascript:void(0)" onclick="saveTitleName(this)" style="padding: 1% 2%; color: #4CAF50; font-weight: bold; text-decoration: none; background-color: #e9f5e5; border-radius: 5px; white-space: nowrap;">식단관리</a>
+                <a id="titleName1" href="javascript:void(0)" onclick="saveTitleName(this)"
+                   style="padding: 1% 2%; color: #4CAF50; font-weight: bold; text-decoration: none; background-color: #e9f5e5; border-radius: 5px; white-space: nowrap;">건강마켓</a>
+                <a id="titleName2" href="javascript:void(0)" onclick="saveTitleName(this)"
+                   style="padding: 1% 2%; color: #4CAF50; font-weight: bold; text-decoration: none; background-color: #e9f5e5; border-radius: 5px; white-space: nowrap;">식단관리</a>
             </div>
 
 
             <!-- 검색 및 아이콘 영역 -->
-            <div class="direct__search btn__modal-open" data-login="y" id="searchPopup" data-popup-name="popup_search" style="display: flex; align-items: center; gap: 2%; margin-left: 3%;">
-                <input type="text" id="searchInput2" class="search-input" placeholder="재료를 입력해 주세요" autocomplete="off" onkeypress="commonSearch(this.value, event)" style="width: 18vw; height: 3vw; padding: 0.5% 2%; border: 0.2vw solid #c8e6c9; border-radius: 10px;">
+            <div class="direct__search btn__modal-open" data-login="y" id="searchPopup" data-popup-name="popup_search"
+                 style="display: flex; align-items: center; gap: 2%; margin-left: 3%;">
+                <input type="text" id="searchInput2" class="search-input" placeholder="재료를 입력해 주세요" autocomplete="off"
+                       onkeypress="commonSearch(this.value, event)"
+                       style="width: 18vw; height: 3vw; padding: 0.5% 2%; border: 0.2vw solid #c8e6c9; border-radius: 10px;">
                 <a href="/member/mypage"><img src="/uploadedImg/main/mypage.png" alt="마이페이지" style="width: 3vw;"></a>
                 <a href="/cart/test"><img src="/uploadedImg/main/write.png" alt="작성" style="width: 3vw;"></a>
-                <a href="/cart/main"><img src="/uploadedImg/main/icon_header_cart.png?h=b0cf2eaea34afb39f82041851f5691b1" alt="장바구니" style="width: 3vw;"></a>
+                <a href="/cart/main"><img
+                        src="/uploadedImg/main/icon_header_cart.png?h=b0cf2eaea34afb39f82041851f5691b1" alt="장바구니"
+                        style="width: 3vw;"></a>
             </div>
         </section>
 
 
         <!-- 하단 내비게이션 영역 -->
-        <section class="header-bottom" style="height: 8%; width: 80%; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
-            <a id="headCardLink" class="gnb__list-name" href="/fooditem/main" style="text-decoration: none; color: gray; font-size: 1.5vw; padding: 0 1%;">식자재</a>
-            <a class="gnb__list-name main_tab" href="/fooditem/ranking" style="text-decoration: none; color: gray; font-size: 1.5vw; padding: 0 1%;">베스트</a>
-            <a class="gnb__list-name main_tab" href="/recipe/main" style="text-decoration: none; color: gray; font-size: 1.5vw; padding: 0 1%;">분류</a>
-            <a class="gnb__list-name main_tab" href="/trade/main" style="text-decoration: none; color: gray; font-size: 1.5vw; padding: 0 1%;">물물교환</a>
+        <section class="header-bottom"
+                 style="height: 8%; width: 80%; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+            <a id="headCardLink" class="gnb__list-name" href="/fooditem/main"
+               style="text-decoration: none; color: gray; font-size: 1.5vw; padding: 0 1%;">식자재</a>
+            <a class="gnb__list-name main_tab" href="/fooditem/ranking"
+               style="text-decoration: none; color: gray; font-size: 1.5vw; padding: 0 1%;">베스트</a>
+            <a class="gnb__list-name main_tab" href="/recipe/main"
+               style="text-decoration: none; color: gray; font-size: 1.5vw; padding: 0 1%;">분류</a>
+            <a class="gnb__list-name main_tab" href="/trade/main"
+               style="text-decoration: none; color: gray; font-size: 1.5vw; padding: 0 1%;">물물교환</a>
         </section>
     </main>
 
     <input id="savedTitleName" style="display: none">
     <script th:inline="javascript">
-        $(() => {
-            document.getElementById('titleName1').classList.remove("on")
-            document.getElementById('titleName2').classList.remove("on")
-            switch (window.location.pathname) {
-                case "/":
-                    document.getElementById('titleName1').classList.add("on")
-                    break;
-                case "/careMain":
-                    document.getElementById('titleName2').classList.add("on")
-                    break;
-                default:
-                    document.getElementById('titleName1').classList.add("on")
-            }
-            if ("${cartCount}" !== null && "${cartCount}" !== "") {
-                const cartCount = document.getElementById("cartCnt")
-                cartCount.innerHTML = "${cartCount}";
-            } else {
-                cartCount.innerHTML = 0;
+
+        fetch('/api/user-info', {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('Authorization')
             }
         })
+            .then(response => {
+                if (!response.ok) {
+                    return response.text(); // JSON 파싱 대신 텍스트로 응답 받기
+                }
+                return response.json(); // 정상적인 JSON 응답 처리
+            })
+            .then(data => {
+                if (data.role === 'ROLE_ADMIN') {
+                    document.getElementById('adminPageLink').style.display = 'block';
+                    console.log(data.role)
+                    console.log(data)
+                } else {
+                    console.log(data.role)
+                    console.log(data)
+                }
+            })
+            .catch(err => console.error('Error fetching user info:', err));
+
+        document.getElementById('titleName1').classList.remove("on")
+        document.getElementById('titleName2').classList.remove("on")
+        switch (window.location.pathname) {
+            case "/":
+                document.getElementById('titleName1').classList.add("on")
+                break;
+            case "/careMain":
+                document.getElementById('titleName2').classList.add("on")
+                break;
+            default:
+                document.getElementById('titleName1').classList.add("on")
+        }
+        // if ("${cartCount}" !== null && "${cartCount}" !== "") {
+        //     const cartCount = document.getElementById("cartCnt")
+        //     cartCount.innerHTML = "${cartCount}";
+        // } else {
+        //     let cartCount = document.getElementById("cartCnt")
+        //     cartCount.innerHTML = 0;
+        // }
 
         function saveTitleName(titleName) {
             console.log("현재 타이틀 이름은 ?")
@@ -107,6 +152,8 @@
                 }
             }
         }
+
+
     </script>
 </header>
 </body>

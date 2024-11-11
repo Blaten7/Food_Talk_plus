@@ -4,20 +4,27 @@ import com.icia.recipe.dto.mainDto.Member;
 import com.icia.recipe.dto.mainDto.NoticeDto;
 import com.icia.recipe.dto.mainDto.SearchDto;
 import com.icia.recipe.dto.manageDto.MemberDto;
+import com.icia.recipe.jwt.JwtUtil;
 import com.icia.recipe.service.mainService.MemberService;
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -25,6 +32,9 @@ public class MemberController {
 
     @Autowired
     MemberService mSer;
+
+    @Autowired
+    JwtUtil jwtUtil;
 
     @PreAuthorize("isAnonymous()")
     @GetMapping("/joinfrm")
@@ -155,6 +165,35 @@ public class MemberController {
             return null;
         }
     }
+    @GetMapping("/api/user-info")
+    public ResponseEntity<?> getUserInfo(HttpServletRequest request) {
+        // 쿠키에서 Authorization 값 추출
+        String token = null;
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if (cookie.getName().equals("Authorization")) {
+                    token = cookie.getValue();
+                }
+            }
+        }
+        // 토큰 확인
+        if (token == null || !token.startsWith("Bearer")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing or invalid token");
+        }
+
+        String jwt = token.replace("Bearer%20", "");
+
+        if (!jwtUtil.validateToken(jwt)) { // 토큰 유효성 검사
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Token");
+        }
+
+        Claims claims = jwtUtil.getUserInfoFromToken(jwt); // 토큰에서 정보 추출
+        String role = (String) claims.get(JwtUtil.AUTHORIZATION_KEY);
+
+        return ResponseEntity.ok(Map.of("role", role)); // role 반환
+    }
+
+
 
 
     @GetMapping("/delivery/info")

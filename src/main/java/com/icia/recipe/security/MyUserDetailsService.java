@@ -21,30 +21,23 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println("레포지토리 전 단계 진입 서비스 ㅇㅇ");
         System.out.println(username);
         Object[] result = mr.getMemberInfo(username);
-        System.out.println("========================");
 
         // 각 행이 Object 배열일 경우
         for (Object row : result) {
             System.out.println(Arrays.toString((Object[]) row));
         }
-        System.out.println("========================");
         if(result.length < 1){
-            System.out.println("사용자 없음");
             //로그인 실패시 예외를 로그인 실패 핸들러에 던짐
             throw new UsernameNotFoundException(username+" 사용자를 찾을 수 없습니다.");
         }
-        System.out.println("사용자 있음");
         Object[] row = (Object[]) result[0]; // 첫 번째 행 추출
         String m_id = (String) row[0];
         String m_pw = (String) row[1];
         String m_name = (String) row[2];
         String role = (String) row[3];
-        System.out.println("형변환 완료");
         System.out.println(m_id+" "+m_pw+" "+m_name+" "+role);
-        System.out.println("출력 완료");
         return User.builder()
                 .username(m_id)
                 .password(m_pw)

@@ -2,10 +2,12 @@ package com.icia.recipe.config;
 
 import com.icia.recipe.entity.UserRoleEnum;
 import com.icia.recipe.jwt.JwtUtil;
+import com.icia.recipe.repository.MemberRepository;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -18,15 +20,19 @@ public class JwtAuthenticationSuccessHandler implements AuthenticationSuccessHan
 
     private final JwtUtil jwtUtil;
 
+    @Autowired
+    MemberRepository mr;
+
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         // 사용자 정보 가져오기
-        String username = authentication.getName(); // 로그인된 사용자 이름
+        System.out.println("만료가 되셨으니까 새로 만들어야죠");
+        String id = authentication.getName(); // 로그인된 사용자 아이디
+        String username = mr.getMemberName(id);
         UserRoleEnum role = (UserRoleEnum) authentication.getAuthorities().stream()
                 .map(grantedAuthority -> UserRoleEnum.valueOf(grantedAuthority.getAuthority())) // 이름이 일치하므로 정상 동작
                 .findFirst()
                 .orElse(UserRoleEnum.ROLE_USER); // 기본 권한 설정
-
         // JWT 생성
         String token = jwtUtil.createToken(username, role);
 

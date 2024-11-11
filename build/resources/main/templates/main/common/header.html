@@ -14,22 +14,33 @@
     <main style="display: flex; flex-direction: column;">
         <!-- 상단 로그인/회원가입 영역 -->
         <section class="header-top" style="display: flex; justify-content: flex-end; padding: 1% 2%; font-size: 1.2vw;">
-            <a sec:authorize="isAnonymous()" href="/loginfrm"
+            <a id="login" href="/loginfrm"
                style="text-decoration: none; color: gray; margin-right: 2%; font-size: small">로그인</a>
-            <a sec:authorize="isAnonymous()" href="/joinfrm"
+            <a id="signIn" href="/joinfrm"
                style="text-decoration: none; color: gray; margin-right: 2%; font-size: small">회원가입</a>
-            <button sec:authorize="isAuthenticated()" href="/main"
-                    style="text-decoration: none; color: gray; margin-right: 2%; font-size: small">갱신
+            <button id="extendTokenButton"
+                    style="background-color: #4CAF50; color: white; border: none; border-radius: 5px; padding: 5px 20px;
+        font-size: 16px; cursor: pointer; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); transition: background-color 0.3s ease, transform 0.2s ease; display: none"
+                    onmouseover="this.style.backgroundColor='#45a049'; this.style.transform='scale(1.05)';"
+                    onmouseout="this.style.backgroundColor='#4CAF50'; this.style.transform='scale(1)';"
+                    onmousedown="this.style.backgroundColor='#3e8e41'; this.style.transform='scale(0.95)';"
+                    onmouseup="this.style.backgroundColor='#45a049'; this.style.transform='scale(1.05)';">
+                <span id="timer">0</span>+
             </button>
-            <a sec:authorize="isAuthenticated()" href="/member/logout"
-               style="text-decoration: none; color: gray; margin-right: 2%; font-size: small">로그아웃</a>
+
+
+
+            <p id="memberName"
+               style="text-decoration: none; color: gray; margin-right: 2%; font-size: small; display: none"></p>
+            <a id="logout" href="/member/logout"
+               style="text-decoration: none; color: gray; margin-right: 2%; font-size: small; display: none">로그아웃</a>
             <a id="adminPageLink" href="/main"
                style="text-decoration: none; color: gray; margin-right: 2%; font-size: small; display: none;">관리자
                 페이지</a>
-            <a sec:authorize="isAuthenticated()" href="/delivery/info"
-               style="text-decoration: none; color: gray; margin-right: 2%; font-size: small">배송정보</a>
-            <a sec:authorize="isAuthenticated()" href="/customer/center"
-               style="text-decoration: none; color: gray; font-size: small">고객센터</a>
+            <a id="deliveryInfo" href="/delivery/info"
+               style="text-decoration: none; color: gray; margin-right: 2%; font-size: small; display: none">배송정보</a>
+            <a id="customerCenter" href="/customer/center"
+               style="text-decoration: none; color: gray; font-size: small; display: none">고객센터</a>
         </section>
 
         <section class="header-middle"
@@ -81,7 +92,6 @@
 
     <input id="savedTitleName" style="display: none">
     <script th:inline="javascript">
-
         fetch('/api/user-info', {
             headers: {
                 'Authorization': 'Bearer ' + localStorage.getItem('Authorization')
@@ -94,16 +104,46 @@
                 return response.json(); // 정상적인 JSON 응답 처리
             })
             .then(data => {
+                const name = document.getElementById('memberName');
+                if (data.name && data.name !== 'undefined' && data.name.trim() !== '') {
+                    name.innerHTML = `${data.name}님 환영합니다`;
+                    name.style.display = 'block'; // 이름 표시
+                    document.getElementById('extendTokenButton').style.display = 'block'
+                    document.getElementById('deliveryInfo').style.display = 'block'
+                    document.getElementById('customerCenter').style.display = 'block'
+                    document.getElementById('logout').style.display = 'block'
+                    document.getElementById('login').style.display = 'none'
+                    document.getElementById('signIn').style.display = 'none'
+                    document.getElementById('extendTokenButton').click()
+                } else {
+                    name.style.display = 'none'; // 로그인 전 숨기기
+                }
+
                 if (data.role === 'ROLE_ADMIN') {
                     document.getElementById('adminPageLink').style.display = 'block';
-                    console.log(data.role)
-                    console.log(data)
-                } else {
-                    console.log(data.role)
-                    console.log(data)
                 }
             })
             .catch(err => console.error('Error fetching user info:', err));
+
+        document.getElementById('extendTokenButton').addEventListener('click', () => {
+            fetch('/api/extend-token', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('Authorization')
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to extend token');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // 새로운 토큰 저장
+                    localStorage.setItem('Authorization', data.newToken);
+                })
+                .catch(err => console.error('Error extending token:', err));
+        });
 
         document.getElementById('titleName1').classList.remove("on")
         document.getElementById('titleName2').classList.remove("on")
@@ -152,7 +192,109 @@
                 }
             }
         }
+        let timerInterval; // 기존 타이머를 추적하는 변수
 
+        function parseJwt(token) {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            const jwtToken = localStorage.getItem('Authorization');
+            if (!jwtToken) {
+                console.error('JWT 토큰이 없습니다.');
+                return;
+            }
+
+            const decoded = parseJwt(jwtToken);
+            const expirationTime = decoded.exp * 1000; // 만료 시간 (밀리초)
+            const timerElement = document.getElementById('timer');
+
+            // 기존 타이머 정리
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+
+            function updateTimer() {
+                const currentTime = new Date().getTime(); // 현재 시간 (밀리초)
+                const timeLeft = Math.max(0, Math.floor((expirationTime - currentTime) / 1000)); // 남은 시간 (초)
+
+                if (timeLeft > 0) {
+                    timerElement.textContent = formatTime(timeLeft); // 남은 시간을 MM:SS 형식으로 표시
+                } else {
+                    timerElement.textContent = '만료됨'; // 만료 시 표시
+                    clearInterval(timerInterval); // 타이머 종료
+                    localStorage.removeItem('Authorization')
+                    localStorage.removeItem('JSESSIONID')
+                    document.getElementById('logout').click()
+                }
+            }
+
+            // 새 타이머 시작
+            updateTimer(); // 즉시 한 번 업데이트
+            timerInterval = setInterval(updateTimer, 1000); // 1초마다 업데이트
+        }
+
+        // 버튼 클릭 시 토큰 연장 및 타이머 초기화
+        document.getElementById('extendTokenButton').addEventListener('click', () => {
+            fetch('/api/extend-token', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('Authorization')
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    localStorage.setItem('Authorization', data.newToken); // 새로운 토큰 저장
+                    startTimer(); // 타이머 초기화
+                })
+                .catch(err => console.error('Error extending token:', err));
+        });
+
+        // 페이지 로드 시 타이머 시작
+        window.onload = startTimer;
+        document.getElementById('logout').addEventListener('click', (event) => {
+            // JWT 토큰 삭제
+            localStorage.removeItem('Authorization'); // 로컬 스토리지에서 JWT 삭제
+            localStorage.removeItem('JSESSIONID'); // 로컬 스토리지에서 JWT 삭제
+
+            if (timerInterval) {
+                clearInterval(timerInterval); // 타이머 정리
+            }
+
+        });
+        let extendSessionTimeout;
+
+        function resetSessionTimer() {
+            clearTimeout(extendSessionTimeout);
+            extendSessionTimeout = setTimeout(() => {
+                fetch('/api/extend-token', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('Authorization')
+                    }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        localStorage.setItem('Authorization', data.newToken);
+                    })
+                    .catch(err => console.error('Error extending token:', err));
+            }, 14 * 60 * 1000); // 14분마다 갱신
+        }
+        // 페이지 활동 감지
+        window.onload = resetSessionTimer;
+        document.addEventListener('mousemove', resetSessionTimer);
+        document.addEventListener('keydown', resetSessionTimer);
 
     </script>
 </header>

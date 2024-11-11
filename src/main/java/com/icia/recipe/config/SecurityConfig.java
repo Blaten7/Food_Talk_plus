@@ -34,7 +34,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
         http.cors(AbstractHttpConfigurer::disable);
-
+        System.out.println("로그인 넣을게~");
         // Form Login 설정
         http.formLogin(form -> form
                 .loginPage("/member/login")
@@ -42,7 +42,6 @@ public class SecurityConfig {
                 .defaultSuccessUrl("/") // 기본 성공 URL
                 .successHandler(successHandler) // 성공 핸들러 등록
                 .failureUrl("/member/login/error"));
-
         // 로그아웃 설정
         http.logout(logout -> logout
                 .logoutUrl("/member/logout")

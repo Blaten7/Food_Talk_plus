@@ -165,36 +165,6 @@ public class MemberController {
             return null;
         }
     }
-    @GetMapping("/api/user-info")
-    public ResponseEntity<?> getUserInfo(HttpServletRequest request) {
-        // 쿠키에서 Authorization 값 추출
-        String token = null;
-        if (request.getCookies() != null) {
-            for (Cookie cookie : request.getCookies()) {
-                if (cookie.getName().equals("Authorization")) {
-                    token = cookie.getValue();
-                }
-            }
-        }
-        // 토큰 확인
-        if (token == null || !token.startsWith("Bearer")) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing or invalid token");
-        }
-
-        String jwt = token.replace("Bearer%20", "");
-
-        if (!jwtUtil.validateToken(jwt)) { // 토큰 유효성 검사
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Token");
-        }
-
-        Claims claims = jwtUtil.getUserInfoFromToken(jwt); // 토큰에서 정보 추출
-        String role = (String) claims.get(JwtUtil.AUTHORIZATION_KEY);
-
-        return ResponseEntity.ok(Map.of("role", role)); // role 반환
-    }
-
-
-
 
     @GetMapping("/delivery/info")
     public String delivery() {

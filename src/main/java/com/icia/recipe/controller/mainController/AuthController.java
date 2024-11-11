@@ -1,106 +1,104 @@
-//package com.icia.recipe.controller.mainController;
-//
-//import com.icia.recipe.entity.UserRoleEnum;
-//import com.icia.recipe.jwt.JwtUtil;
-//import io.jsonwebtoken.Claims;
-//import jakarta.servlet.http.Cookie;
-//import jakarta.servlet.http.HttpServletResponse;
-//import lombok.RequiredArgsConstructor;
-//import org.springframework.web.bind.annotation.CookieValue;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.RestController;
-//
-//import java.io.UnsupportedEncodingException;
-//import java.net.URLEncoder;
-//
-//@RestController
-//@RequestMapping("/api")
-//@RequiredArgsConstructor
-//public class AuthController {
-//
-//    public static final String AUTHORIZATION_HEADER = "Authorization";
-//
-//    private final JwtUtil jwtUtil;
-//
-//    @GetMapping("/create-cookie")
-//    public String createCookie(HttpServletResponse res) {
-//        addCookie("Robbie Auth", res);
-//
-//        return "createCookie";
-//    }
-//
-//    @GetMapping("/get-cookie")
-//    public String getCookie(@CookieValue(AUTHORIZATION_HEADER) String value) {
-//        System.out.println("value = " + value);
-//
-//        return "getCookie : " + value;
-//    }
-//
-//    public static void addCookie(String cookieValue, HttpServletResponse res) {
-//        try {
-//            cookieValue = URLEncoder.encode(cookieValue, "utf-8").replaceAll("\\+", "%20"); // Cookie Value 에는 공백이 불가능해서 encoding 진행
-//
-//            Cookie cookie = new Cookie(AUTHORIZATION_HEADER, cookieValue); // Name-Value
-//            cookie.setPath("/");
-//            cookie.setMaxAge(30 * 60);
-//
-//            // Response 객체에 Cookie 추가
-//            res.addCookie(cookie);
-//        } catch (UnsupportedEncodingException e) {
-//            throw new RuntimeException(e.getMessage());
-//        }
-//    }
-//
-//    @GetMapping("/create-jwt")
-//    public String createJwt(HttpServletResponse res) {
-//        // Jwt 생성
-//        String token = jwtUtil.createToken("Robbie", UserRoleEnum.USER);
-//
-//        // Jwt 쿠키 저장
-//        jwtUtil.addJwtToCookie(token, res);
-//
-//        return "createJwt : " + token;
-//    }
-//
-//    @GetMapping("/get-jwt")
-//    public String getJwt(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String tokenValue) {
-//        // JWT 토큰 substring
-//        String token = jwtUtil.substringToken(tokenValue);
-//
-//        // 토큰 검증
-//        if(!jwtUtil.validateToken(token)){
-//            throw new IllegalArgumentException("Token Error");
-//        }
-//
-//        // 토큰에서 사용자 정보 가져오기
-//        Claims info = jwtUtil.getUserInfoFromToken(token);
-//        // 사용자 username
-//        String username = info.getSubject();
-//        System.out.println("username = " + username);
-//        // 사용자 권한
-//        String authority = (String) info.get(JwtUtil.AUTHORIZATION_KEY);
-//        System.out.println("authority = " + authority);
-//
-//        return "getJwt : " + username + ", " + authority;
-//    }
-//
-//    @GetMapping("/get-jwt-info")
-//    public String getJwtInfo(@CookieValue(JwtUtil.AUTHORIZATION_HEADER) String tokenValue) {
-//        // JWT 토큰에서 "Bearer " 제거
-//        String token = jwtUtil.substringToken(tokenValue);
-//
-//        // 토큰 검증
-//        if (!jwtUtil.validateToken(token)) {
-//            throw new IllegalArgumentException("Invalid Token");
-//        }
-//
-//        // 사용자 정보 가져오기
-//        Claims info = jwtUtil.getUserInfoFromToken(token);
-//        String username = info.getSubject();
-//        String role = (String) info.get(JwtUtil.AUTHORIZATION_KEY);
-//
-//        return "Username: " + username + ", Role: " + role;
-//    }
-//
-//}
+package com.icia.recipe.controller.mainController;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.icia.recipe.entity.UserRoleEnum;
+import com.icia.recipe.jwt.JwtUtil;
+import com.icia.recipe.service.mainService.KakaoService;
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api")
+@RequiredArgsConstructor
+public class AuthController {
+
+    public static final String AUTHORIZATION_HEADER = "Authorization";
+
+    private final KakaoService kSer;
+
+    private final JwtUtil jwtUtil;
+
+    @PostMapping("/extend-token")
+    public ResponseEntity<?> extendToken(HttpServletRequest request) {
+        String token = null;
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if (cookie.getName().equals("Authorization")) {
+                    token = cookie.getValue();
+                }
+            }
+        }
+        // 토큰 확인
+        if (token == null || !token.startsWith("Bearer")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing or invalid token");
+        }
+        String jwt = token.replace("Bearer%20", ""); // Bearer 접두사 제거
+        if (!jwtUtil.validateToken(jwt)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Token");
+        }
+
+        Claims claims = jwtUtil.getUserInfoFromToken(jwt); // JWT에서 사용자 정보 추출
+        String username = (String) claims.get("name");
+        String role = (String) claims.get(JwtUtil.AUTHORIZATION_KEY);
+
+        // 새로운 토큰 생성
+        String newToken = jwtUtil.createToken(username, UserRoleEnum.valueOf(role));
+
+        // 새 토큰 반환
+        return ResponseEntity.ok(Map.of("newToken", newToken));
+    }
+
+    @GetMapping("/user-info")
+    public ResponseEntity<?> getUserInfo(HttpServletRequest request) {
+        // 쿠키에서 Authorization 값 추출
+        String token = null;
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if (cookie.getName().equals("Authorization")) {
+                    token = cookie.getValue();
+                }
+            }
+        }
+        // 토큰 확인
+        if (token == null || !token.startsWith("Bearer")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing or invalid token");
+        }
+
+        String jwt = token.replace("Bearer%20", "");
+
+        if (!jwtUtil.validateToken(jwt)) { // 토큰 유효성 검사
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid Token");
+        }
+
+        Claims claims = jwtUtil.getUserInfoFromToken(jwt); // 토큰에서 정보 추출
+        String role = (String) claims.get(JwtUtil.AUTHORIZATION_KEY);
+        String name = (String) claims.get("name");
+
+        return ResponseEntity.ok(Map.of("name", name, "role", role));
+    }
+
+    @GetMapping("/user/kakao/callback")
+    public String kakaoLogin(@RequestParam String code, HttpServletResponse resp) throws JsonProcessingException {
+        String token = kSer.kakaoLogin(code);
+
+        Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, token);
+        cookie.setPath("/");
+        resp.addCookie(cookie);
+        return "redirect:/";
+    }
+
+
+
+
+
+}

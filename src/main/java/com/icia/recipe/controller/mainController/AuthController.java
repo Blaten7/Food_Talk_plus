@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.instrument.ClassDefinition;
 import java.net.URLEncoder;
 import java.util.Map;
 
@@ -89,12 +90,13 @@ public class AuthController {
 
     @GetMapping("/user/kakao/callback")
     public String kakaoLogin(@RequestParam String code, HttpServletResponse resp) throws JsonProcessingException {
+        System.out.println("리다이렉션 성공");
         String token = kSer.kakaoLogin(code);
-
+        System.out.println("토큰은 ? : "+token);
         Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, token);
         cookie.setPath("/");
         resp.addCookie(cookie);
-        return "redirect:/";
+        return "/";
     }
 
 

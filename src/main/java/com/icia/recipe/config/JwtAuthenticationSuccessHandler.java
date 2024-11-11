@@ -26,7 +26,6 @@ public class JwtAuthenticationSuccessHandler implements AuthenticationSuccessHan
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         // 사용자 정보 가져오기
-        System.out.println("만료가 되셨으니까 새로 만들어야죠");
         String id = authentication.getName(); // 로그인된 사용자 아이디
         String username = mr.getMemberName(id);
         UserRoleEnum role = (UserRoleEnum) authentication.getAuthorities().stream()

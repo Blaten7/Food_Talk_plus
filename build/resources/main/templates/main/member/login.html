@@ -226,6 +226,47 @@
             })
 
         }
+        $(document).ready(function () {
+            // 토큰 삭제
+            Cookies.remove('Authorization', {path: '/'});
+        });
+
+        const href = location.href;
+        const queryString = href.substring(href.indexOf("?") + 1)
+        if (queryString === 'error') {
+            const errorDiv = document.getElementById('login-failed');
+            errorDiv.style.display = 'block';
+        }
+
+        const host = 'http://' + window.location.host;
+
+        function onLogin() {
+            let username = $('#username').val();
+            let password = $('#password').val();
+
+            $.ajax({
+                type: "POST",
+                url: `/api/user/login`,
+                contentType: "application/json",
+                data: JSON.stringify({username: username, password: password}),
+            })
+                .done(function (res, status, xhr) {
+                    const token = xhr.getResponseHeader('Authorization');
+
+                    Cookies.set('Authorization', token, {path: '/'})
+
+                    $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+                        jqXHR.setRequestHeader('Authorization', token);
+                    });
+
+                    window.location.href = host;
+                })
+                .fail(function (jqXHR, textStatus) {
+                    alert("Login Fail");
+                    window.location.href = host + '/api/user/login-page?error'
+                });
+        }
+
     </script>
 </head>
 <body>
@@ -354,8 +395,12 @@
         <div style="display: flex;justify-content: space-between">
             <button style="display: none; margin-bottom: 30px">css용 ㅇㅇ 건드리지말것</button>
         </div>
+        <button type="button" id="login-kakao-btn" onclick="location.href='https://kauth.kakao.com/oauth/authorize?client_id=036062a59ad86612a6fc748ed359a84c&redirect_uri=http://localhost:8081/api/user/kakao/callback&response_type=code'"
+                style="width: 400px; height: 50px; margin-top: 20px;justify-content: center; font-size: x-large; background-color: yellow; color: black; border: none">
+            카카오 로그인
+        </button>
         <button type="submit"
-                style="width: 400px; height: 50px; margin-top: 20px;justify-content: center; font-size: x-large; background-color: #77b347; color: white">
+                style="width: 400px; height: 50px; margin-top: 20px;justify-content: center; font-size: x-large; background-color: #77b347; color: white; border: none">
             로그인
         </button>
 

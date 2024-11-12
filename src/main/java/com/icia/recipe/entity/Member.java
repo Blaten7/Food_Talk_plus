@@ -36,6 +36,12 @@ public class Member implements Serializable {
     @Column(name = "role", length = 5, columnDefinition = "VARCHAR(5) DEFAULT 'USER'")
     private String member_role;
 
+    @Column(nullable = false, unique = true)
+    private String email;
+
+    @Column(nullable = true)
+    private Long kakaoId;
+
     @ManyToMany(mappedBy = "membersOrderList")
     private List<Order> orderList = new ArrayList<>();
 
@@ -46,4 +52,30 @@ public class Member implements Serializable {
     @JoinColumn(name = "m_id", insertable = false, updatable = false)
     private Trade tradeList;
 
+    public Member(String nickname, String encodedPassword, String email, UserRoleEnum userRoleEnum, Long kakaoId) {
+        this.member_name = nickname;
+        this.member_pw = encodedPassword;
+        this.member_role = userRoleEnum.toString();
+        this.kakaoId = kakaoId;
+    }
+
+    public Member kakaoIdUpdate(Long kakaoId) {
+        this.kakaoId = kakaoId;
+        return this;
+    }
+
+    public Member(String member_name, String member_pw, String email, String role) {
+        this.member_name = member_name;
+        this.member_pw = member_pw;
+        this.email = email;
+        this.member_role = role;
+    }
+
+    public Member(String member_name, String member_pw, String email, String role, Long kakaoId) {
+        this.member_name = member_name;
+        this.member_pw = member_pw;
+        this.email = email;
+        this.member_role = role;
+        this.kakaoId =kakaoId;
+    }
 }

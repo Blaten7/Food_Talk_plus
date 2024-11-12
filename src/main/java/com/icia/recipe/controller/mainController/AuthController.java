@@ -92,11 +92,11 @@ public class AuthController {
     public String kakaoLogin(@RequestParam String code, HttpServletResponse resp) throws JsonProcessingException {
         System.out.println("리다이렉션 성공");
         String token = kSer.kakaoLogin(code);
-        System.out.println("토큰은 ? : "+token);
-        Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, token);
+        System.out.println("카카오 로그인 사용자 정보 : " + token);
+        Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, token.substring(7));
         cookie.setPath("/");
         resp.addCookie(cookie);
-        return "/";
+        return "redirect:/";
     }
 
 

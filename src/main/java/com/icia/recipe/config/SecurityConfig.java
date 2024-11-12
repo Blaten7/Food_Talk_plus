@@ -34,7 +34,6 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
         http.cors(AbstractHttpConfigurer::disable);
-        System.out.println("SECURITY CONFIG LOGIN");
         // Form Login 설정
         http.formLogin(form -> form
                 .loginPage("/member/login")
@@ -43,13 +42,11 @@ public class SecurityConfig {
                 .successHandler(successHandler) // 성공 핸들러 등록
                 .failureUrl("/member/login/error"));
 
-        System.out.println("SECURITY CONFIG LOGOUT");
         // 로그아웃 설정
         http.logout(logout -> logout
                 .logoutUrl("/member/logout")
                 .logoutSuccessUrl("/") // 로그아웃 성공 후 리다이렉트
                 .addLogoutHandler(jwtLogoutHandler));
-        System.out.println("SECURITY CONFIG EXCEPTION");
         // 예외 처리
         http.exceptionHandling(handler -> handler.accessDeniedHandler(accessDeniedHandler));
 

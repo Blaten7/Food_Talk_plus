@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface MemberRepository extends JpaRepository<com.icia.recipe.entity.Member, Long> {
@@ -75,4 +76,13 @@ public interface MemberRepository extends JpaRepository<com.icia.recipe.entity.M
 
     @Query(value = "update member set m_pw= :newPw where m_pw= :pw", nativeQuery = true)
     boolean updateNewPw(@Param("pw") String pw, @Param("newPw") String newPw);
+
+    @Query(value = "select * from member where m_id=:kakaoId", nativeQuery = true)
+    Optional<Object> findByKakaoId(Long kakaoId);
+
+    @Query(value = "select * from member where m_id=:kakaoEmail", nativeQuery = true)
+    Optional<Object> findByEmail(String kakaoEmail);
+
+    @Query(value = "insert into member (m_name, m_pw, m_id, role) values (:#{#kakaoUser[0]}, :#{#kakaoUser[1]}, :#{#kakaoUser[2]}, :#{#kakaoUser[3]})", nativeQuery = true)
+    void kakaoUserAdd(@Param("kakaoUser")Object kakaoUser);
 }

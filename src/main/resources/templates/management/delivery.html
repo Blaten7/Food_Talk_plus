@@ -264,9 +264,8 @@
 </script>
 
 <body id="page-top">
-<div id="wrapper">
-    <%--    사이드바 E R P--}
-    <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0">
+<div id="wrapper" style="display: flex; flex-direction: row">
+    <nav class="navbar navbar-dark align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0" style="background-color: #4e73df; width: 20%">
         <div class="container-fluid d-flex flex-column p-0"><br><br><br>
             <a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="/main">
                 <div class="sidebar-brand-text mx-3">
@@ -275,7 +274,6 @@
             </a><br><br>
             <hr class="sidebar-divider my-0"/>
             <ul class="navbar-nav text-light" id="accordionSidebar">
-                <%--                사이드바 메뉴 구성--}
                 <li class="nav-item"><a class="nav-link" href="/main"><i class="fas fa-tachometer-alt"></i>
                     <span> 매출 관리</span></a></li>
                 <li class="nav-item"><a class="nav-link active" href="/delivery"><i class="fas fa-user"></i>
@@ -300,7 +298,6 @@
                 <div class="container-fluid">
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle me-3" type="button"><i
                             class="fas fa-bars"></i></button>
-                    <%--                    검색란 --}
                     <div class="input-group" style="width: 500px">
                         <input class="bg-light form-control border-0 small" type="text"
                                placeholder="검색어를 입력하세요" onkeypress="commonSearch(this.value, event)"/>
@@ -311,7 +308,6 @@
                                                                             aria-expanded="false"
                                                                             data-bs-toggle="dropdown" href="#"><i
                                 class="fas fa-search"></i></a>
-                            <%--                            네비게이션 바에 검색버튼이 있다는데 뭔지 모름 ㅋㅋ--}
                             <div class="dropdown-menu dropdown-menu-end p-3 animated--grow-in"
                                  aria-labelledby="searchDropdown">
                                 <form class="me-auto navbar-search w-100">
@@ -325,7 +321,6 @@
                                 </form>
                             </div>
                         </li>
-                        <%--                        우측 상단 헤더 알림--}
                         <li id="noticelist" class="nav-item dropdown no-arrow mx-1">
                             <div class="nav-item dropdown no-arrow">
                                 <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown"
@@ -340,7 +335,6 @@
                                 </div>
                             </div>
                         </li>
-                        <%--                        우측 상단 메세지 리스트--}
                         <li id="messagelist" class="nav-item dropdown no-arrow mx-1">
                             <div class="nav-item dropdown no-arrow">
                                 <a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown"
@@ -400,7 +394,6 @@
                             <div class="shadow dropdown-list dropdown-menu dropdown-menu-end"
                                  aria-labelledby="alertsDropdown"></div>
                         </li>
-                        <%--                        우측 상단 프로필--}
                         <div class="d-none d-sm-block topbar-divider"></div>
                         <li class="nav-item dropdown no-arrow">
                             <input id="nowId" type="text" value="${m_id}" style="display: none">
@@ -425,7 +418,6 @@
                     </ul>
                 </div>
             </nav>
-            <%--            네비게이션 바 END--}
             <div class="container-fluid">
                 <div class="d-sm-flex justify-content-between align-items-center mb-4">
                     <h3 class="text-dark mb-0">배송 관리</h3><a class="btn btn-primary btn-sm d-none d-sm-inline-block"
@@ -638,17 +630,16 @@
                                                 </th>
                                             </tr>
                                             <tbody id="tbody">
-                                            <c:forEach var="item" items="${orderList}" varStatus="i">
-                                                <tr class="data" data-num="${item.o_num}">
-                                                    <th class="count" colspan="1">${i.count}</th>
-                                                    <th class="date" colspan="3">${item.o_date}</th>
-                                                    <th class="id" colspan="3">${item.m_id}</th>
-                                                    <th class="address" colspan="3">${item.o_address}</th>
-                                                    <th class="post" colspan="3">${item.o_post}</th>
-                                                    <th colspan="2"><input class='ckBox' name='selectCk'
-                                                                           type='checkbox'></th>
-                                                </tr>
-                                            </c:forEach>
+                                            <tr th:each="item, iStat : ${orderList}" class="data" th:data-num="${item.o_num}">
+                                                <th class="count" colspan="1" th:text="${iStat.index + 1}"></th>
+                                                <th class="date" colspan="3" th:text="${item.o_date}"></th>
+                                                <th class="id" colspan="3" th:text="${item.m_id}"></th>
+                                                <th class="address" colspan="3" th:text="${item.o_address}"></th>
+                                                <th class="post" colspan="3" th:text="${item.o_post}"></th>
+                                                <th colspan="2">
+                                                    <input class="ckBox" name="selectCk" type="checkbox">
+                                                </th>
+                                            </tr>
                                             </tbody>
                                         </table>
 
@@ -678,20 +669,19 @@
                                                 </th>
                                             </tr>
                                             <tbody id="tbody2">
-                                            <c:forEach var="item" items="${orderList2}" varStatus="i">
-                                                <tr class="data" data-num="${item.o_num}">
-                                                    <th class="count" colspan="1">${i.count}</th>
-                                                    <th class="date" colspan="3">${item.o_date}</th>
-                                                    <th class="id" colspan="3">${item.m_id}</th>
-                                                    <th class="address" colspan="6">
-                                                        <div class="progressBar">
-                                                            <div class="progress"></div>
-                                                        </div>
-                                                    </th>
-                                                    <th colspan="2"><input class='ckBox' name='selectCk'
-                                                                           type='checkbox'></th>
-                                                </tr>
-                                            </c:forEach>
+                                            <tr th:each="item, iStat : ${orderList2}" class="data" th:data-num="${item.o_num}">
+                                                <th class="count" colspan="1" th:text="${iStat.index + 1}"></th>
+                                                <th class="date" colspan="3" th:text="${item.o_date}"></th>
+                                                <th class="id" colspan="3" th:text="${item.m_id}"></th>
+                                                <th class="address" colspan="6">
+                                                    <div class="progressBar">
+                                                        <div class="progress"></div>
+                                                    </div>
+                                                </th>
+                                                <th colspan="2">
+                                                    <input class="ckBox" name="selectCk" type="checkbox">
+                                                </th>
+                                            </tr>
                                             </tbody>
                                         </table>
 

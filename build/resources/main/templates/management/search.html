@@ -9,11 +9,13 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css">
     <link rel="stylesheet" href="/assets/css/styles.min.css?h=94c76ca45cf1136042bce4cad72a7b5e">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="/assets/js/script.min.js"></script>
     <style>
         .no-hover:hover {
             background-color: transparent !important;
             color: white !important;
         }
+
         tr:hover {
             background-color: #badce3;
         }
@@ -293,7 +295,8 @@
                                     <div style="width: 80%; text-align: center; margin-left: 10%">
                                         <h3 style="color: #4e73df">재고</h3><br>
                                         <table class="table my-0" id="dataList">
-                                            <tr id="mInven" style="vertical-align: center;background-color: #4e73df; color: white">
+                                            <tr id="mInven"
+                                                style="vertical-align: center;background-color: #4e73df; color: white">
                                                 <th class="no-hover">#</th>
                                                 <th class="no-hover"><h4 style="text-align: center">등록일</h4></th>
                                                 <th class="no-hover"><h4 style="text-align: center;">유통기한</h4></th>
@@ -304,7 +307,8 @@
                                                 <th class="no-hover"><h4>평균금액</h4></th>
                                                 <th class="no-hover"><h4>총 계</h4></th>
                                             </tr>
-                                            <tr th:each="elem, i : ${searchList[0]}" class="inven" onclick="searchDetailModal(this);">
+                                            <tr th:each="elem, i : ${searchList[0]}" class="inven"
+                                                onclick="searchDetailModal(this);">
                                                 <td th:text="${i.index + 1}"></td>
                                                 <td th:text="${elem.f_date} + ' ~ ' + ${elem.f_date2}"></td>
                                                 <td th:text="${elem.f_edate} + ' ~ ' + ${elem.f_edate2}"></td>
@@ -334,7 +338,8 @@
                                                 <th class="no-hover"><h4>합계</h4></th>
                                                 <th class="no-hover"><h4>현황</h4></th>
                                             </tr>
-                                            <tr th:each="elem, i : ${searchList[1]}" class="invenAdd" onclick="searchDetailModal(this)">
+                                            <tr th:each="elem, i : ${searchList[1]}" class="invenAdd"
+                                                onclick="searchDetailModal(this)">
                                                 <td th:text="${i.index + 1}"></td>
                                                 <td th:text="${elem.iv_company}"></td>
                                                 <td th:text="${elem.iv_name}"></td>
@@ -423,5 +428,6 @@
         </div>
     </div>
     <script src="/assets/js/script.min.js?h=bdf36300aae20ed8ebca7e88738d5267"></script>
+</div>
 </body>
 </html>

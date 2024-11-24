@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JavaScriptLibraryMappings">
-    <file url="file://$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main" libraries="{jquery-3.7.0, js-cookie, summernote}" />
-    <file url="file://$PROJECT_DIR$/src/main" libraries="{all, bootstrap, chart.js, jquery, jquery-3.6.0, jquery-3.7.0, jquery-ui, js-cookie, sockjs-client, summernote}" />
+    <file url="file://$PROJECT_DIR$/build/generated/sources/annotationProcessor/java/main" libraries="{flatpickr, jquery-3.7.0, js-cookie, summernote}" />
+    <file url="file://$PROJECT_DIR$/src/main" libraries="{all, bootstrap, chart.js, flatpickr, jquery, jquery-3.6.0, jquery-3.7.0, jquery-ui, js-cookie, sockjs-client, summernote}" />
   </component>
 </project>

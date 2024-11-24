@@ -39,7 +39,7 @@ public class MemberController {
     @PreAuthorize("isAnonymous()")
     @GetMapping("/joinfrm")
     public String join() {
-        return "main/member/memberjoin";
+        return "main/member/caulseAgree";
     }
 
     @GetMapping("/agreefrm")
